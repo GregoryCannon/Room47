@@ -22,12 +22,19 @@ public class Serializer {
 	    return is.readObject();
 	}
 	
-	public static void main(){
+	public static void main(String[] args){
 		//public EstablishCommunicationPacket(String name, long tA, byte[] enc, byte[] params, byte[] signature){
 		try{
 			EstablishCommunicationPacket p = new EstablishCommunicationPacket("Test", 1, new byte[5], new byte[3], new byte[4]);
 			System.out.println(p);
+			System.out.println(p.name);
+			System.out.println(p.tA);
 			byte[] ser = serialize(p);
+			System.out.println(ser);
+			EstablishCommunicationPacket q = (EstablishCommunicationPacket) deserialize(ser);
+			System.out.println(q);
+			System.out.println(q.name);
+			System.out.println(q.tA);
 		} catch (Exception e){
 			e.printStackTrace();
 		}

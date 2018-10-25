@@ -2,7 +2,7 @@ package cryptography;
 
 import java.util.Date;
 
-public class Person {
+public class Person implements java.io.Serializable{
     private String status;
     public String ID;
     public String name;

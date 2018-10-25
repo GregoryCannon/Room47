@@ -1,12 +1,12 @@
 package cryptography;
 
 public class Packets {
-	public static class EstablishCommunicationPacket{
+	public static class EstablishCommunicationPacket implements java.io.Serializable{
 		public String name; 
 		public long tA;
 		public byte[] enc;
-			public byte[] params; 
-			public byte[] signature;
+		public byte[] params; 
+		public byte[] signature;
 			
 		public EstablishCommunicationPacket(String name, long tA, byte[] enc, byte[] params, byte[] signature){
 			this.name = name;
