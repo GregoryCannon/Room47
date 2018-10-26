@@ -38,7 +38,7 @@ public class Alice {
 	}
 
 	public static byte[] encryptSessionKey(PublicKey rsaPublic, SecretKey secret) throws NoSuchAlgorithmException,
-			NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException {
+	NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException {
 		Cipher c = Cipher.getInstance("RSA/NONE/OAEPPadding", "BC");
 		c.init(Cipher.WRAP_MODE, rsaPublic);
 		return c.wrap(secret);
@@ -90,24 +90,6 @@ public class Alice {
 		String ciphertext;
 		String hMacStr;
 		while(message != "q") {
-		switch (configuration) {
-		case 1:
-			break;
-		case 2:
-			ivAndCipher = cbcEncrypt(cryptography.Keys.getSecretKey(), message.getBytes()); // used to be message.getBytes()
-			//byte[] see = Bob.cbcDecrypt(Keys.getSecretKey(), ivAndCipher[0], ivAndCipher[1]);
-			iv = Base64.toBase64String(ivAndCipher[0]);
-			ciphertext = Base64.toBase64String(ivAndCipher[1]);
-			message = iv + ciphertext;
-			System.out.println("Message in Alice " + message);
-			break;
-		case 3:
-			hMac = calculateHmac(cryptography.Keys.getSecretKey(), message.getBytes());
-			hMacStr = Base64.toBase64String(hMac);
-			hMacStr = hMacStr.substring(0, 24);
-			message+= hMacStr;
-			break;
-		case 4:
 			hMac = calculateHmac(cryptography.Keys.getSecretKey(), message.getBytes());
 			hMacStr = Base64.toBase64String(hMac);
 			hMacStr = hMacStr.substring(0, 24);
@@ -116,11 +98,10 @@ public class Alice {
 			iv = Base64.toBase64String(ivAndCipher[0]);
 			ciphertext = Base64.toBase64String(ivAndCipher[1]);
 			message = iv + ciphertext + hMacStr;
-			break;
-		}
-		sendMessage(message);
-		System.out.println("Type in a message to send to Bob:");
-		message = scan.nextLine();
+			
+			sendMessage(message);
+			System.out.println("Type in a message to send to Bob:");
+			message = scan.nextLine();
 		}
 		scan.close();
 	}
@@ -136,7 +117,7 @@ public class Alice {
 	public static byte[] calculateHmac(SecretKey key, byte[] data) throws GeneralSecurityException {
 		Mac hmac = Mac.getInstance("HMacSHA512", "BC"); hmac.init(key);
 		return hmac.doFinal(data);
-		}
+	}
 
 	public static void main(String args[]) throws IOException, GeneralSecurityException {
 		Security.addProvider(new BouncyCastleProvider());
