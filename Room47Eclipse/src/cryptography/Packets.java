@@ -23,17 +23,18 @@ public class Packets {
 	}
 
 	public static class MessagePacket implements java.io.Serializable{
-		public String message;
+		public String hMacStr;
+		public String iv;
+		public String cipherText;
 
 		public MessagePacket(String message, SecretKey sessionKey){
 			try{
 				byte [] hMac = Crypto.calculateHmac(sessionKey, message.getBytes());
 				String hMacStr = Base64.toBase64String(hMac);
-				hMacStr = hMacStr.substring(0, 24);
+				this.hMacStr = hMacStr.substring(0, 24);
 				byte[][] ivAndCipher = Crypto.cbcEncrypt(sessionKey, message.getBytes()); // used to be message.getBytes()
-				String iv = Base64.toBase64String(ivAndCipher[0]);
-				String ciphertext = Base64.toBase64String(ivAndCipher[1]);
-				this.message = iv + ciphertext + hMacStr;
+				this.iv = Base64.toBase64String(ivAndCipher[0]);
+				this.cipherText = Base64.toBase64String(ivAndCipher[1]);
 			} catch (Exception e){
 				e.printStackTrace();
 			}

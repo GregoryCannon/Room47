@@ -51,21 +51,13 @@ public class Alice {
 		long time = System.currentTimeMillis();
 		byte[] encSessionKey = Crypto.encryptSessionKey(cryptography.Keys.getPublicKeyBob(), sessionKey);
 		byte[] signature = Crypto.signEstablishPacket(ALICE, time, encSessionKey);
-		
-		System.out.println("Name: " + "Longer Name Goes Here".getBytes().length);
-		System.out.println("Time: " + Serializer.longToBytes(time).length);
-		System.out.println("Enc: " + encSessionKey.length);
-		System.out.println("Sig: " + signature.length);
-		
 		EstablishCommPacket p = new EstablishCommPacket(ALICE, time, encSessionKey, signature);
-		System.out.println("Initial packet: " + p.name + " " + p.time + " " + p.enc + " " + p.signature);
 		byte[] pEnc = Serializer.serialize(p);
+		
+		//System.out.println("Initial packet: " + p.name + " " + p.time + " " + p.enc + " " + p.signature);
 		
 		sendMessage("" + pEnc.length); 
 		sendBytes(pEnc);
-		
-		// Await response
-		// TBD
 	}
 
 	public void sendMessage(String msg) throws IOException {
@@ -88,8 +80,9 @@ public class Alice {
 		String message = scan.nextLine();
 		while(message != "q") {
 			MessagePacket p = new MessagePacket(message, sessionKey);
-			System.out.println("Sending:" + p.message);
-			sendMessage(p.message);
+			byte[] pEnc = Serializer.serialize(p);
+			sendMessage("" + pEnc.length);
+			sendBytes(pEnc);
 			
 			System.out.println("Type in a message to send to Bob:");
 			message = scan.nextLine();
