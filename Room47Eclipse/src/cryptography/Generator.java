@@ -60,16 +60,6 @@ public class Generator {
 		System.out.println("Filesystems set up");
 		
 	}
-	
-	public static SecretKey generateSessionKey() throws NoSuchAlgorithmException, NoSuchProviderException {
-				 KeyGenerator keyGenerator = KeyGenerator.getInstance("AES", "BC");
-				 keyGenerator.init(128);
-				 return keyGenerator.generateKey();
-	}
-	
-	public static long getCurrentTime() {
-		return System.currentTimeMillis();
-	}
 		
 	public static void main (String args[]) throws NoSuchAlgorithmException, IOException {
 		Security.addProvider(new BouncyCastleProvider());

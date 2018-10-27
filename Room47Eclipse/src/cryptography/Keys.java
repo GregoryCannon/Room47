@@ -62,13 +62,5 @@ public class Keys {
 		return priB;
 		
 	}
-	
-	public static void setSecretKey(SecretKey secret) {
-		secretKey = secret;
-	}
-	
-	public static SecretKey getSecretKey() {
-		return secretKey;
-	}
 
 }
