@@ -22,17 +22,17 @@ public class Packets {
 		}
 	}
 
-	public static class MessagePacket implements java.io.Serializable{
+	public static class BytePacket implements java.io.Serializable{
 		public String hMacStr;
 		public String iv;
 		public String cipherText;
 
-		public MessagePacket(String message, SecretKey sessionKey){
+		public BytePacket(byte[] bytes, SecretKey sessionKey){
 			try{
-				byte [] hMac = Crypto.calculateHmac(sessionKey, message.getBytes());
+				byte[] hMac = Crypto.calculateHmac(sessionKey, bytes);
 				String hMacStr = Base64.toBase64String(hMac);
 				this.hMacStr = hMacStr.substring(0, 24);
-				byte[][] ivAndCipher = Crypto.cbcEncrypt(sessionKey, message.getBytes()); // used to be message.getBytes()
+				byte[][] ivAndCipher = Crypto.cbcEncrypt(sessionKey, bytes);
 				this.iv = Base64.toBase64String(ivAndCipher[0]);
 				this.cipherText = Base64.toBase64String(ivAndCipher[1]);
 			} catch (Exception e){
@@ -40,6 +40,29 @@ public class Packets {
 			}
 		}
 	}
+	
+	public static class StringMessage{
+		public String str;
+
+		public StringMessage(String str){
+			this.str = str;
+		}
+	}
+	
+	/*
+	public static class GetStatusPacket extends MessagePacket{
+
+		public GetStatusPacket(SecretKey sessionKey) {
+			super(sessionKey);
+		}
+
+		@Override
+		byte[] getBytes() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}*/
 
 
 	public static class EstablishPacket implements java.io.Serializable{
