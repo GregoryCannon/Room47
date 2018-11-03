@@ -1,25 +1,20 @@
 package cryptography;
 
+import cryptography.Packets.BytePacket;
+import cryptography.Packets.EstablishCommPacket;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.encoders.Base64;
+
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.Security;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
-
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Base64;
-
-import cryptography.Packets.EstablishCommPacket;
-import cryptography.Packets.MessagePacket;
 
 public class Bob {
 	public static final String BOB = "Bob";
@@ -95,7 +90,7 @@ public class Bob {
 			//for (byte b : line) System.out.print(String.format("0x%02X ", b));
 			System.out.println();
 
-			MessagePacket p = (MessagePacket) Serializer.deserialize(line);
+			BytePacket p = (BytePacket) Serializer.deserialize(line);
 
 			ivBytes = Base64.decode(p.iv);
 			ciphertextBytes = Base64.decode(p.cipherText);

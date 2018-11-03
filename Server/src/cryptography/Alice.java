@@ -1,16 +1,18 @@
 package cryptography;
 
+import cryptography.Packets.BytePacket;
+import cryptography.Packets.EstablishCommPacket;
+import cryptography.Packets.StringMessage;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Base64;
 
-import cryptography.Packets.*;
-
-import javax.crypto.*;
-import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.SecretKey;
 import java.io.*;
 import java.net.Socket;
-import java.security.*;
+import java.security.GeneralSecurityException;
+import java.security.Security;
 import java.util.Scanner;
+
+import static cryptography.Mallory.sendMessage;
 
 public class Alice {
 	public static final String ALICE = "Alice";
@@ -63,9 +65,14 @@ public class Alice {
 		clientSocket.close();
 	}
 	
-	public void sendMessage(String message) throws IOException{
+	public void sendStringMessage(String message) throws IOException{
 		StringMessage sm = new StringMessage(message);
-		BytePacket bp = new BytePacket(Serializer.serialize(sm), sessionKey);
+		byte[] smEnc = Serializer.serialize(sm);
+		sendBytePacket(smEnc);
+	}
+
+	public void sendBytePacket(byte[] bytes) throws IOException {
+		BytePacket bp = new BytePacket(bytes, sessionKey);
 		byte[] bpEnc = Serializer.serialize(bp);
 		sendString("" + bpEnc.length);
 		sendBytes(bpEnc);
@@ -76,7 +83,7 @@ public class Alice {
 		System.out.println("Type in a message to send to Bob:");
 		String message = scan.nextLine();
 		while(message != "q") {
-			sendMessage(message);
+			sendStringMessage(message);
 			
 			System.out.println("Type in a message to send to Bob:");
 			message = scan.nextLine();
