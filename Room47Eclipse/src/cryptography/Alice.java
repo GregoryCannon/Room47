@@ -22,8 +22,9 @@ public class Alice {
 
 	public static void main(String args[]) throws IOException, GeneralSecurityException, ClassNotFoundException {
 		Security.addProvider(new BouncyCastleProvider());
-		String host = args[0]; // 127.0.0.1
+		//String host = args[0]; // 127.0.0.1
 		//int port = Integer.parseInt(args[1]); // 6666
+		String host = "127.0.0.1";
 		int port = 3000;
 		Alice alice = new Alice();
 		
