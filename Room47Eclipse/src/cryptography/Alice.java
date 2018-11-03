@@ -1,16 +1,12 @@
 package cryptography;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.SerializationUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
 
 import cryptography.Packets.*;
 
 import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
 import java.io.*;
 import java.net.Socket;
 import java.security.*;
@@ -42,11 +38,11 @@ public class Alice {
 		in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 		// Send establishment packet
-		//SecretKey sKey = Crypto.generateSessionKey();
+		sessionKey = Crypto.generateSessionKey();
 		//String stringKey = Base64.toBase64String(sKey.getEncoded());
 		//System.out.println("\n\n"+stringKey);
-		byte[] encodedKey = Base64.decode("Z2+uQRwPCI0z3gvh6wY79w==");
-	    sessionKey = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
+		//byte[] encodedKey = Base64.decode("Z2+uQRwPCI0z3gvh6wY79w==");
+	    //sessionKey = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
 		
 		long time = System.currentTimeMillis();
 		byte[] encSessionKey = Crypto.encryptSessionKey(cryptography.Keys.getPublicKeyBob(), sessionKey);
