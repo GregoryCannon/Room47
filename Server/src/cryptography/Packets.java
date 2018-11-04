@@ -1,11 +1,9 @@
 package cryptography;
 
-import java.io.UnsupportedEncodingException;
-
-import javax.crypto.SecretKey;
-
 import org.bouncycastle.util.Arrays;
 import org.bouncycastle.util.encoders.Base64;
+
+import javax.crypto.SecretKey;
 
 public class Packets {
 	public static class EstablishCommPacket implements java.io.Serializable{
@@ -41,7 +39,7 @@ public class Packets {
 		}
 	}
 	
-	public static class StringMessage{
+	public static class StringMessage implements java.io.Serializable{
 		public String str;
 
 		public StringMessage(String str){

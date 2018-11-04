@@ -12,8 +12,6 @@ import java.security.GeneralSecurityException;
 import java.security.Security;
 import java.util.Scanner;
 
-import static cryptography.Mallory.sendMessage;
-
 public class Alice {
 	public static final String ALICE = "Alice";
 	private Socket clientSocket;

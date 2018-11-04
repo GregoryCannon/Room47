@@ -87,7 +87,6 @@ public class Bob {
 			byte[] line = new byte[len];
 			bIn.read(line);
 			System.out.print("\nReceived data: " + new String(line, Charset.forName("ISO-8859-1")));
-			//for (byte b : line) System.out.print(String.format("0x%02X ", b));
 			System.out.println();
 
 			BytePacket p = (BytePacket) Serializer.deserialize(line);
