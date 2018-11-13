@@ -13,13 +13,15 @@ import java.security.GeneralSecurityException;
 public class SslServer implements SslContextProvider {
 
     public static void main(String[] args) throws Exception {
+        /*
         if (args.length != 1) {
             System.out.println("Usage: SslServer <port>\n");
             System.exit(1);
         }
 
         int port = Integer.parseInt(args[0]);
-
+        */
+        int port = 9000;
         new SslServer().run(port);
     }
 

@@ -9,6 +9,7 @@ import java.security.GeneralSecurityException;
 public class SslClient implements SslContextProvider {
 
     public static void main(String[] args) throws Exception {
+        /*
         if (args.length != 2) {
             System.out.println("Usage: SslClient <host> <port>\n");
             System.exit(1);
@@ -16,7 +17,9 @@ public class SslClient implements SslContextProvider {
 
         String host = args[0];
         int port = Integer.parseInt(args[1]);
-
+        */
+        String host = "localhost";
+        int port = 9000;
         new SslClient().run(host, port);
     }
 
