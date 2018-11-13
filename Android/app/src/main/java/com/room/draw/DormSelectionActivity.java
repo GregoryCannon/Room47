@@ -57,4 +57,11 @@ public class DormSelectionActivity extends AppCompatActivity {
 
         mAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, DashboardActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

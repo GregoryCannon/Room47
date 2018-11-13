@@ -19,5 +19,6 @@
         <activity android:name="com.room.draw.SignupActivity" android:theme="@style/AppTheme.Dark" />
         <activity android:name=".DormSelectionActivity" android:theme="@style/AppTheme.Dark" />
         <activity android:name=".RoomSelectionActivity" android:theme="@style/AppTheme.Dark" />
+        <activity android:name=".DashboardActivity" android:theme="@style/AppTheme.Dark" />
     </application>
 </manifest>

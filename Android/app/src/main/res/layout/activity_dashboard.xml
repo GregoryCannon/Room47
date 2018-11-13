@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/select_dorm"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Select A Room"
+        android:textColor="#ffffff"/>
+    <TextView
+        android:id="@+id/regTime"
+        android:layout_below="@id/select_dorm"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registration Time: 12:00 PM"/>
+
+    <Button
+        android:id="@+id/room_status"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="View Room Status"
+        android:textColor="#ffffff"
+        android:layout_alignParentRight="true" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Logout"
+        android:layout_below="@id/regTime"
+        android:textColor="#ffffff"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

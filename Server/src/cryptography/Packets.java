@@ -66,7 +66,7 @@ public class Packets {
 		}
 
 		private void decode(byte[] packet){
-			System.out.println("Decoding: " + packet);
+			//System.out.println("Decoding: " + packet);
 			System.out.println("Packet length: " + packet.length);
 			byte[] nameB = Arrays.copyOfRange(packet, 0, nameL);
 			name = new String(nameB);

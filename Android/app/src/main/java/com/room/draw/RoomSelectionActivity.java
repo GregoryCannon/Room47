@@ -34,4 +34,9 @@ public class RoomSelectionActivity extends AppCompatActivity {
         rooms.add(new Room(10));
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
 }
