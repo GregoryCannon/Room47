@@ -20,7 +20,7 @@ import io.lettuce.core.api.sync.RedisCommands;
 public class Room47 {
 		
 	private static RedisDB redis;
-    private static HashUtil hashUtil;
+    	private static HashUtil hashUtil;
     
 	public static void setUp() throws NoSuchAlgorithmException { 
 		hashUtil = new HashUtil();
