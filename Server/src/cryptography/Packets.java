@@ -88,7 +88,7 @@ public class Packets {
 
 		private void decode(byte[] packet){
 			//System.out.println("Decoding: " + packet);
-			System.out.println("Packet length: " + packet.length);
+			System.out.println("ClientPacket length: " + packet.length);
 			byte[] nameB = Arrays.copyOfRange(packet, 0, nameL);
 			name = new String(nameB);
 			byte[] timeB = Arrays.copyOfRange(packet, nameL, nameL+timeL);
@@ -105,7 +105,7 @@ public class Packets {
 			System.arraycopy(timeB, 0, packet, nameL, Math.min(timeB.length, timeL));
 			System.arraycopy(enc, 0, packet, nameL+timeL, Math.min(enc.length, encL));
 			System.arraycopy(signature, 0, packet, nameL+timeL+encL, Math.min(signature.length, sigL));
-			System.out.println("Packet length: " + packet.length);
+			System.out.println("ClientPacket length: " + packet.length);
 			return packet;
 		}
 	}
