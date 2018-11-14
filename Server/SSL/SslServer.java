@@ -10,19 +10,69 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.security.GeneralSecurityException;
 
+
+
 public class SslServer implements SslContextProvider {
+    ServerSocket socket;
+    OutputStream os;
+    InputStream is;
 
-    public static void main(String[] args) throws Exception {
-        /*
-        if (args.length != 1) {
-            System.out.println("Usage: SslServer <port>\n");
-            System.exit(1);
+
+    public SslServer(int port, SslServerHandler handler){
+        try {
+            socket = createSSLSocket(port);
+            System.out.println("Server started. Awaiting client...");
+
+            SSLSocket client = (SSLSocket) socket.accept();
+            os = client.getOutputStream();
+            is = client.getInputStream();
+            System.out.printf("Client (%s) connected. Awaiting ping...%n", SslUtil.getPeerIdentity(client));
+
+            run(handler);
+        } catch (Exception e){
+            e.printStackTrace();
         }
+    }
 
-        int port = Integer.parseInt(args[0]);
-        */
-        int port = 9000;
-        new SslServer().run(port);
+    private void run(SslServerHandler handler) throws Exception {
+        while (true){
+            ClientPacket cp = (ClientPacket) Serializer.deserialize(readBytes());
+            ServerPacket response = handler.handlePacket(cp);
+            sendBytes(Serializer.serialize(response));
+
+            /*
+            Old stuff from when it was only strings
+            // Read from client
+            String command = readString();
+            System.out.println("Received: " + command);
+
+            // Send response
+            String response = handler.handleString(command);
+            sendBytes(response.getBytes());
+            System.out.println("Sent: " + response);
+            */
+        }
+    }
+
+    public void sendBytes(byte[] bytes) throws IOException {
+        byte[] toSend = new byte[SslUtil.READ_LENGTH];
+        System.arraycopy(bytes, 0, toSend, 0, bytes.length);
+        os.write(toSend);
+        os.flush();
+    }
+
+    public String readString() throws IOException{
+        return new String(readBytes()).replaceAll("\0", "");
+    }
+
+    public byte[] readBytes() throws IOException {
+        int len = SslUtil.READ_LENGTH;
+        byte[] buf = new byte[len];
+        int read = is.read(buf);
+        if (read != len) {
+            throw new RuntimeException("Not enough bytes read: " + read + ", expected " + len + " bytes!");
+        }
+        return buf;
     }
 
     @Override
@@ -38,34 +88,6 @@ public class SslServer implements SslContextProvider {
     @Override
     public TrustManager[] getTrustManagers() throws GeneralSecurityException, IOException {
         return SslUtil.createTrustManagers("cacert.jks", "F8urious".toCharArray());
-    }
-
-    public void run(int port) throws Exception {
-        ServerSocket socket = createSSLSocket(port);
-
-        System.out.println("Server started. Awaiting client...");
-
-        try (SSLSocket client = (SSLSocket) socket.accept(); OutputStream os = client.getOutputStream(); InputStream is = client.getInputStream()) {
-            System.out.printf("Client (%s) connected. Awaiting ping...%n", SslUtil.getPeerIdentity(client));
-
-            byte[] buf = new byte[4];
-            int read = is.read(buf);
-            if (read != 4) {
-                throw new RuntimeException("Not enough bytes read: " + read + ", expected 4 bytes!");
-            }
-
-            String command = new String(buf);
-            if (!"ping".equals(command)) {
-                throw new RuntimeException("Expected 'ping', but got '" + command + "'...");
-            }
-
-            System.out.println("Ping received. Sending pong...");
-
-            os.write("pong".getBytes());
-            os.flush();
-
-            System.out.println("Pong written. Ending server...");
-        }
     }
 
     private ServerSocket createSSLSocket(int port) throws Exception {

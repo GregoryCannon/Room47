@@ -18,6 +18,7 @@ import java.util.List;
 
 public class SslUtil {
     private static final String JKS = "JKS";
+    public static final int READ_LENGTH = 1024;
 
     public static KeyManager[] createKeyManagers(String keystore, char[] password) throws GeneralSecurityException, IOException {
         return createKeyManagers(keystore, password, password);
