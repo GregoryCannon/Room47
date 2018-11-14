@@ -43,13 +43,13 @@ public class Room47 {
     }
 	
 	public static void main(String[] args){
-		try {
+	try {
 		setUp();
-		}
-		catch (NoSuchAlgorithmException e) {
+	}
+	catch (NoSuchAlgorithmException e) {
 			
-		}
-		String username = "Sam";
+	}
+	String username = "Sam";
         String password = "passphrase";
         String salt = "123456";
         String registrationTime = "98765";
