@@ -40,7 +40,7 @@ public class Room47 {
 			redis.setDormRoom(username, room);
 			redis.setDormRoomNumber(username, roomNumber);
 		}
-    }
+    	}
 	
 	public static void main(String[] args){
 	try {
