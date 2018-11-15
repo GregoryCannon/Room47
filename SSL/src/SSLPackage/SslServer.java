@@ -64,6 +64,16 @@ public class SslServer implements SslContextProvider {
         return buf;
     }
 
+    public void close(){
+        try {
+            os.close();
+            is.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /*
         SSL Setup
      */

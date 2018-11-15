@@ -8,9 +8,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 public class Server {
-
     private static RedisDB redis;
     private static HashUtil hashUtil;
+    private boolean isAuthenticated = false;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         new Server();
@@ -21,29 +21,50 @@ public class Server {
         redis = new RedisDB("localhost", 6379, hashUtil);
     }
 
-    private static ServerPacket handle(ClientPacket p){
+    public ServerPacket handle(ClientPacket p) {
         switch (p.action){
             case REGISTER:
                 try {
                     registerUser(p.username, p.password);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
+                    return new ServerPacket(e.getMessage());
                 }
                 break;
             case REQUEST_ROOM:
-                requestRoom(p.dormName, p.roomNumber, p.username);
-                break;
+                if (isAuthenticated){
+                    boolean success = requestRoom(p.dormName, p.roomNumber, p.username);
+                    if (success){
+                        return new ServerPacket("Room reserved!");
+                    } else {
+                        return new ServerPacket("Failed to reserve room. Check that the room is empty, " +
+                            "and that you're currently available to register.");
+                    }
+                }
             case LOG_IN:
-                break;
+                if (isAuthenticated) {
+                    return new ServerPacket("You're already logged in!");
+                } else {
+                    try {
+                        if (logIn(p.username, p.password)){
+                            return new ServerPacket("Login successful");
+                        } else {
+                            return new ServerPacket("Login failed");
+                        }
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        return new ServerPacket(e.getMessage());
+                    }
+                }
             case GET_INFO:
-                break;
+                return new ServerPacket("That functionality is coming soon!");
             case GET_ROOMS:
-                break;
+                return new ServerPacket("That functionality is coming soon!");
         }
-        return new ServerPacket("Generic response");
+        return new ServerPacket("Unknown action requested");
     }
 
-    public static void registerUser(String username, String password) throws UnsupportedEncodingException {
+    public void registerUser(String username, String password) throws UnsupportedEncodingException {
         // TODO: Check for valid pomona ID #
         // TODO: Store names
         Date regTime = new Date();  // TODO: Assign registration times;
@@ -60,17 +81,20 @@ public class Server {
         String verificationHashPass = new String(hashUtil.hashPassword(salt, password), "UTF8");
         String redisHashedPassword = redis.getHashedPassword(username);
         if (redisHashedPassword == null) return false;
-        return redisHashedPassword.equals(verificationHashPass);
+        isAuthenticated = redisHashedPassword.equals(verificationHashPass);
+        return isAuthenticated;
     }
 
-    public static void requestRoom(String room, String roomNumber, String username){
-        // TODO: Block two people in same dormName
+    public boolean requestRoom(String room, String roomNumber, String username){
+        // TODO: Block two people in same room
         // TODO: Check peoples' registration times
 
         if (redis.getDormRoom(username).equals("-1") && redis.getDormRoomNumber(username).equals("-1")) {
             redis.setDormRoom(username, room);
             redis.setDormRoomNumber(username, roomNumber);
+            return true;
         }
+        return false;
     }
 }
 
