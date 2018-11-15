@@ -1,236 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-<<<<<<< Updated upstream
-    <list default="true" id="36b2b493-3f98-4e3e-815e-78a81af81aca" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Server/src/cryptography/HashUtil.java" afterDir="false" />
+    <list default="true" id="578bfa7e-771e-416b-8e2d-6b7b46b1d168" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Room47.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/debug.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/gradle_wrapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/instant_run.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/instant_run_bootstrap.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/cryptography/RedisDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/cryptography/RedisDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Room47/cryptography/RedisDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Room47/cryptography/RedisDB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Room47/cryptography/RedisDBTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Room47/cryptography/RedisDBTest.class" afterDir="false" />
-=======
-    <list default="true" id="d9c7f2b7-da8e-484e-9f24-e1a4940af4cd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Android/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/Android/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/.idea/runConfigurations.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/.idea/runConfigurations.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/app/src/main/java/com/room/draw/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/java/com/room/draw/LoginActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/app/src/main/java/com/room/draw/SignupActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/java/com/room/draw/SignupActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/app/src/main/res/layout/activity_login.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/res/layout/activity_login.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Android/app/src/main/res/layout/activity_signup.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Android/app/src/main/res/layout/activity_signup.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/cryptography/Packets.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/cryptography/Packets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/cryptography/RedisDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/cryptography/RedisDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java" afterDir="false" />
->>>>>>> Stashed changes
     </list>
-    <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-<<<<<<< Updated upstream
-  <component name="CreatePatchCommitExecutor">
-    <option name="PATCH_PATH" value="" />
-  </component>
   <component name="FUSProjectUsageTrigger">
     <session id="1555537620">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.27" value="1" />
-          <entry key="project.open.time.3" value="1" />
-          <entry key="project.opened" value="2" />
-=======
-  <component name="FUSProjectUsageTrigger">
-    <session id="-929619218">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="3" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="3" />
->>>>>>> Stashed changes
+          <entry key="project.opened" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-<<<<<<< Updated upstream
-          <entry key="java" value="17" />
-          <entry key="txt" value="1" />
-=======
-          <entry key="java" value="5" />
->>>>>>> Stashed changes
+          <entry key="iml" value="2" />
+          <entry key="java" value="2" />
+          <entry key="xml" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-<<<<<<< Updated upstream
-          <entry key="JAVA" value="17" />
-          <entry key="PLAIN_TEXT" value="1" />
-=======
-          <entry key="JAVA" value="5" />
->>>>>>> Stashed changes
+          <entry key="IDEA_MODULE" value="2" />
+          <entry key="JAVA" value="2" />
+          <entry key="XML" value="2" />
         </counts>
       </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-<<<<<<< Updated upstream
-          <entry key="java" value="2573" />
-=======
-          <entry key="java" value="47" />
->>>>>>> Stashed changes
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-<<<<<<< Updated upstream
-          <entry key="JAVA" value="2573" />
-        </counts>
-      </usages-collector>
+      <usages-collector id="statistics.spring.boot.run.usages" />
       <usages-collector id="statistics.vcs.git.usages" />
       <usages-collector id="statistics.spring.boot.mvc.usages" />
-      <usages-collector id="statistics.spring.boot.run.usages" />
       <usages-collector id="statistics.js.language.service.starts" />
+      <usages-collector id="statistics.file.types.edit" />
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Server/src/cryptography/RedisDB.java">
+        <entry file="file://$PROJECT_DIR$/Server/src/ServerPackage/RedisDB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+            <state relative-caret-position="238">
+              <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2434#2435#0" expanded="true" />
-                <element signature="e#2455#2456#0" expanded="true" />
-                <element signature="e#2561#2562#0" expanded="true" />
-                <element signature="e#2591#2592#0" expanded="true" />
-                <element signature="e#2927#2928#0" expanded="true" />
-                <element signature="e#2957#2958#0" expanded="true" />
-=======
-          <entry key="JAVA" value="47" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
->>>>>>> Stashed changes
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-<<<<<<< Updated upstream
-        <entry file="file://$PROJECT_DIR$/Server/src/cryptography/HashUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-68">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#413#414#0" expanded="true" />
-                <element signature="e#434#435#0" expanded="true" />
-              </folding>
-=======
-        <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Packets.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="68" column="14" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
->>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-<<<<<<< Updated upstream
-        <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+        <entry file="file://$PROJECT_DIR$/Server/src/ServerPackage/RedisDBTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2802">
-              <caret line="560" column="75" selection-start-line="560" selection-start-column="75" selection-end-line="560" selection-end-column="75" />
-=======
-        <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Room47.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="11" column="15" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
->>>>>>> Stashed changes
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-<<<<<<< Updated upstream
-        <entry file="file://$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-442">
-              <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
-=======
-        <entry file="file://$PROJECT_DIR$/Server/src/cryptography/RedisDB.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="21" selection-start-column="21" selection-end-column="21" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
->>>>>>> Stashed changes
+            <state relative-caret-position="-816">
+              <caret line="12" column="19" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="24" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
-<<<<<<< Updated upstream
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
-=======
->>>>>>> Stashed changes
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GradleLocalSettings">
     <option name="projectSyncType">
       <map>
-<<<<<<< Updated upstream
         <entry key="$PROJECT_DIR$/../LodeRunner" value="PREVIEW" />
-=======
-        <entry key="$PROJECT_DIR$/../StarForce" value="PREVIEW" />
-        <entry key="$PROJECT_DIR$/../loderunner" value="PREVIEW" />
->>>>>>> Stashed changes
       </map>
-    </option>
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-<<<<<<< Updated upstream
-        <option value="$PROJECT_DIR$/Server/src/cryptography/Packets.java" />
-        <option value="$PROJECT_DIR$/Server/src/cryptography/HashUtil.java" />
-        <option value="$PROJECT_DIR$/Server/src/cryptography/RedisDB.java" />
-        <option value="$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java" />
-=======
-        <option value="$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java" />
-        <option value="$PROJECT_DIR$/Server/src/cryptography/RedisDB.java" />
-        <option value="$PROJECT_DIR$/Server/src/cryptography/Packets.java" />
->>>>>>> Stashed changes
-      </list>
     </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -239,17 +89,10 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-<<<<<<< Updated upstream
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="5" />
     <option name="y" value="5" />
     <option name="width" value="1750" />
-=======
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="655" />
-    <option name="y" value="10" />
-    <option name="width" value="1175" />
->>>>>>> Stashed changes
     <option name="height" value="970" />
   </component>
   <component name="ProjectView">
@@ -257,11 +100,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-<<<<<<< Updated upstream
-=======
       <pane id="PackagesPane" />
->>>>>>> Stashed changes
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -272,9 +111,11 @@
             <path>
               <item name="Room47" type="b2602c69:ProjectViewProjectNode" />
               <item name="Room47" type="462c0819:PsiDirectoryNode" />
-<<<<<<< Updated upstream
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
-=======
+              <item name="Android" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Room47" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Room47" type="462c0819:PsiDirectoryNode" />
               <item name="Server" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -288,49 +129,26 @@
               <item name="Room47" type="462c0819:PsiDirectoryNode" />
               <item name="Server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="cryptography" type="462c0819:PsiDirectoryNode" />
->>>>>>> Stashed changes
+              <item name="ServerPackage" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-<<<<<<< Updated upstream
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
-      <pane id="Scratches" />
-    </panes>
-  </component>
-  <component name="PropertiesComponent">
-    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/out" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542091344674" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/out" />
-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="SDKs" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.24827586" />
-=======
-      <pane id="AndroidView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541281275795" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/reactive-streams-1.0.1.jar!/" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542245591341" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/External JARs/rxjava-1.0.2.jar!/" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
->>>>>>> Stashed changes
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -344,174 +162,24 @@
       </list>
     </option>
   </component>
-<<<<<<< Updated upstream
-  <component name="RunManager" selected="Application.Bob">
-    <configuration default="true" type="JUnitTestDiscovery" factoryName="JUnit Test Discovery" changeList="All">
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration name="Alice" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="cryptography.RedisDBTest" />
-=======
-  <component name="RunManager" selected="Application.Room47">
-    <configuration name="Room47" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="cryptography.Room47" />
->>>>>>> Stashed changes
-      <module name="Room47" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cryptography.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-<<<<<<< Updated upstream
-    <configuration default="false" name="Alice" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cryptography.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="cryptography.Alice" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="Room47Java" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration name="Bob" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="cryptography.Bob" />
-      <module name="Room47Java" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-=======
+  <component name="RunManager">
     <configuration name="RedisDBTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Room47" />
->>>>>>> Stashed changes
+      <module name="Server" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cryptography.*" />
+          <option name="PATTERN" value="ServerPackage.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-<<<<<<< Updated upstream
+      <option name="PACKAGE_NAME" value="ServerPackage" />
+      <option name="MAIN_CLASS_NAME" value="ServerPackage.RedisDBTest" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Generator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="cryptography.Generator" />
-      <module name="Room47Java" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JUnit" factoryName="JUnit">
-      <option name="VM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
-      <module name="Room47Java" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <module name="" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-=======
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
-      <option name="PACKAGE_NAME" value="cryptography" />
-      <option name="MAIN_CLASS_NAME" value="cryptography.RedisDBTest" />
-      <option name="METHOD_NAME" value="" />
-      <option name="PARAMETERS" value="" />
->>>>>>> Stashed changes
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <list>
-<<<<<<< Updated upstream
-      <item itemvalue="Application.Bob" />
-      <item itemvalue="Application.Alice" />
-      <item itemvalue="Application.Generator" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Bob" />
-        <item itemvalue="Application.Alice" />
-=======
-      <item itemvalue="JUnit.RedisDBTest" />
-      <item itemvalue="Application.Room47" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Room47" />
         <item itemvalue="JUnit.RedisDBTest" />
->>>>>>> Stashed changes
       </list>
     </recent_temporary>
   </component>
@@ -520,308 +188,96 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-<<<<<<< Updated upstream
-      <changelist id="36b2b493-3f98-4e3e-815e-78a81af81aca" name="Default Changelist" comment="" />
-      <created>1541275460005</created>
+      <changelist id="578bfa7e-771e-416b-8e2d-6b7b46b1d168" name="Default Changelist" comment="" />
+      <created>1542244194331</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1541275460005</updated>
-      <workItem from="1541275463973" duration="5837000" />
-      <workItem from="1542086458507" duration="4734000" />
-=======
-      <changelist id="d9c7f2b7-da8e-484e-9f24-e1a4940af4cd" name="Default Changelist" comment="" />
-      <created>1541279070223</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1541279070223</updated>
-      <workItem from="1541279072917" duration="653000" />
-      <workItem from="1541279759509" duration="124000" />
-      <workItem from="1541280685119" duration="718000" />
->>>>>>> Stashed changes
+      <updated>1542244194331</updated>
+      <workItem from="1542244197456" duration="1271000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-<<<<<<< Updated upstream
-    <history-entry file="RedisDBTest - 2018.11.03 at 13h 10m 08s.xml">
+    <history-entry file="RedisDBTest - 2018.11.14 at 17h 20m 39s.xml">
       <configuration name="RedisDBTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.03 at 13h 12m 30s.xml">
-      <configuration name="RedisDBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.03 at 13h 15m 15s.xml">
-      <configuration name="RedisDBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.03 at 14h 09m 33s.xml">
-      <configuration name="RedisDBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.12 at 21h 42m 01s.xml">
-      <configuration name="RedisDBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.12 at 21h 43m 30s.xml">
-      <configuration name="RedisDBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.12 at 21h 44m 15s.xml">
-      <configuration name="RedisDBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.12 at 21h 50m 48s.xml">
-      <configuration name="RedisDBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.12 at 21h 57m 05s.xml">
-      <configuration name="RedisDBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.12 at 22h 39m 15s.xml">
-=======
-    <history-entry file="RedisDBTest - 2018.11.03 at 14h 11m 52s.xml">
-      <configuration name="RedisDBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="RedisDBTest - 2018.11.03 at 14h 14m 06s.xml">
->>>>>>> Stashed changes
+    <history-entry file="RedisDBTest - 2018.11.14 at 17h 21m 20s.xml">
       <configuration name="RedisDBTest" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-<<<<<<< Updated upstream
-    <option name="totallyTimeSpent" value="10577000" />
-=======
-    <option name="totallyTimeSpent" value="1495000" />
->>>>>>> Stashed changes
+    <option name="totallyTimeSpent" value="1271000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-<<<<<<< Updated upstream
+      <window_info id="Designer" />
+      <window_info id="Build Variants" side_tool="true" />
+      <window_info id="Image Layers" />
+      <window_info id="Capture Tool" />
+      <window_info id="UI Designer" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info id="Captures" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24966443" />
-=======
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24966443" />
->>>>>>> Stashed changes
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Designer" order="2" />
-      <window_info id="Build Variants" order="3" side_tool="true" />
-      <window_info id="Image Layers" order="4" />
-<<<<<<< Updated upstream
-      <window_info id="Capture Tool" order="5" />
-      <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info id="Captures" order="7" />
-      <window_info id="UI Designer" order="8" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Android Profiler" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" sideWeight="0.50067115" side_tool="true" visible="true" weight="0.32907802" />
+      <window_info anchor="bottom" id="Messages" sideWeight="0.49798658" weight="0.32907802" />
+      <window_info anchor="bottom" id="Logcat" />
+      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32907802" />
-=======
-      <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info id="Captures" order="6" />
-      <window_info id="Capture Tool" order="7" />
-      <window_info id="UI Designer" order="8" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32907802" />
->>>>>>> Stashed changes
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49932885" visible="true" weight="0.32907802" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Android Profiler" order="7" show_stripe_button="false" />
-<<<<<<< Updated upstream
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32907802" />
-      <window_info anchor="bottom" id="Logcat" order="11" />
-      <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="13" />
-      <window_info anchor="bottom" id="Terminal" order="14" />
-=======
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="9" weight="0.32907802" />
-      <window_info anchor="bottom" id="Logcat" order="10" />
-      <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="12" />
-      <window_info anchor="bottom" id="Terminal" order="13" />
->>>>>>> Stashed changes
+      <window_info anchor="right" id="Palette" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Device File Explorer" side_tool="true" />
+      <window_info anchor="right" id="Maven Projects" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Palette&#9;" />
+      <window_info anchor="right" id="Theme Preview" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-<<<<<<< Updated upstream
-      <window_info anchor="right" id="Device File Explorer" order="4" side_tool="true" />
-      <window_info anchor="right" id="Maven Projects" order="5" />
-      <window_info anchor="right" id="Database" order="6" />
-      <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="Theme Preview" order="8" />
-      <window_info anchor="right" id="Capture Analysis" order="9" />
-=======
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" id="Device File Explorer" order="5" side_tool="true" />
-      <window_info anchor="right" id="Maven Projects" order="6" />
-      <window_info anchor="right" id="Database" order="7" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
-      <window_info anchor="right" id="Theme Preview" order="9" />
->>>>>>> Stashed changes
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-<<<<<<< Updated upstream
-  <component name="Vcs.Log.UiProperties">
-    <option name="RECENTLY_FILTERED_USER_GROUPS">
-      <collection />
-    </option>
-    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-      <collection />
-    </option>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Server/src/cryptography/Bob.java</url>
-          <line>97</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Server/src/cryptography/Alice.java</url>
-          <line>73</line>
-          <properties />
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Server/src/rooms.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Room47.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android/app/src/main/java/com/room/draw/RoomSelectionActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Keys.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Generator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Alice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="72" column="38" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Packets.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="14" column="14" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/SSLClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/server.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Bob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
-=======
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java">
+    <entry file="file://$PROJECT_DIR$/.idea/Room47.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server/Server.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server/src/ServerPackage/RedisDB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
->>>>>>> Stashed changes
+        <state relative-caret-position="238">
+          <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-<<<<<<< Updated upstream
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/HashUtil.java">
+    <entry file="file://$PROJECT_DIR$/Server/src/ServerPackage/RedisDBTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-68">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#413#414#0" expanded="true" />
-            <element signature="e#434#435#0" expanded="true" />
-=======
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/RedisDB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="21" selection-start-column="21" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
->>>>>>> Stashed changes
-          </folding>
-        </state>
-      </provider>
-    </entry>
-<<<<<<< Updated upstream
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/RedisDB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2434#2435#0" expanded="true" />
-            <element signature="e#2455#2456#0" expanded="true" />
-            <element signature="e#2561#2562#0" expanded="true" />
-            <element signature="e#2591#2592#0" expanded="true" />
-            <element signature="e#2927#2928#0" expanded="true" />
-            <element signature="e#2957#2958#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/RedisDBTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-442">
-          <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
-=======
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Packets.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="68" column="14" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/cryptography/Room47.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="11" column="15" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
->>>>>>> Stashed changes
+        <state relative-caret-position="-816">
+          <caret line="12" column="19" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -831,9 +287,6 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-<<<<<<< Updated upstream
-=======
-          <last-edited>Room47:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -846,7 +299,6 @@
       <state key="FacetStructureConfigurable.UI">
         <settings>
           <last-edited>Android</last-edited>
->>>>>>> Stashed changes
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -869,19 +321,11 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-<<<<<<< Updated upstream
-          <last-edited>Android API 28 Platform</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.24827586" />
-=======
           <last-edited>1.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
->>>>>>> Stashed changes
               </list>
             </option>
           </splitter-proportions>
@@ -889,21 +333,23 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-<<<<<<< Updated upstream
-          <last-edited>Room47Java</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.6" />
-                <option value="0.2" />
-=======
           <last-edited>Room47</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
-                <option value="0.6" />
->>>>>>> Stashed changes
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
               </list>
             </option>
           </splitter-proportions>
@@ -911,18 +357,10 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-<<<<<<< Updated upstream
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.24827586" />
-=======
-          <last-edited>0</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
->>>>>>> Stashed changes
               </list>
             </option>
           </splitter-proportions>
