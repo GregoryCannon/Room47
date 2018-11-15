@@ -3,7 +3,7 @@ import java.io.IOException;
 /**
  * Created by Greg on 11/13/18.
  */
-public class TestClient {
+public class ExampleClient {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         // Initialize server
         SslServerHandler handler = (clientPacket) -> {

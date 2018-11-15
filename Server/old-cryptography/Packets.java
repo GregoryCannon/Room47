@@ -7,9 +7,9 @@ import javax.crypto.SecretKey;
 
 public class Packets {
 	public static class EstablishCommPacket implements java.io.Serializable{
-		public String name; 
+		public String name;
 		public long time;
-		public byte[] enc; 
+		public byte[] enc;
 		public byte[] signature;
 
 		public EstablishCommPacket(String name, long time, byte[] enc, byte[] signature){
@@ -38,7 +38,7 @@ public class Packets {
 			}
 		}
 	}
-	
+
 	public static class StringMessage implements java.io.Serializable{
 		public String str;
 
@@ -46,7 +46,7 @@ public class Packets {
 			this.str = str;
 		}
 	}
-	
+
 	/*
 	public static class GetStatusPacket extends MessagePacket{
 
@@ -59,14 +59,14 @@ public class Packets {
 			// TODO Auto-generated method stub
 			return null;
 		}
-		
+
 	}*/
 
 
 	public static class EstablishPacket implements java.io.Serializable{
-		public String name; 
+		public String name;
 		public long time;
-		public byte[] enc; 
+		public byte[] enc;
 		public byte[] signature;
 
 		// Number of bytes for each in the packet
@@ -94,7 +94,7 @@ public class Packets {
 			byte[] timeB = Arrays.copyOfRange(packet, nameL, nameL+timeL);
 			time = Serializer.bytesToLong(timeB);
 			enc = Arrays.copyOfRange(packet, nameL+timeL, nameL+timeL+encL);
-			signature = Arrays.copyOfRange(packet, nameL+timeL+encL, nameL+timeL+encL+sigL); 
+			signature = Arrays.copyOfRange(packet, nameL+timeL+encL, nameL+timeL+encL+sigL);
 		}
 
 		public byte[] encode(){

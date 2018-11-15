@@ -1,20 +1,7 @@
-import static junit.framework.TestCase.assertEquals;
+import cryptography.HashUtil;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.HashMap;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.RedisURI;
-import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisCommands;
 
 public class Room47 {
 		
@@ -110,10 +97,15 @@ public class Room47 {
 		System.out.println(username5);
 		System.out.println(redis.getDormRoom(username5) + redis.getDormRoomNumber(username5));
 	}
-	
-	
-	
+
 }
+
+
+
+
+
+
+
 
 /**
 package cryptography;
