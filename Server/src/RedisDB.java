@@ -78,6 +78,11 @@ public class RedisDB {
     public void setRegistrationTime(String username, String registrationTime){
         commands.hset(username, REGISTRATION_TIME, registrationTime);
     }
+    
+    public boolean isAuthenticated(String username, String salt, String password) throws UnsupportedEncodingException {
+        String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
+        return commands.hget(username, PASSWORD).equals(hashedPassword);
+    }
 
     public void closeRedisConnection(){
         connection.close();
