@@ -6,6 +6,7 @@ import SSLPackage.ServerPacket;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Random;
 
 public class Server {
     private static RedisDB redis;
@@ -26,11 +27,11 @@ public class Server {
             case REGISTER:
                 try {
                     registerUser(p.username, p.password);
-                    return new ServerPacket("Registration successful");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                     return new ServerPacket(e.getMessage());
                 }
+                break;
             case REQUEST_ROOM:
                 if (isAuthenticated){
                     boolean success = requestRoom(p.dormName, p.roomNumber, p.username);
@@ -65,16 +66,27 @@ public class Server {
     }
 
     public void registerUser(String username, String password) throws UnsupportedEncodingException {
-        String valid = "^[0-9]{8}$";
-        if (redis.getUserID(username) == valid) {
-            // TODO: Store names
-            Date regTime = new Date();  // TODO: Assign registration times;
-            String salt = "" + (int) (Math.random() * 999999);
-            int regNumber = (int) (Math.random() * 1000);
-            String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
-            redis.createAccount(username, hashedPassword, regTime.toString(), salt);
-            redis.setRoomDrawNumber(username, "" + regNumber);
-        }
+        // TODO: Check for valid pomona ID #
+        // TODO: Store names
+        Random rnd;
+        Date regTime;
+        long ms;
+
+        // Get a new random instance, seeded from the clock
+        rnd = new Random();
+
+        // Get an Epoch value roughly between 1940 and 2010
+        // -946771200000L = January 1, 1940
+        // Add up to 70 years to it (using modulus on the next long)
+        ms = -946771200000L + (Math.abs(rnd.nextLong()) % (70L * 365 * 24 * 60 * 60 * 1000));
+
+        // Construct a date
+        regTime = new Date(ms);
+        String salt = "" + (int) (Math.random()*999999);
+        int regNumber = (int) (Math.random()*1000);
+        String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
+        redis.createAccount(username, hashedPassword, regTime.toString(), salt);
+        redis.setRoomDrawNumber(username, ""+regNumber);
     }
 
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {
