@@ -65,14 +65,16 @@ public class Server {
     }
 
     public void registerUser(String username, String password) throws UnsupportedEncodingException {
-        // TODO: Check for valid pomona ID #
-        // TODO: Store names
-        Date regTime = new Date();  // TODO: Assign registration times;
-        String salt = "" + (int) (Math.random()*999999);
-        int regNumber = (int) (Math.random()*1000);
-        String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
-        redis.createAccount(username, hashedPassword, regTime.toString(), salt);
-        redis.setRoomDrawNumber(username, ""+regNumber);
+        String valid = "^[0-9]{8}$";
+        if (redis.getUserID(username) == valid) {
+            // TODO: Store names
+            Date regTime = new Date();  // TODO: Assign registration times;
+            String salt = "" + (int) (Math.random() * 999999);
+            int regNumber = (int) (Math.random() * 1000);
+            String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
+            redis.createAccount(username, hashedPassword, regTime.toString(), salt);
+            redis.setRoomDrawNumber(username, "" + regNumber);
+        }
     }
 
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {
