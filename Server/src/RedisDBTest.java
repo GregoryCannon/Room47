@@ -65,4 +65,14 @@ public class RedisDBTest {
         redis.setRegistrationTime(username, registrationTime);
         assertEquals(redis.getRegistrationTime(username), "98765");
     }
+    
+    @Test
+    public void testIsAuthenticated() throws UnsupportedEncodingException {
+        String username = "John Smith";
+        String password = "passphrase";
+        String salt = "mySalt";
+        String registrationTime = "12345";
+        redis.createAccount(username, password, registrationTime, salt);
+        assertTrue(redis.isAuthenticated(username, salt, password));
+    }
 }
