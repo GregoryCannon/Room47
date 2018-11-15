@@ -2,6 +2,7 @@ package ServerPackage;
 
 import SSLPackage.Action;
 import SSLPackage.ClientPacket;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -22,13 +23,18 @@ public class ServerTest {
     public static void init() throws NoSuchAlgorithmException, UnsupportedEncodingException {
         hashUtil = new HashUtil();
         redis = new RedisDB("localhost", 6379, hashUtil);
-        server = new Server();
-        writeDummyData();
         setupJohnSmith();
+    }
+
+    @Before
+    public void createServer() throws NoSuchAlgorithmException {
+        server = new Server();
     }
 
     @Test
     public void simpleRoomAssignment(){
+        writeDummyData();
+
         server.requestRoom("Clark V", "117", "sam");
         server.requestRoom("Clark I", "117", "josh");
         server.requestRoom("Walker", "204", "greg");
@@ -61,7 +67,7 @@ public class ServerTest {
     @Test
     public void canLogInWithPacket() throws UnsupportedEncodingException{
         ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, jPassword, null, null, null);
-        assertEquals(server.handle(p).message, "Login Successful");
+        assertEquals(server.handle(p).message, "Login successful");
     }
 
     @Test
@@ -72,12 +78,18 @@ public class ServerTest {
     @Test
     public void loginFailsWithWrongPasswordWithPacket() throws UnsupportedEncodingException {
         ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, "incorrect password", null, null, null);
-        assertEquals(server.handle(p).message, "Login Failed");
+        assertEquals(server.handle(p).message, "Login failed");
     }
 
     @Test
     public void loginFailsWithWrongUsername() throws UnsupportedEncodingException {
         assertFalse(server.logIn("Jane Doe", jPassword));
+    }
+
+    @Test
+    public void loginFailsWithWrongUsernameWithPacket() throws UnsupportedEncodingException {
+        ClientPacket p = new ClientPacket(Action.LOG_IN, "Jane Doe", jPassword, null, null, null);
+        assertEquals(server.handle(p).message, "Login failed");
     }
 
     private static void writeDummyData(){
