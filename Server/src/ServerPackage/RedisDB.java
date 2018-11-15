@@ -20,6 +20,8 @@ public class RedisDB {
     private static final String DORM_ROOM = "dormRoom";
     private static final String DORM_ROOM_NUMBER = "dormRoomNumber";
     private static final String REGISTRATION_TIME = "registrationTime";
+    private static final String FULL_NAME = "fullName";
+    private static final String USER_ID = "userID";
 
     public RedisDB(String host, int port, HashUtil hashUtil){
         RedisURI uri = RedisURI.create(host, port);
@@ -38,6 +40,8 @@ public class RedisDB {
         commands.hset(username, DORM_ROOM, "-1");
         commands.hset(username, DORM_ROOM_NUMBER, "-1");
         commands.hset(username, REGISTRATION_TIME, registrationTime);
+        commands.hset(username, FULL_NAME, "-1");
+        commands.hset(username, USER_ID, "-1");
     }
 
     public String getPassword(String username){
@@ -87,6 +91,22 @@ public class RedisDB {
     public boolean isAuthenticated(String username, String salt, String password) throws UnsupportedEncodingException {
         String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
         return commands.hget(username, PASSWORD).equals(hashedPassword);
+    }
+
+    public String getFullName(String username){
+        return commands.hget(username, FULL_NAME);
+    }
+
+    public void setFullName(String username, String fullName){
+        commands.hset(username, FULL_NAME, fullName);
+    }
+
+    public String getUserID(String username){
+        return commands.hget(username, USER_ID);
+    }
+
+    public void setUserID(String username, String userID){
+        commands.hset(username, USER_ID, userID);
     }
 
     public void closeRedisConnection(){

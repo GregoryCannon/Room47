@@ -78,4 +78,20 @@ public class RedisDBTest {
         redis.createAccount(username, password, registrationTime, salt);
         assertTrue(redis.isAuthenticated(username, salt, password));
     }
+
+    @Test
+    public void testUserID(){
+        String username = "John Smith";
+        String userID = "54321";
+        redis.setUserID(username, userID);
+        assertEquals(redis.getUserID(username), "54321");
+    }
+
+    @Test
+    public void testFullName(){
+        String username = "adumbledore";
+        String fullName = "Albus Percival Wulfric Brian Dumbledore";
+        redis.setFullName(username, fullName);
+        assertEquals(redis.getFullName(username), "Albus Percival Wulfric Brian Dumbledore");
+    }
 }
