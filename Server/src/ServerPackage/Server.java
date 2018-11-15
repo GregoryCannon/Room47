@@ -56,9 +56,11 @@ public class Server {
 
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {
         String salt = redis.getSalt(username);
+        if (salt == null) return false;
         String verificationHashPass = new String(hashUtil.hashPassword(salt, password), "UTF8");
-        String temp = redis.getHashedPassword(username);
-        return redis.getHashedPassword(username).equals(verificationHashPass);
+        String redisHashedPassword = redis.getHashedPassword(username);
+        if (redisHashedPassword == null) return false;
+        return redisHashedPassword.equals(verificationHashPass);
     }
 
     public static void requestRoom(String room, String roomNumber, String username){
