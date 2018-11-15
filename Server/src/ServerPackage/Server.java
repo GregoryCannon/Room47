@@ -21,7 +21,7 @@ public class Server {
         redis = new RedisDB("localhost", 6379, hashUtil);
     }
 
-    private static ServerPacket handle(ClientPacket p){
+    public ServerPacket handle(ClientPacket p){
         switch (p.action){
             case REGISTER:
                 try {
@@ -43,7 +43,7 @@ public class Server {
         return new ServerPacket("Generic response");
     }
 
-    public static void registerUser(String username, String password) throws UnsupportedEncodingException {
+    public void registerUser(String username, String password) throws UnsupportedEncodingException {
         // TODO: Check for valid pomona ID #
         // TODO: Store names
         Date regTime = new Date();  // TODO: Assign registration times;
@@ -63,8 +63,8 @@ public class Server {
         return redisHashedPassword.equals(verificationHashPass);
     }
 
-    public static void requestRoom(String room, String roomNumber, String username){
-        // TODO: Block two people in same dormName
+    public void requestRoom(String room, String roomNumber, String username){
+        // TODO: Block two people in same room
         // TODO: Check peoples' registration times
 
         if (redis.getDormRoom(username).equals("-1") && redis.getDormRoomNumber(username).equals("-1")) {
