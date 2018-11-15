@@ -13,7 +13,7 @@ public class RedisDB {
     private RedisClient client;
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> commands;
-    private HashUtil hashUtil;
+    //private HashUtil hashUtil;
     private static final String PASSWORD = "password";
     private static final String SALT = "salt";
     private static final String ROOM_DRAW_NUMBER = "roomDrawNumber";
@@ -26,13 +26,11 @@ public class RedisDB {
         client = RedisClient.create(uri);
         connection = client.connect();
         commands = connection.sync();
-        this.hashUtil = hashUtil;
+        //this.hashUtil = hashUtil;
     }
 
-    public void createAccount(String username, String password, String registrationTime, String salt) throws UnsupportedEncodingException {
-        byte[] hashedPassword = hashUtil.hashPassword(salt, password);
-        String convertedPassword = new String(hashedPassword, "UTF8");
-        commands.hset(username, PASSWORD, convertedPassword);
+    public void createAccount(String username, String hashedPassword, String registrationTime, String salt) throws UnsupportedEncodingException {
+        commands.hset(username, PASSWORD, hashedPassword);
         commands.hset(username, SALT, salt);
         commands.hset(username, ROOM_DRAW_NUMBER, "-1");
         commands.hset(username, DORM_ROOM, "-1");
@@ -40,7 +38,7 @@ public class RedisDB {
         commands.hset(username, REGISTRATION_TIME, registrationTime);
     }
 
-    public String getPassword(String username){
+    public String getHashedPassword(String username){
         return commands.hget(username, PASSWORD);
     }
 
@@ -82,11 +80,6 @@ public class RedisDB {
 
     public void setRegistrationTime(String username, String registrationTime){
         commands.hset(username, REGISTRATION_TIME, registrationTime);
-    }
-    
-    public boolean isAuthenticated(String username, String salt, String password) throws UnsupportedEncodingException {
-        String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
-        return commands.hget(username, PASSWORD).equals(hashedPassword);
     }
 
     public void closeRedisConnection(){

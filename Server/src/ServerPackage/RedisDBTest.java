@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class RedisDBTest {
     private static RedisDB redis;
@@ -55,10 +54,11 @@ public class RedisDBTest {
         String password = "passphrase";
         String salt = "123456";
         String registrationTime = "98765";
-        redis.createAccount(username, password, registrationTime, salt);
-        assertEquals(redis.getSalt(username), "123456");
         String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
-        assertEquals(redis.getPassword(username), hashedPassword);
+
+        redis.createAccount(username, hashedPassword, registrationTime, salt);
+        assertEquals(redis.getSalt(username), "123456");
+        assertEquals(redis.getHashedPassword(username), hashedPassword);
     }
 
     @Test
@@ -66,16 +66,6 @@ public class RedisDBTest {
         String username = "John Smith";
         String registrationTime = "98765";
         redis.setRegistrationTime(username, registrationTime);
-        assertEquals(redis.getRegistrationTime(username), "98765");
-    }
-    
-    @Test
-    public void testIsAuthenticated() throws UnsupportedEncodingException {
-        String username = "John Smith";
-        String password = "passphrase";
-        String salt = "mySalt";
-        String registrationTime = "12345";
-        redis.createAccount(username, password, registrationTime, salt);
-        assertTrue(redis.isAuthenticated(username, salt, password));
+        assertEquals(redis.getRegistrationTime(username), registrationTime);
     }
 }
