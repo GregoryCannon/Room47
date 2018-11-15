@@ -63,6 +63,17 @@ public class ServerTest {
         assertFalse(server.logIn(username, "incorrect"));
     }
 
+    @Test
+    public void loginFailsWithWrongUsername() throws UnsupportedEncodingException {
+        String username = "John Smith";
+        String password = "passphrase";
+        String salt = "mySalt";
+        String registrationTime = "12345";
+        String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
+        redis.createAccount(username, hashedPassword, registrationTime, salt);
+        assertFalse(server.logIn("Jane Doe", hashedPassword));
+    }
+
     private static void writeDummyData(){
         try {
             server.registerUser("sam", "passphrase1");
