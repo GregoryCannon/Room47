@@ -1,4 +1,3 @@
-package cryptography;
 import static junit.framework.TestCase.assertEquals;
 
 import java.io.BufferedReader;

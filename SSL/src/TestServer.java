@@ -7,6 +7,9 @@ public class TestServer {
             The handler method receives a client packet, then does any backend updates, and returns a message packet.
         */
         SslServerHandler handler = (clientPacket) -> {
+
+            // Backend logic goes here
+
             return new ServerPacket("Generic message");
         };
         SslServer server = new SslServer(9000, handler);

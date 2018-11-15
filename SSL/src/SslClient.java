@@ -12,30 +12,19 @@ public class SslClient implements SslContextProvider {
     InputStream is;
     final int READ_LENGTH = 1024;
 
-    public SslClient(String host, int port){
-        try{
+    public SslClient(String host, int port) {
+        try {
             socket = createSSLSocket(host, port);
             os = socket.getOutputStream();
             is = socket.getInputStream();
             System.out.printf("Connected to server (%s). Writing ping...%n", SslUtil.getPeerIdentity(socket));
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public KeyManager[] getKeyManagers() throws GeneralSecurityException, IOException {
-        return SslUtil.createKeyManagers("client.jks", "F8urious".toCharArray());
-    }
-
-    @Override
-    public String getProtocol() {
-        return "TLSv1.2";
-    }
-
-    @Override
-    public TrustManager[] getTrustManagers() throws GeneralSecurityException, IOException {
-        return SslUtil.createTrustManagers("cacert.jks", "F8urious".toCharArray());
+    public void sendClientPacket(ClientPacket clientPacket) throws IOException{
+        sendBytes(Serializer.serialize(clientPacket));
     }
 
     public void sendBytes(byte[] bytes) throws IOException {
@@ -60,6 +49,25 @@ public class SslClient implements SslContextProvider {
             throw new RuntimeException("Not enough bytes read: " + read + ", expected " + len + " bytes!");
         }
         return buf;
+    }
+
+    /*
+        SSL Logistics
+     */
+
+    @Override
+    public KeyManager[] getKeyManagers() throws GeneralSecurityException, IOException {
+        return SslUtil.createKeyManagers("client.jks", "F8urious".toCharArray());
+    }
+
+    @Override
+    public String getProtocol() {
+        return "TLSv1.2";
+    }
+
+    @Override
+    public TrustManager[] getTrustManagers() throws GeneralSecurityException, IOException {
+        return SslUtil.createTrustManagers("cacert.jks", "F8urious".toCharArray());
     }
 
     private SSLSocket createSSLSocket(String host, int port) throws Exception {

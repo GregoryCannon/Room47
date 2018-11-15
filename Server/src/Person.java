@@ -1,5 +1,3 @@
-package cryptography;
-
 import java.util.Date;
 
 public class Person implements java.io.Serializable{

@@ -1,8 +1,4 @@
 package cryptography;
-<<<<<<< HEAD
-=======
-
->>>>>>> 414f52944cc7f5ccdd80ee4043e5623b1e2d7460
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

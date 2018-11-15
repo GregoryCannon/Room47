@@ -16,7 +16,7 @@ public class TestClient {
 
         // Create a packet and send it
         ClientPacket msg = new ClientPacket(Action.REGISTER, null, null, "Greg", null);
-        client.sendBytes(Serializer.serialize(msg));
+        client.sendClientPacket(msg);
         System.out.println("Sent packet.");
 
         // Read the server's message packet
