@@ -6,11 +6,12 @@ import SSLPackage.ServerPacket;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Random;
 
 public class Server {
     private static RedisDB redis;
     private static HashUtil hashUtil;
-    private boolean isAuthenticated = false;
+    private String authenticatedUser = null;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         new Server();
@@ -32,7 +33,7 @@ public class Server {
                     return new ServerPacket(e.getMessage());
                 }
             case REQUEST_ROOM:
-                if (isAuthenticated){
+                if (authenticatedUser.equals(p.username)){
                     boolean success = requestRoom(p.dormName, p.roomNumber, p.username);
                     if (success){
                         return new ServerPacket("Room reserved!");
@@ -42,7 +43,7 @@ public class Server {
                     }
                 }
             case LOG_IN:
-                if (isAuthenticated) {
+                if (authenticatedUser != null) {
                     return new ServerPacket("You're already logged in!");
                 } else {
                     try {
@@ -68,7 +69,14 @@ public class Server {
         String valid = "^[0-9]{8}$";
         if (studentID.matches(valid)) {
             // TODO: Store names
-            Date regTime = new Date();  // TODO: Assign registration times;
+            Random rnd = new Random();
+            // Get an Epoch value roughly between 1940 and 2010
+            // -946771200000L = January 1, 1940
+            // Add up to 70 years to it (using modulus on the next long)
+            long ms = -946771200000L + (Math.abs(rnd.nextLong()) % (70L * 365 * 24 * 60 * 60 * 1000));
+
+            // Construct a date
+            Date regTime = new Date(ms);
             String salt = "" + (int) (Math.random() * 999999);
             int regNumber = (int) (Math.random() * 1000);
             String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
@@ -83,8 +91,12 @@ public class Server {
         String verificationHashPass = new String(hashUtil.hashPassword(salt, password), "UTF8");
         String redisHashedPassword = redis.getHashedPassword(username);
         if (redisHashedPassword == null) return false;
-        isAuthenticated = redisHashedPassword.equals(verificationHashPass);
-        return isAuthenticated;
+        if (redisHashedPassword.equals(verificationHashPass)){
+            authenticatedUser = username;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean requestRoom(String room, String roomNumber, String username){
