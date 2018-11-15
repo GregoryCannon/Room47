@@ -74,8 +74,6 @@ public class Server {
             // -946771200000L = January 1, 1940
             // Add up to 70 years to it (using modulus on the next long)
             long ms = -946771200000L + (Math.abs(rnd.nextLong()) % (70L * 365 * 24 * 60 * 60 * 1000));
-
-            // Construct a date
             Date regTime = new Date(ms);
             String salt = "" + (int) (Math.random() * 999999);
             int regNumber = (int) (Math.random() * 1000);
