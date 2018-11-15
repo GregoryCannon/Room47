@@ -5,6 +5,12 @@ import java.io.IOException;
  */
 public class TestClient {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+        // Initialize server
+        SslServerHandler handler = (clientPacket) -> {
+            return new ServerPacket("Generic message");
+        };
+        new Thread(() -> new SslServer(9000, handler)).start();
+
         // Initialize a client
         SslClient client = new SslClient("localhost", 9000);
 
@@ -13,9 +19,9 @@ public class TestClient {
         client.sendBytes(Serializer.serialize(msg));
         System.out.println("Sent packet.");
 
-        // Read the server's response packet
+        // Read the server's message packet
         ServerPacket response = client.readServerPacket();
-        System.out.println("Received server packet: " + response.response);
+        System.out.println("Received server packet: " + response.message);
     }
 
 
@@ -25,8 +31,8 @@ public class TestClient {
         client.sendBytes(msg.getBytes());
         System.out.println("Sent: " + msg);
 
-        String response = client.readString();
-        System.out.println("Received: " + response);
+        String message = client.readString();
+        System.out.println("Received: " + message);
     }
     */
 

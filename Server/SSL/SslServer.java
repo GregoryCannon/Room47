@@ -1,5 +1,3 @@
-//import SslContextProvider;
-
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
@@ -11,7 +9,6 @@ import java.net.ServerSocket;
 import java.security.GeneralSecurityException;
 
 
-
 public class SslServer implements SslContextProvider {
     ServerSocket socket;
     OutputStream os;
@@ -21,12 +18,12 @@ public class SslServer implements SslContextProvider {
     public SslServer(int port, SslServerHandler handler){
         try {
             socket = createSSLSocket(port);
-            System.out.println("Server started. Awaiting client...");
+            System.out.println("Server: Server started. Awaiting client...");
 
             SSLSocket client = (SSLSocket) socket.accept();
             os = client.getOutputStream();
             is = client.getInputStream();
-            System.out.printf("Client (%s) connected. Awaiting ping...%n", SslUtil.getPeerIdentity(client));
+            System.out.printf("Server: Client (%s) connected. Awaiting ping...%n", SslUtil.getPeerIdentity(client));
 
             run(handler);
         } catch (Exception e){
@@ -36,21 +33,11 @@ public class SslServer implements SslContextProvider {
 
     private void run(SslServerHandler handler) throws Exception {
         while (true){
+            System.out.println("Server: packet received");
             ClientPacket cp = (ClientPacket) Serializer.deserialize(readBytes());
             ServerPacket response = handler.handlePacket(cp);
             sendBytes(Serializer.serialize(response));
-
-            /*
-            Old stuff from when it was only strings
-            // Read from client
-            String command = readString();
-            System.out.println("Received: " + command);
-
-            // Send response
-            String response = handler.handleString(command);
-            sendBytes(response.getBytes());
-            System.out.println("Sent: " + response);
-            */
+            System.out.println("Server: response sent");
         }
     }
 
@@ -74,6 +61,10 @@ public class SslServer implements SslContextProvider {
         }
         return buf;
     }
+
+    /*
+        SSL Setup
+     */
 
     @Override
     public KeyManager[] getKeyManagers() throws GeneralSecurityException, IOException {
