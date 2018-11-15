@@ -1,0 +1,17 @@
+Information:error-prone compiler 2.3.1 was used to compile java sources
+Information:11/14/2018 9:28 PM - Compilation completed successfully with 5 warnings in 3 s 36 ms
+C:\Users\samge_000\Desktop\Room47\SSL\src\SSLPackage\SslClient.java
+Warning:(24, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+    (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
+Warning:(44, 16) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
+    (see http://errorprone.info/bugpattern/DefaultCharset)
+  Did you mean 'return new String(readBytes(SslUtil.READ_LENGTH), UTF_8).replaceAll("\0", "");' or 'return new String(readBytes(SslUtil.READ_LENGTH), Charset.defaultCharset()).replaceAll("\0", "");'?
+C:\Users\samge_000\Desktop\Room47\SSL\src\SSLPackage\ClientPacket.java
+Warning:(23, 20) java: [EqualsHashCode] Classes that override equals should also override hashCode.
+    (see http://errorprone.info/bugpattern/EqualsHashCode)
+C:\Users\samge_000\Desktop\Room47\SSL\src\SSLPackage\SslServer.java
+Warning:(32, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+    (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
+Warning:(54, 16) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
+    (see http://errorprone.info/bugpattern/DefaultCharset)
+  Did you mean 'return new String(readBytes(), UTF_8).replaceAll("\0", "");' or 'return new String(readBytes(), Charset.defaultCharset()).replaceAll("\0", "");'?
