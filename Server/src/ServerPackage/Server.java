@@ -25,7 +25,7 @@ public class Server {
         switch (p.action){
             case REGISTER:
                 try {
-                    registerUser(p.username, p.password);
+                    registerUser(p.username, p.password, "00011122");
                     return new ServerPacket("Registration successful");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -64,9 +64,9 @@ public class Server {
         return new ServerPacket("Unknown action requested");
     }
 
-    public void registerUser(String username, String password) throws UnsupportedEncodingException {
+    public void registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
         String valid = "^[0-9]{8}$";
-        if (redis.getUserID(username) == valid) {
+        if (studentID.matches(valid)) {
             // TODO: Store names
             Date regTime = new Date();  // TODO: Assign registration times;
             String salt = "" + (int) (Math.random() * 999999);

@@ -94,10 +94,10 @@ public class ServerTest {
 
     private static void writeDummyData(){
         try {
-            server.registerUser("sam", "passphrase1");
-            server.registerUser("josh", "passphrase2");
-            server.registerUser("patrick", "passphrase3");
-            server.registerUser("greg", "passphrase4");
+            server.registerUser("sam", "passphrase1", "00011122");
+            server.registerUser("josh", "passphrase2", "0");
+            server.registerUser("patrick", "passphrase3", "000");
+            server.registerUser("greg", "passphrase4", "00011133");
         }
         catch (UnsupportedEncodingException e) {
             e.printStackTrace();
