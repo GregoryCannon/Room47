@@ -1,3 +1,5 @@
+package SSLPackage;
+
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.TrustManager;
 import java.io.IOException;

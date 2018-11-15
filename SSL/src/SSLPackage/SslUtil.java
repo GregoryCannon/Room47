@@ -1,3 +1,5 @@
+package SSLPackage;
+
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;

@@ -1,4 +1,4 @@
-import cryptography.HashUtil;
+package ServerPackage;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -119,13 +119,13 @@ import java.util.HashMap;
  * A project for CS181S, System Security
 
 
-public class Room47 {
+public class ServerPackage.Room47 {
     private static HashMap<String, String> assignments;
-    private static HashMap<String, Person> people;
+    private static HashMap<String, ServerPackage.Person> people;
     static final String EMPTY_ROOM = "Empty";
     static final String UNASSIGNED = "None";
 
-    public Room47(){
+    public ServerPackage.Room47(){
 
     }
 
@@ -150,12 +150,12 @@ public class Room47 {
         //Date regTime = new Date((new Date()).getTime() + 2 * HOUR);
         Date regTime = new Date();
         int regNumber = people.size() + 10;
-        Person newPerson = new Person(name, username, password, ID, regNumber, regTime);
+        ServerPackage.Person newPerson = new ServerPackage.Person(name, username, password, ID, regNumber, regTime);
         people.put(ID, newPerson);
     }
 
     public static boolean requestRoom(String room, String ID){
-        Person person = people.get(ID);
+        ServerPackage.Person person = people.get(ID);
         if (assignments.containsKey(room) && !assignments.get(room).equals(EMPTY_ROOM)){
             return false;
         }
@@ -168,12 +168,12 @@ public class Room47 {
     }
 
     public static void syncData(){
-        for (Person person: people.values()){
+        for (ServerPackage.Person person: people.values()){
             person.room = UNASSIGNED;
         }
         for (String room: assignments.keySet()){
             if (assignments.get(room) != EMPTY_ROOM){
-                Person owner = people.get(assignments.get(room));
+                ServerPackage.Person owner = people.get(assignments.get(room));
                 owner.room = room;
             }
         }
@@ -200,7 +200,7 @@ public class Room47 {
         }
 
         for (String id : people.keySet()){
-            Person person = people.get(id);
+            ServerPackage.Person person = people.get(id);
             System.out.println(person.ID);
             System.out.println("\t" + person.name);
             System.out.println("\t" + person.getStatus());

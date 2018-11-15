@@ -1,3 +1,5 @@
+package ServerPackage;
+
 import java.util.Date;
 
 public class Person implements java.io.Serializable{
