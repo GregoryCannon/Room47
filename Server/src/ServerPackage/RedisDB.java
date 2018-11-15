@@ -1,5 +1,7 @@
 package ServerPackage;
 
+//import io.lettuce.core.RedisClient;
+
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -20,7 +22,8 @@ public class RedisDB {
     private static final String REGISTRATION_TIME = "registrationTime";
 
     public RedisDB(String host, int port, HashUtil hashUtil){
-        client = RedisClient.create(RedisURI.create(host, port));
+        RedisURI uri = RedisURI.create(host, port);
+        client = RedisClient.create(uri);
         connection = client.connect();
         commands = connection.sync();
         this.hashUtil = hashUtil;

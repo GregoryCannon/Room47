@@ -11,7 +11,6 @@ public class Room47 {
 	public static void setUp() throws NoSuchAlgorithmException { 
 		hashUtil = new HashUtil();
 		redis = new RedisDB("localhost", 6379, hashUtil);
-		
 	}
 	 
 	public void setRoomDrawNumber() {
