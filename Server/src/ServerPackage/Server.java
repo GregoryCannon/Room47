@@ -26,11 +26,11 @@ public class Server {
             case REGISTER:
                 try {
                     registerUser(p.username, p.password);
+                    return new ServerPacket("Registration successful");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                     return new ServerPacket(e.getMessage());
                 }
-                break;
             case REQUEST_ROOM:
                 if (isAuthenticated){
                     boolean success = requestRoom(p.dormName, p.roomNumber, p.username);
