@@ -30,7 +30,7 @@ public class TestSsl {
     @Test
     public void canSendPackets() throws IOException, ClassNotFoundException {
         // Setup
-        ClientPacket testClientPacket = new ClientPacket(Action.REGISTER, "username", "password", "name", "room");
+        ClientPacket testClientPacket = new ClientPacket(Action.REGISTER, "username", "password", "name", "dormName", "roomNumber");
         String testResponse = "server response";
         init((clientPacket) -> {
             // Check that all info was preserved

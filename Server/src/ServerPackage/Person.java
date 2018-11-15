@@ -8,13 +8,14 @@ public class Person implements java.io.Serializable{
     public String name;
     public String username;
     public String password;
+    public int salt;
     public Date regTime;
     public int regNumber;
     public String room;
     static final String EMPTY_ROOM = "Empty";
     static final String UNASSIGNED = "None";
 
-    public Person(String name, String username, String password, String ID, int regNumber, Date regTime){
+    public Person(String name, String username, String password, int salt, String ID, int regNumber, Date regTime){
         this.name = name;
         this.username = username;
         this.password = password;
