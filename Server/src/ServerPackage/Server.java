@@ -17,7 +17,7 @@ public class Server {
 
     public Server() throws NoSuchAlgorithmException{
         hashUtil = new HashUtil();
-        redis = new RedisDB("localhost", 6379, hashUtil);
+        redis = new RedisDB("localhost", 6379);
     }
 
     public ServerPacket handle(ClientPacket p) {

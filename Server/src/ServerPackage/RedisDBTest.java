@@ -16,7 +16,7 @@ public class RedisDBTest {
     @BeforeClass
     public static void setUp() throws NoSuchAlgorithmException {
         hashUtil = new HashUtil();
-        redis = new RedisDB("localhost", 6379, hashUtil);
+        redis = new RedisDB("localhost", 6379);
     }
 
     @AfterClass
@@ -83,5 +83,27 @@ public class RedisDBTest {
         String fullName = "Albus Percival Wulfric Brian Dumbledore";
         redis.setFullName(username, fullName);
         assertEquals(redis.getFullName(username), "Albus Percival Wulfric Brian Dumbledore");
+    }
+
+    @Test
+    public void testGetOccupantOfRoom() throws UnsupportedEncodingException {
+        String username = "user";
+        String hashedPassword = "qwerty";
+        String registrationTime = "1234";
+        String salt = "321";
+        for(int i = 0; i<10; i++){
+            redis.createAccount(username + i, hashedPassword + i,
+                    registrationTime + i, salt + i);
+            if(i % 2 == 0){
+                redis.setDormName(username + i, "Walker");
+            }
+            else{
+                redis.setDormName(username + i, "Clark I");
+            }
+            redis.setDormRoomNumber(username + i, i + "");
+        }
+        String getUser = redis.getOccupantOfRoom("Clark I", "3");
+        assertEquals(getUser, "user3");
+        assertEquals(redis.getUsers().size(), 10);
     }
 }

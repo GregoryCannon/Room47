@@ -22,7 +22,7 @@ public class ServerTest {
     @BeforeClass
     public static void init() throws NoSuchAlgorithmException, UnsupportedEncodingException {
         hashUtil = new HashUtil();
-        redis = new RedisDB("localhost", 6379, hashUtil);
+        redis = new RedisDB("localhost", 6379);
         setupJohnSmith();
     }
 
@@ -35,10 +35,10 @@ public class ServerTest {
     public void simpleRoomAssignment(){
         writeDummyData();
 
-        server.requestRoom("Clark V", "117", "sam");
-        server.requestRoom("Clark I", "117", "josh");
-        server.requestRoom("Walker", "204", "greg");
-        server.requestRoom("Walker", "208", "patrick");
+        server.requestRoom("Clark V", "117");
+        server.requestRoom("Clark I", "117");
+        server.requestRoom("Walker", "204");
+        server.requestRoom("Walker", "208");
 
         assertEquals(redis.getDormName("sam"), "Clark V");
         assertEquals(redis.getDormRoomNumber("sam"), "117");
