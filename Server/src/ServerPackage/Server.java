@@ -25,12 +25,18 @@ public class Server {
     public ServerPacket handle(ClientPacket p) {
         switch (p.action){
             case REGISTER:
-                try {
-                    registerUser(p.username, p.password, "00011122");
-                    return new ServerPacket(REGISTRATION_SUCCESSFUL);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    return new ServerPacket(e.getMessage());
+                String valid = "^[0-9]{8}$";
+                // TODO: check if username is already used
+                if (p.roomNumber.matches(valid)) {   // user room number as Student ID because the packet doesn't have a field for ID
+                    try {
+                        registerUser(p.username, p.password, p.roomNumber);
+                        return new ServerPacket(REGISTRATION_SUCCESSFUL);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        return new ServerPacket(e.getMessage());
+                    }
+                } else {
+                    return new ServerPacket(REGISTRATION_FAILED);
                 }
             case REQUEST_ROOM:
                 if (authenticatedUser != null){
@@ -119,17 +125,16 @@ public class Server {
     }
 
     public void registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
-        String valid = "^[0-9]{8}$";
-        if (studentID.matches(valid)) {
-            long weekInMs = 604800000L;
-            long currentTime = System.currentTimeMillis();
-            long regTimeMs = currentTime + (long) (Math.random() * weekInMs);
-            String salt = "" + (int) (Math.random() * 999999);
-            int regNumber = (int) (Math.random() * 1000);
-            String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
-            redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt);
-            redis.setRoomDrawNumber(username, "" + regNumber);
-        }
+        long weekInMs = 604800000L;
+        long currentTime = System.currentTimeMillis();
+        // TODO: reinstate random registration times (currently disabled for testing purposes)
+        //long regTimeMs = currentTime + (long) (Math.random() * weekInMs);
+        long regTimeMs = currentTime;
+        String salt = "" + (int) (Math.random() * 999999);
+        int regNumber = (int) (Math.random() * 1000);
+        String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
+        redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt);
+        redis.setRoomDrawNumber(username, "" + regNumber);
     }
 
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {

@@ -60,6 +60,14 @@ public class RedisDB {
         return commands.smembers(USERS);
     }
 
+    public void clearRoom(String dormName, String dormRoomNumber){
+        String occupant;
+        while (!(occupant = getOccupantOfRoom(dormName, dormRoomNumber)).equals("-1")){
+            setDormName(occupant, "-1");
+            setDormRoomNumber(occupant, "-1");
+        }
+    }
+
     //O(n) search for now
     public String getOccupantOfRoom(String dormName, String dormRoomNumber){
         Set<String> users = commands.smembers(USERS);

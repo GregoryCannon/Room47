@@ -8,6 +8,7 @@ public class ServerPacket implements java.io.Serializable{
 
     // Possible server responses
     public static final String REGISTRATION_SUCCESSFUL = "Registration successful";
+    public static final String REGISTRATION_FAILED = "Registration failed! Check that your student ID is valid.";
     public static final String RESERVE_SUCCESSFUL = "Room reserved!";
     public static final String RESERVE_FAILED = "Failed to reserve room. Check that the room is empty, " +
             "and that you're currently available to register.";

@@ -90,11 +90,7 @@ public class RedisDBTest {
         String username = "John Smith";
         String dormName = "Clark I";
         String dormRoomNumber = "3";
-        String occupant;
-        while (!(occupant = redis.getOccupantOfRoom(dormName, dormRoomNumber)).equals("-1")){
-            redis.setDormName(occupant, "-1");
-            redis.setDormRoomNumber(occupant, "-1");
-        }
+        redis.clearRoom(dormName, dormRoomNumber);
 
         redis.setDormName(username, dormName);
         redis.setDormRoomNumber(username, dormRoomNumber);
@@ -119,6 +115,5 @@ public class RedisDBTest {
         assertEquals(getUser, "user3");
         assertEquals(redis.getUsers().size(), 10);
         */
-
     }
 }
