@@ -5,8 +5,6 @@ import SSLPackage.ServerPacket;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.Random;
 
 public class Server {
     private static RedisDB redis;
@@ -33,14 +31,16 @@ public class Server {
                     return new ServerPacket(e.getMessage());
                 }
             case REQUEST_ROOM:
-                if (authenticatedUser.equals(p.username)){
-                    boolean success = requestRoom(p.dormName, p.roomNumber, p.username);
+                if (authenticatedUser != null){
+                    boolean success = requestRoom(p.dormName, p.roomNumber);
                     if (success){
                         return new ServerPacket("Room reserved!");
                     } else {
                         return new ServerPacket("Failed to reserve room. Check that the room is empty, " +
-                            "and that you're currently available to register.");
+                                "and that you're currently available to register.");
                     }
+                } else {
+                    return new ServerPacket("You are not logged in!");
                 }
             case LOG_IN:
                 if (authenticatedUser != null) {
@@ -58,20 +58,26 @@ public class Server {
                     }
                 }
             case ADMIN_PLACE_STUDENT:
-                boolean success = adminPlaceUserInRoom(p.username, p.dormName, p.roomNumber);
-                if (success) {
-                    return new ServerPacket("User " + p.username + " placed in " + p.dormName + " " + p.roomNumber);
-                } else {
+                if (authenticatedUser == null || !redis.isAdmin(authenticatedUser)){
                     return new ServerPacket("Unauthorized: you are not logged in as an administrator.");
+                } else {
+                    boolean success = adminPlaceUserInRoom(p.username, p.dormName, p.roomNumber);
+                    if (success) {
+                        return new ServerPacket("User " + p.username + " placed in " + p.dormName + " " + p.roomNumber);
+                    } else {
+                        return new ServerPacket("Failed to place student");
+                    }
                 }
-                break;
             case ADMIN_REMOVE_STUDENT:
-                boolean success = adminRemoveUserFromRoom(p.dormName, p.roomNumber);
-                if (success) {
-                    String oldOccupant = redis.getOccupantOfRoom(p.dormName, p.roomNumber);
-                    return new ServerPacket("User " + oldOccupant + " removed from " + p.dormName + " " + p.roomNumber);
-                } else {
+                if (authenticatedUser == null || !redis.isAdmin(authenticatedUser)){
                     return new ServerPacket("Unauthorized: you are not logged in as an administrator.");
+                } else {
+                    boolean success = adminRemoveUserFromRoom(p.dormName, p.roomNumber);
+                    if (success) {
+                        return new ServerPacket("User " + p.username + " placed in " + p.dormName + " " + p.roomNumber);
+                    } else {
+                        return new ServerPacket("Failed to remove student");
+                    }
                 }
             case GET_INFO:
                 return new ServerPacket("That functionality is coming soon!");
@@ -107,15 +113,13 @@ public class Server {
     public void registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
         String valid = "^[0-9]{8}$";
         if (studentID.matches(valid)) {
-            Random rnd = new Random();
-            // Get an Epoch value roughly between 1940 and 2010
-            // -946771200000L = January 1, 1940
-            // Add up to 70 years to it (using modulus on the next long)
-            long ms = -946771200000L + (Math.abs(rnd.nextLong()) % (70L * 365 * 24 * 60 * 60 * 1000));
+            long weekInMs = 604800000L;
+            long currentTime = System.currentTimeMillis();
+            long regTimeMs = currentTime + (long) (Math.random() * weekInMs);
             String salt = "" + (int) (Math.random() * 999999);
             int regNumber = (int) (Math.random() * 1000);
             String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
-            redis.createAccount(username, hashedPassword, ""+ms, salt);
+            redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt);
             redis.setRoomDrawNumber(username, "" + regNumber);
         }
     }
@@ -134,15 +138,15 @@ public class Server {
         }
     }
 
-    public boolean requestRoom(String room, String roomNumber, String username){
+    public boolean requestRoom(String room, String roomNumber){
         // TODO: Block two people in same room
         long currentTime = System.currentTimeMillis();
-        long regTime = Long.parseLong(redis.getRegistrationTime(username));
+        long regTime = Long.parseLong(redis.getRegistrationTime(authenticatedUser));
 
-        if (redis.getDormName(username).equals("-1") && redis.getDormRoomNumber(username).equals("-1")
+        if (redis.getDormName(authenticatedUser).equals("-1") && redis.getDormRoomNumber(authenticatedUser).equals("-1")
                 && regTime <= currentTime) {
-            redis.setDormName(username, room);
-            redis.setDormRoomNumber(username, roomNumber);
+            redis.setDormName(authenticatedUser, room);
+            redis.setDormRoomNumber(authenticatedUser, roomNumber);
             return true;
         }
         return false;
