@@ -68,7 +68,6 @@ public class Server {
     public void registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
         String valid = "^[0-9]{8}$";
         if (studentID.matches(valid)) {
-            // TODO: Store names
             Random rnd = new Random();
             // Get an Epoch value roughly between 1940 and 2010
             // -946771200000L = January 1, 1940

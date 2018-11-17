@@ -32,6 +32,7 @@ public class RedisDB {
     }
 
     public void createAccount(String username, String hashedPassword, String registrationTime, String salt) throws UnsupportedEncodingException {
+        // TODO: query student data for their English name
         commands.hset(username, PASSWORD, hashedPassword);
         commands.hset(username, SALT, salt);
         commands.hset(username, ROOM_DRAW_NUMBER, "-1");
