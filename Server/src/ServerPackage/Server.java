@@ -5,6 +5,7 @@ import SSLPackage.ServerPacket;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Random;
 
 public class Server {
@@ -135,14 +136,12 @@ public class Server {
 
     public boolean requestRoom(String room, String roomNumber, String username){
         // TODO: Block two people in same room
-        Date currentTime;
-        Date regTime;
-        currentTime = new Date();
-        regTime = new Date(redis.getRegistrationTime(username));
+        long currentTime = System.currentTimeMillis();
+        long regTime = Long.parseLong(redis.getRegistrationTime(username));
 
-        if (redis.getDormRoom(username).equals("-1") && redis.getDormRoomNumber(username).equals("-1")
-                && (regTime.before(currentTime) || regTime.equals(currentTime))) {
-            redis.setDormRoom(username, room);
+        if (redis.getDormName(username).equals("-1") && redis.getDormRoomNumber(username).equals("-1")
+                && regTime <= currentTime) {
+            redis.setDormName(username, room);
             redis.setDormRoomNumber(username, roomNumber);
             return true;
         }
