@@ -135,10 +135,14 @@ public class Server {
 
     public boolean requestRoom(String room, String roomNumber, String username){
         // TODO: Block two people in same room
-        // TODO: Check peoples' registration times
+        Date currentTime;
+        Date regTime;
+        currentTime = new Date();
+        regTime = new Date(redis.getRegistrationTime(username));
 
-        if (redis.getDormName(username).equals("-1") && redis.getDormRoomNumber(username).equals("-1")) {
-            redis.setDormName(username, room);
+        if (redis.getDormRoom(username).equals("-1") && redis.getDormRoomNumber(username).equals("-1")
+                && (regTime.before(currentTime) || regTime.equals(currentTime))) {
+            redis.setDormRoom(username, room);
             redis.setDormRoomNumber(username, roomNumber);
             return true;
         }
