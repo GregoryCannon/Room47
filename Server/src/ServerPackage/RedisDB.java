@@ -9,13 +9,13 @@ import io.lettuce.core.api.sync.RedisCommands;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 public class RedisDB {
     private RedisClient client;
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> commands;
-    //private HashUtil hashUtil;
     private static final String PASSWORD = "password";
     private static final String SALT = "salt";
     private static final String ROOM_DRAW_NUMBER = "roomDrawNumber";
@@ -51,7 +51,7 @@ public class RedisDB {
         return commands.sismember(ADMIN, username);
     }
 
-    public Set<String> getAdmin(){
+    public Set<String> getAdmins(){
         return commands.smembers(ADMIN);
     }
 
@@ -132,6 +132,16 @@ public class RedisDB {
 
     public void setUserID(String username, String userID){
         commands.hset(username, USER_ID, userID);
+    }
+
+    public void clearRedisDB(){
+        Set<String> users = getUsers();
+        Iterator<String> usersIterator = users.iterator();
+        while(usersIterator.hasNext()){
+            String currentUser = usersIterator.next();
+            commands.del(currentUser);
+            commands.srem(USERS, currentUser);
+        }
     }
 
     public void closeRedisConnection(){
