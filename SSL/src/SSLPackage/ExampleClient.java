@@ -17,7 +17,7 @@ public class ExampleClient {
         SslClient client = new SslClient("localhost", 9000);
 
         // Create a packet and send it
-        ClientPacket msg = new ClientPacket(Action.REGISTER, null, null, "Greg", null, null);
+        ClientPacket msg = new ClientPacket(Action.REGISTER, null, null, null, null);
         client.sendClientPacket(msg);
         System.out.println("Sent packet.");
 
