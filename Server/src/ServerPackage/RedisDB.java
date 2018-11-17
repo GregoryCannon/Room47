@@ -43,6 +43,16 @@ public class RedisDB {
         commands.hset(username, USER_ID, "-1");
     }
 
+    public boolean isAdmin(String username){
+        // TODO: implement this function
+        return true;
+    }
+
+    public String getOccupantOfRoom(String dormName, String dormRoomNumber){
+        // TODO: implement this function
+        return "";
+    }
+
     public String getHashedPassword(String username){
         return commands.hget(username, PASSWORD);
     }

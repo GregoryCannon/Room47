@@ -66,7 +66,14 @@ public class Server {
     }
 
     public boolean adminPlaceUserInRoom(String username, String dormName, String dormRoomNumber){
-        // stub
+        if (!redis.isAdmin(username)) return false;
+
+
+        if (redis.getDormName(username).equals("-1") && redis.getDormRoomNumber(username).equals("-1")) {
+            redis.setDormName(username, room);
+            redis.setDormRoomNumber(username, roomNumber);
+            return true;
+        }
     }
 
     public void registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
