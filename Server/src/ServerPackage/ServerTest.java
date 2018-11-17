@@ -40,13 +40,13 @@ public class ServerTest {
         server.requestRoom("Walker", "204", "greg");
         server.requestRoom("Walker", "208", "patrick");
 
-        assertEquals(redis.getDormRoom("sam"), "Clark V");
+        assertEquals(redis.getDormName("sam"), "Clark V");
         assertEquals(redis.getDormRoomNumber("sam"), "117");
-        assertEquals(redis.getDormRoom("josh"), "Clark I");
+        assertEquals(redis.getDormName("josh"), "Clark I");
         assertEquals(redis.getDormRoomNumber("josh"), "117");
-        assertEquals(redis.getDormRoom("greg"), "Walker");
+        assertEquals(redis.getDormName("greg"), "Walker");
         assertEquals(redis.getDormRoomNumber("greg"), "204");
-        assertEquals(redis.getDormRoom("patrick"), "Walker");
+        assertEquals(redis.getDormName("patrick"), "Walker");
         assertEquals(redis.getDormRoomNumber("patrick"), "208");
     }
 

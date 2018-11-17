@@ -36,8 +36,8 @@ public class RedisDBTest {
     public void testDormRoom() {
         String username = "Sam Gearou";
         String dormRoom = "Clark I";
-        redis.setDormRoom(username, dormRoom);
-        assertEquals(redis.getDormRoom(username), "Clark I");
+        redis.setDormName(username, dormRoom);
+        assertEquals(redis.getDormName(username), "Clark I");
     }
 
     @Test

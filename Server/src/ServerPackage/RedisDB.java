@@ -55,11 +55,11 @@ public class RedisDB {
         return commands.hget(username, ROOM_DRAW_NUMBER);
     }
 
-    public void setDormRoom(String username, String dormRoom){
+    public void setDormName(String username, String dormRoom){
         commands.hset(username, DORM_ROOM, dormRoom);
     }
 
-    public String getDormRoom(String username){
+    public String getDormName(String username){
         return commands.hget(username, DORM_ROOM);
     }
 
