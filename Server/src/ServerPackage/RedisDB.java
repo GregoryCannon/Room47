@@ -50,6 +50,8 @@ public class RedisDB {
         return commands.sismember(ADMIN, username);
     }
 
+    public long addAdmin(String username) { return commands.sadd(ADMIN, username); }
+
     public Set<String> getAdmin(){
         return commands.smembers(ADMIN);
     }

@@ -36,7 +36,7 @@ public class Server {
                 if (authenticatedUser != null){
                     boolean success = requestRoom(p.dormName, p.roomNumber);
                     if (success){
-                        return new ServerPacket(ROOM_RESERVED);
+                        return new ServerPacket(RESERVE_SUCCESSFUL);
                     } else {
                         return new ServerPacket(RESERVE_FAILED);
                     }
@@ -57,6 +57,13 @@ public class Server {
                         e.printStackTrace();
                         return new ServerPacket(e.getMessage());
                     }
+                }
+            case LOG_OUT:
+                if (authenticatedUser == null) {
+                    return new ServerPacket(NOT_LOGGED_IN);
+                } else {
+                    authenticatedUser = null;
+                    return new ServerPacket(LOGOUT_SUCCESSFUL);
                 }
             case ADMIN_PLACE_STUDENT:
                 if (authenticatedUser == null || !redis.isAdmin(authenticatedUser)){
@@ -105,6 +112,10 @@ public class Server {
             redis.setDormRoomNumber(currentOccupant, "-1");
         }
         return true;
+    }
+
+    public void addAdmin(String username){
+        redis.addAdmin(username);
     }
 
     public void registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {

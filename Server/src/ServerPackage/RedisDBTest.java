@@ -87,6 +87,19 @@ public class RedisDBTest {
 
     @Test
     public void testGetOccupantOfRoom() throws UnsupportedEncodingException {
+        String username = "John Smith";
+        String dormName = "Clark I";
+        String dormRoomNumber = "3";
+        String occupant;
+        while (!(occupant = redis.getOccupantOfRoom(dormName, dormRoomNumber)).equals("-1")){
+            redis.setDormName(occupant, "-1");
+            redis.setDormRoomNumber(occupant, "-1");
+        }
+
+        redis.setDormName(username, dormName);
+        redis.setDormRoomNumber(username, dormRoomNumber);
+        assertEquals(username, redis.getOccupantOfRoom(dormName, dormRoomNumber));
+        /*
         String username = "user";
         String hashedPassword = "qwerty";
         String registrationTime = "1234";
@@ -105,5 +118,7 @@ public class RedisDBTest {
         String getUser = redis.getOccupantOfRoom("Clark I", "3");
         assertEquals(getUser, "user3");
         assertEquals(redis.getUsers().size(), 10);
+        */
+
     }
 }

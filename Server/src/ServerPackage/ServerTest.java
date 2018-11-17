@@ -9,6 +9,8 @@ import org.junit.Test;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
+import static SSLPackage.Action.*;
+import static SSLPackage.ServerPacket.*;
 import static org.junit.Assert.*;
 
 /**
@@ -27,18 +29,22 @@ public class ServerTest {
     }
 
     @Before
-    public void createServer() throws NoSuchAlgorithmException {
+    public void createServer() throws NoSuchAlgorithmException, UnsupportedEncodingException {
         server = new Server();
+        server.registerUser("testadmin", "adminpass", "01234567");
+        server.addAdmin("testadmin");
     }
 
     @Test
     public void simpleRoomAssignment(){
         writeDummyData();
 
-        server.requestRoom("Clark V", "117");
-        server.requestRoom("Clark I", "117");
-        server.requestRoom("Walker", "204");
-        server.requestRoom("Walker", "208");
+        testAction(LOG_IN, "testadmin", "adminpass", null, null, LOGIN_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, "sam", null, "Clark V", "117", PLACE_STUDENT_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, "josh", null, "Clark I", "117", PLACE_STUDENT_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, "greg", null, "Walker", "204", PLACE_STUDENT_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, "patrick", null, "Walker", "208", PLACE_STUDENT_SUCCESSFUL);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
 
         assertEquals(redis.getDormName("sam"), "Clark V");
         assertEquals(redis.getDormRoomNumber("sam"), "117");
@@ -66,7 +72,7 @@ public class ServerTest {
 
     @Test
     public void canLogInWithPacket() throws UnsupportedEncodingException{
-        ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, jPassword, null, null, null);
+        ClientPacket p = new ClientPacket(LOG_IN, jUsername, jPassword, null, null);
         assertEquals(server.handle(p).message, "Login successful");
     }
 
@@ -77,7 +83,7 @@ public class ServerTest {
 
     @Test
     public void loginFailsWithWrongPasswordWithPacket() throws UnsupportedEncodingException {
-        ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, "incorrect password", null, null, null);
+        ClientPacket p = new ClientPacket(LOG_IN, jUsername, "incorrect password", null, null);
         assertEquals(server.handle(p).message, "Login failed");
     }
 
@@ -88,11 +94,37 @@ public class ServerTest {
 
     @Test
     public void loginFailsWithWrongUsernameWithPacket() throws UnsupportedEncodingException {
-        ClientPacket p = new ClientPacket(Action.LOG_IN, "Jane Doe", jPassword, null, null, null);
+        ClientPacket p = new ClientPacket(LOG_IN, "Jane Doe", jPassword, null, null);
         assertEquals(server.handle(p).message, "Login failed");
     }
 
+    @Test
+    public void adminFunctionsDontWorkWhenNotAuthenticated(){
+        ClientPacket p = new ClientPacket(ADMIN_REMOVE_STUDENT, null, null, "Clark I", "117");
+        assertEquals(server.handle(p).message, ADMIN_UNAUTHORIZED);
 
+        ClientPacket q = new ClientPacket(ADMIN_PLACE_STUDENT, "sam", null, "Clark I", "117");
+        assertEquals(server.handle(q).message, ADMIN_UNAUTHORIZED);
+    }
+
+    @Test
+    public void onlyAdminsCanUseAdminFunctions(){
+        testAction(LOG_IN, "greg", "passphrase4", null, null, LOGIN_SUCCESSFUL);
+        testAction(ADMIN_REMOVE_STUDENT, null, null, "Clark I", "117", ADMIN_UNAUTHORIZED);
+        testAction(ADMIN_PLACE_STUDENT, "sam", null, "Clark I", "117", ADMIN_UNAUTHORIZED);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+
+        testAction(LOG_IN, "testadmin", "adminpass", null, null, LOGIN_SUCCESSFUL);
+        testAction(ADMIN_REMOVE_STUDENT, null, null, "Clark I", "117", REMOVE_STUDENT_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, "sam", null, "Clark I", "117", PLACE_STUDENT_SUCCESSFUL);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+    }
+
+    private void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
+                            String expectedResult){
+        ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
+        assertEquals(expectedResult, server.handle(p).message);
+    }
 
     private static void writeDummyData(){
         try {
