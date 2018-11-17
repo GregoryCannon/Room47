@@ -92,6 +92,8 @@ public class ServerTest {
         assertEquals(server.handle(p).message, "Login failed");
     }
 
+
+
     private static void writeDummyData(){
         try {
             server.registerUser("sam", "passphrase1", "00011122");

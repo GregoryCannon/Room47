@@ -8,7 +8,6 @@ import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
 import java.util.Set;
 
 public class RedisDB {
@@ -62,16 +61,29 @@ public class RedisDB {
     //O(n) search for now
     public String getOccupantOfRoom(String dormName, String dormRoomNumber){
         Set<String> users = commands.smembers(USERS);
-        Iterator<String> userIterator = users.iterator();
-        while(userIterator.hasNext()){
-            String currentUser = userIterator.next();
-            String userDormName = commands.hget(currentUser, DORM_NAME);
-            String userDormRoomNumber = commands.hget(currentUser, DORM_ROOM_NUMBER);
+        for (String user : users){
+            String userDormName = commands.hget(user, DORM_NAME);
+            String userDormRoomNumber = commands.hget(user, DORM_ROOM_NUMBER);
             if(userDormName.equals(dormName) && userDormRoomNumber.equals(dormRoomNumber)){
-                return currentUser;
+                return user;
             }
         }
-        return "";
+        return "-1";
+    }
+
+    // Returns a space-separated string of room numbers that are occupied, within a given dorm
+    public String getOccupiedRooms(String dormName){
+        Set<String> users = commands.smembers(USERS);
+        String occupiedRooms = "";
+
+        for (String user : users){
+            String userDormName = commands.hget(user, DORM_NAME);
+            String userDormRoomNumber = commands.hget(user, DORM_ROOM_NUMBER);
+            if (userDormName.equals(dormName) && !userDormRoomNumber.equals("-1")){
+                occupiedRooms += " " + userDormRoomNumber;
+            }
+        }
+        return occupiedRooms;
     }
 
     public String getHashedPassword(String username){
