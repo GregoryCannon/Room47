@@ -81,8 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         String username = _userNameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        ServerPacket response = Connection.login(username, password, getApplicationContext());
-        System.out.println(response.message);
+        final ServerPacket response = Connection.login(username, password, getApplicationContext());
 
 
         // TODO: Implement your own authentication logic here.
@@ -91,8 +90,12 @@ public class LoginActivity extends AppCompatActivity {
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-
-                            onLoginSuccess();
+                            if(response.message.equals(ServerPacket.LOGIN_SUCCESSFUL)) {
+                                onLoginSuccess();
+                            }
+                            else {
+                                onLoginFailed();
+                            }
 
                         // onLoginFailed();
                         progressDialog.dismiss();

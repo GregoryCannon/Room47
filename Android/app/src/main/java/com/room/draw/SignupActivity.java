@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
+import SSLPackage.Connection;
+import SSLPackage.ServerPacket;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -41,7 +45,13 @@ public class SignupActivity extends AppCompatActivity {
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signup();
+                try {
+                    signup();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -57,7 +67,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void signup() {
+    public void signup() throws IOException, ClassNotFoundException {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
@@ -79,6 +89,9 @@ public class SignupActivity extends AppCompatActivity {
         String reEnterPassword = _reEnterPasswordText.getText().toString();
         String userId = _userID.getText().toString();
 
+        final ServerPacket response = Connection.register(username, password, userId, getApplicationContext());
+
+
         // TODO: Implement your own signup logic here.
 
         new android.os.Handler().postDelayed(
@@ -86,7 +99,12 @@ public class SignupActivity extends AppCompatActivity {
                     public void run() {
                         // On complete call either onSignupSuccess or onSignupFailed
                         // depending on success
-                        onSignupSuccess();
+                        if (response.message.equals(ServerPacket.REGISTRATION_SUCCESSFUL)) {
+                            onSignupSuccess();
+                        }
+                        else {
+                            onSignupFailed();
+                        }
                         // onSignupFailed();
                         progressDialog.dismiss();
                     }
@@ -103,7 +121,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }
