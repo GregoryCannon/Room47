@@ -1,4 +1,4 @@
-package com.room.draw;
+package SSLPackage;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -36,8 +36,7 @@ public class SslClient implements SslContextProvider {
 
     public void sendClientPacket(ClientPacket clientPacket) throws IOException {
         String s = new String(Serializer.serialize(clientPacket));
-        s = s.replace("com.room.draw", "SSLPackage");
-        sendBytes((s.getBytes()));
+        sendBytes(Serializer.serialize(clientPacket));
     }
 
     public void sendBytes(byte[] bytes) throws IOException {

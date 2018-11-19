@@ -1,6 +1,4 @@
-package com.room.draw;
-
-import android.content.Context;
+package SSLPackage;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLServerSocket;
@@ -11,6 +9,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.security.GeneralSecurityException;
+
+import SSLPackage.ClientPacket;
+import SSLPackage.Serializer;
+import SSLPackage.ServerPacket;
+import SSLPackage.SslContextProvider;
+import SSLPackage.SslServerHandler;
+import SSLPackage.SslUtil;
 
 
 public class SslServer implements SslContextProvider {

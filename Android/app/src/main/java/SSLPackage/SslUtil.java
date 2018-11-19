@@ -1,19 +1,12 @@
-package com.room.draw;
+package SSLPackage;
 
 import javax.net.ssl.*;
-import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import java.security.Principal;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 public class SslUtil {
     private static final String JKS = "BKS";

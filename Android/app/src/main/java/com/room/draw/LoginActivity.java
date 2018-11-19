@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import SSLPackage.Connection;
+import SSLPackage.ServerPacket;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

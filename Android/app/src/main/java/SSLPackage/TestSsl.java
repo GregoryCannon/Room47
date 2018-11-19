@@ -1,4 +1,4 @@
-package com.room.draw;
+package SSLPackage;
 
 /**
  * Created by Greg on 11/14/18.
@@ -23,7 +23,7 @@ public class TestSsl {
 
     public void canSendPackets(Context context) throws IOException, ClassNotFoundException {
         // Setup
-        ClientPacket testClientPacket = new ClientPacket(Action.REGISTER, "username", "password", "name", "dormName", "roomNumber");
+        ClientPacket testClientPacket = new ClientPacket(Action.REGISTER, "username", "password", "dormName", "roomNumber");
 
 
         // Send packet and get server's response

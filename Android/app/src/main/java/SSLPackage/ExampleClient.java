@@ -1,4 +1,4 @@
-package com.room.draw;
+package SSLPackage;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class ExampleClient {
         SslClient client = new SslClient("localhost", 9000, null);
 
         // Create a packet and send it
-        ClientPacket msg = new ClientPacket(Action.REGISTER, null, null, "Greg", null, null);
+        ClientPacket msg = new ClientPacket(Action.REGISTER, null, "Greg", null, null);
         client.sendClientPacket(msg);
         System.out.println("Sent packet.");
 

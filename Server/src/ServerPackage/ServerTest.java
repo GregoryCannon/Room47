@@ -66,7 +66,7 @@ public class ServerTest {
 
     @Test
     public void canLogInWithPacket() throws UnsupportedEncodingException{
-        ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, jPassword, null, null, null);
+        ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, jPassword, null, null);
         assertEquals(server.handle(p).message, "Login successful");
     }
 
@@ -77,7 +77,7 @@ public class ServerTest {
 
     @Test
     public void loginFailsWithWrongPasswordWithPacket() throws UnsupportedEncodingException {
-        ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, "incorrect password", null, null, null);
+        ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, "incorrect password", null, null);
         assertEquals(server.handle(p).message, "Login failed");
     }
 
@@ -88,7 +88,7 @@ public class ServerTest {
 
     @Test
     public void loginFailsWithWrongUsernameWithPacket() throws UnsupportedEncodingException {
-        ClientPacket p = new ClientPacket(Action.LOG_IN, "Jane Doe", jPassword, null, null, null);
+        ClientPacket p = new ClientPacket(Action.LOG_IN, "Jane Doe", jPassword, null, null);
         assertEquals(server.handle(p).message, "Login failed");
     }
 
