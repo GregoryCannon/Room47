@@ -35,7 +35,9 @@ public class SslClient implements SslContextProvider {
     }
 
     public void sendClientPacket(ClientPacket clientPacket) throws IOException {
-        sendBytes(Serializer.serialize(clientPacket));
+        String s = new String(Serializer.serialize(clientPacket));
+        s = s.replace("com.room.draw", "SSLPackage");
+        sendBytes((s.getBytes()));
     }
 
     public void sendBytes(byte[] bytes) throws IOException {
