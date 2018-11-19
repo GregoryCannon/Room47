@@ -14,6 +14,6 @@ public class ExampleServer {
 
             return new ServerPacket("Generic message");
         };
-        SslServer server = new SslServer(9000, handler);
+        SslServer server = new SslServer(6667, handler);
     }
 }

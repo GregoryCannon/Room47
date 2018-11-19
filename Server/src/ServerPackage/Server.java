@@ -2,6 +2,8 @@ package ServerPackage;
 
 import SSLPackage.ClientPacket;
 import SSLPackage.ServerPacket;
+import SSLPackage.SslServer;
+import SSLPackage.SslServerHandler;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -11,6 +13,7 @@ import static SSLPackage.ServerPacket.*;
 public class Server {
     private static RedisDB redis;
     private static HashUtil hashUtil;
+    private static SslServer server;
     private String authenticatedUser = null;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
@@ -20,6 +23,8 @@ public class Server {
     public Server() throws NoSuchAlgorithmException{
         hashUtil = new HashUtil();
         redis = new RedisDB("localhost", 6379);
+        SslServerHandler handler = (clientPacket) -> handle(clientPacket);
+        server = new SslServer(6667, handler);
     }
 
     public ServerPacket handle(ClientPacket p) {
