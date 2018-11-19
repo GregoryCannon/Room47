@@ -13,7 +13,7 @@ public class Connection {
 //            return new ServerPacket("Generic message");
 //        };
 //        new Thread(() -> new SslServer(9000, handler)).start();
-        client = new SslClient("10.0.2.2", 9000, context);
+        client = new SslClient("10.0.2.2", 6667, context);
         ClientPacket testClientPacket = new ClientPacket(Action.REGISTER, username, password, "dormName", "roomNumber");
 
 
