@@ -13,7 +13,6 @@ import static SSLPackage.ServerPacket.*;
 public class Server {
     private static RedisDB redis;
     private static HashUtil hashUtil;
-    private static SslServer server;
     private String authenticatedUser = null;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
@@ -24,7 +23,7 @@ public class Server {
         hashUtil = new HashUtil();
         redis = new RedisDB("localhost", 6379);
         SslServerHandler handler = (clientPacket) -> handle(clientPacket);
-        server = new SslServer(6667, handler);
+        SslServer server = new SslServer(6667, handler);
     }
 
     public ServerPacket handle(ClientPacket p) {
@@ -35,6 +34,8 @@ public class Server {
                 if (p.roomNumber.matches(valid)) {   // user room number as Student ID because the packet doesn't have a field for ID
                     try {
                         registerUser(p.username, p.password, p.roomNumber);
+                        logIn(p.username, p.password);
+
                         return new ServerPacket(REGISTRATION_SUCCESSFUL);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
