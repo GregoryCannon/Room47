@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.input_password) EditText _passwordText;
     @BindView(R.id.btn_login) Button _loginButton;
     @BindView(R.id.link_signup) TextView _signupLink;
+    private boolean loggedIn;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,13 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                login();
+                try {
+                    login();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -51,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void login() {
+    public void login() throws IOException, ClassNotFoundException {
         Log.d(TAG, "Login");
 
         if (!validate()) {
@@ -70,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
         String username = _userNameText.getText().toString();
         String password = _passwordText.getText().toString();
 
+        ServerPacket response = Connection.login(username, password, getApplicationContext());
+        System.out.println(response.message);
 
 
         // TODO: Implement your own authentication logic here.
@@ -78,7 +89,12 @@ public class LoginActivity extends AppCompatActivity {
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
+                        if (loggedIn) {
+                            onLoginSuccess();
+                        }
+                        else {
+                            onLoginFailed();
+                        }
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
