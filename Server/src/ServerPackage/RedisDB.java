@@ -15,7 +15,6 @@ public class RedisDB {
     private RedisClient client;
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> commands;
-    //private HashUtil hashUtil;
     private static final String PASSWORD = "password";
     private static final String SALT = "salt";
     private static final String ROOM_DRAW_NUMBER = "roomDrawNumber";
@@ -51,6 +50,8 @@ public class RedisDB {
         return commands.sismember(ADMIN, username);
     }
 
+    public long addAdmin(String username) { return commands.sadd(ADMIN, username); }
+
     public Set<String> getAdmin(){
         return commands.smembers(ADMIN);
     }
@@ -59,19 +60,40 @@ public class RedisDB {
         return commands.smembers(USERS);
     }
 
+    public void clearRoom(String dormName, String dormRoomNumber){
+        String occupant;
+        while (!(occupant = getOccupantOfRoom(dormName, dormRoomNumber)).equals("-1")){
+            setDormName(occupant, "-1");
+            setDormRoomNumber(occupant, "-1");
+        }
+    }
+
     //O(n) search for now
     public String getOccupantOfRoom(String dormName, String dormRoomNumber){
         Set<String> users = commands.smembers(USERS);
-        Iterator<String> userIterator = users.iterator();
-        while(userIterator.hasNext()){
-            String currentUser = userIterator.next();
-            String userDormName = commands.hget(currentUser, DORM_NAME);
-            String userDormRoomNumber = commands.hget(currentUser, DORM_ROOM_NUMBER);
+        for (String user : users){
+            String userDormName = commands.hget(user, DORM_NAME);
+            String userDormRoomNumber = commands.hget(user, DORM_ROOM_NUMBER);
             if(userDormName.equals(dormName) && userDormRoomNumber.equals(dormRoomNumber)){
-                return currentUser;
+                return user;
             }
         }
-        return "";
+        return "-1";
+    }
+
+    // Returns a space-separated string of room numbers that are occupied, within a given dorm
+    public String getOccupiedRooms(String dormName){
+        Set<String> users = commands.smembers(USERS);
+        String occupiedRooms = "";
+
+        for (String user : users){
+            String userDormName = commands.hget(user, DORM_NAME);
+            String userDormRoomNumber = commands.hget(user, DORM_ROOM_NUMBER);
+            if (userDormName.equals(dormName) && !userDormRoomNumber.equals("-1")){
+                occupiedRooms += " " + userDormRoomNumber;
+            }
+        }
+        return occupiedRooms;
     }
 
     public String getHashedPassword(String username){
@@ -132,6 +154,16 @@ public class RedisDB {
 
     public void setUserID(String username, String userID){
         commands.hset(username, USER_ID, userID);
+    }
+
+    public void clearRedisDB(){
+        Set<String> users = getUsers();
+        Iterator<String> usersIterator = users.iterator();
+        while(usersIterator.hasNext()){
+            String currentUser = usersIterator.next();
+            commands.del(currentUser);
+            commands.srem(USERS, currentUser);
+        }
     }
 
     public void closeRedisConnection(){

@@ -1,8 +1,6 @@
 package ServerPackage;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -22,6 +20,11 @@ public class RedisDBTest {
     @AfterClass
     public static void tearDown() {
         redis.closeRedisConnection();
+    }
+
+    @After
+    public void tearDownAfter(){
+        redis.clearRedisDB();
     }
 
     @Test

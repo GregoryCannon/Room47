@@ -6,6 +6,7 @@ package SSLPackage;
 public enum Action{
     REGISTER,
     LOG_IN,
+    LOG_OUT,
     REQUEST_ROOM,
     GET_ROOMS,
     GET_INFO,
