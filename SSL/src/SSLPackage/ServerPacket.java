@@ -1,10 +1,9 @@
 package SSLPackage;
 
-/**
- * Created by Greg on 11/13/18.
- */
 public class ServerPacket implements java.io.Serializable{
     public String message;
+
+    private static final long serialVersionUID = 1234567L;
 
     // Possible server responses
     public static final String REGISTRATION_SUCCESSFUL = "Registration successful";
