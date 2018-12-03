@@ -3,19 +3,25 @@ package ServerPackage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 /**
  * Created by Greg on 12/2/18.
  */
 public class StudentDataManager {
-    private Set<Student> students = new HashSet<>();
+    private HashMap<String, String> fullNamesById;
 
-    private class Student{
-        String fullName;
-        String studentId;
+    public StudentDataManager(){
+        fullNamesById = new HashMap<>();
+
+        // Read student data
+        try {
+            readStudentData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
     public void readStudentData() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("file.txt"));
         try {
@@ -23,21 +29,33 @@ public class StudentDataManager {
             String line = "";
 
             while ((line = br.readLine()) != null) {
-                addStudent(line);
+                addStudentToMap(line);
             }
         } finally {
             br.close();
         }
     }
 
-    private boolean addStudent(String rawLine){
+    public boolean isValidStudentId(String studentId){
+        return fullNamesById.containsKey(studentId);
+    }
+
+    public String getStudentFullName(String studentId){
+        if (fullNamesById.containsKey(studentId)) {
+            return fullNamesById.get(studentId);
+        } else {
+            return null;
+        }
+    }
+
+    private boolean addStudentToMap(String rawLine){
         String[] chunks = rawLine.split("|");
         if (chunks.length != 2) return false;
 
-        Student newStudent = new Student();
-        newStudent.fullName = chunks[0];
-        newStudent.studentId = chunks[1];
-        students.add(newStudent);
+        String studentId = chunks[1];
+        String fullName = chunks[0];
+
+        fullNamesById.put(studentId, fullName);
         return true;
     }
 }
