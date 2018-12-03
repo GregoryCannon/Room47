@@ -100,7 +100,16 @@ public class Server {
                     }
                 }
             case GET_INFO:
-                return new ServerPacket("That functionality is coming soon!");
+                if (authenticatedUser != null){
+                    String info = getInfo(authenticatedUser);
+                    if (info.equals(GET_INFO_FAILED)){
+                        return new ServerPacket(GET_INFO_FAILED);
+                    } else {
+                        return new ServerPacket(info);
+                    }
+                } else {
+                    return new ServerPacket(NOT_LOGGED_IN);
+                }
             case GET_ROOMS:
                 return new ServerPacket(redis.getOccupiedRooms(p.dormName));
         }
@@ -130,17 +139,17 @@ public class Server {
         redis.addAdmin(username);
     }
 
-    public void registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
-        long weekInMs = 604800000L;
-        long currentTime = System.currentTimeMillis();
-        // TODO: reinstate random registration times (currently disabled for testing purposes)
-        //long regTimeMs = currentTime + (long) (Math.random() * weekInMs);
-        long regTimeMs = currentTime;
-        String salt = "" + (int) (Math.random() * 999999);
-        int regNumber = (int) (Math.random() * 1000);
-        String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
-        redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt);
-        redis.setRoomDrawNumber(username, "" + regNumber);
+    public String getInfo(String username){
+        String fullName = redis.getFullName(username);
+        String dormName = redis.getDormName(username);
+        String dormRoomNumber = redis.getDormRoomNumber(username);
+        String regNumber = redis.getRoomDrawNumber(username);
+        String regTime = redis.getRegistrationTime(username);
+        String studentId = redis.getUserID(username);
+        String isAdmin = redis.isAdmin(username) + "";
+        if (regNumber == null) return GET_INFO_FAILED; // if they're not in the database
+        return fullName + "|" + dormName + "|" + dormRoomNumber + "|" + regNumber + "|"
+                + regTime + "|" + studentId + "|" + isAdmin;
     }
 
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {
@@ -155,6 +164,19 @@ public class Server {
         } else {
             return false;
         }
+    }
+
+    public void registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
+        String salt = "" + (int) (Math.random() * 999999);
+        int regNumber = (int) (Math.random() * 1000);
+        long regTimeMs = calculateRegistrationTime(regNumber, 10);
+        String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
+        redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt);
+        redis.setRoomDrawNumber(username, "" + regNumber);
+    }
+
+    private long calculateRegistrationTime(int registrationNumber, long timeDelta){
+        return System.currentTimeMillis() + registrationNumber * timeDelta;
     }
 
     public boolean requestRoom(String room, String roomNumber){
