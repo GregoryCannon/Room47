@@ -1,6 +1,7 @@
 package com.room.draw;
 
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import SSLPackage.Connection;
 import SSLPackage.ServerPacket;
@@ -22,11 +24,13 @@ import butterknife.ButterKnife;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    public static ServerPacket response = null;
 
     @BindView(R.id.input_username) EditText _userNameText;
     @BindView(R.id.input_password) EditText _passwordText;
     @BindView(R.id.btn_login) Button _loginButton;
     @BindView(R.id.link_signup) TextView _signupLink;
+    @BindView(R.id.forgot_password) TextView _forgotPassword;
     private boolean loggedIn;
     
     @Override
@@ -45,6 +49,10 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -60,9 +68,19 @@ public class LoginActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+
+        _forgotPassword.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ResetPasswordActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
-    public void login() throws IOException, ClassNotFoundException {
+    public void login() throws IOException, ClassNotFoundException, ExecutionException, InterruptedException {
         Log.d(TAG, "Login");
 
         if (!validate()) {
@@ -81,10 +99,7 @@ public class LoginActivity extends AppCompatActivity {
         String username = _userNameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        final ServerPacket response = Connection.login(username, password, getApplicationContext());
-
-
-        // TODO: Implement your own authentication logic here.
+        new SslClientToServer().execute((Object) null).get();
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -155,5 +170,24 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    private class SslClientToServer extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            try {
+                response = Connection.login(_userNameText.getText().toString(), _passwordText.getText().toString(), getApplicationContext());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }

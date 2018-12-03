@@ -7,13 +7,14 @@ package SSLPackage;
 import android.content.Context;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 
 public class TestSsl {
     static SslServer server;
     static SslClient client;
 
-    private static void init(SslServerHandler handler){
+    private static void init(SslServerHandler handler) throws ExecutionException, InterruptedException {
         // Initialize server
         new Thread(() -> { server = new SslServer(9000, handler); }).start();
 

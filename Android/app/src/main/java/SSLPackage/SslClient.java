@@ -2,7 +2,7 @@ package SSLPackage;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.os.StrictMode;
+import android.os.AsyncTask;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLSocket;
@@ -12,21 +12,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
+import java.util.concurrent.ExecutionException;
 
 public class SslClient implements SslContextProvider {
-    SSLSocket socket;
-    OutputStream os;
-    InputStream is;
+    public static SSLSocket socket;
+    public static OutputStream os;
+    public static InputStream is;
     final int READ_LENGTH = 1024;
     Context context;
+    Object[] objects;
 
-    public SslClient(String host, int port, Context context) {
+    public SslClient(String host, int port, Context context) throws ExecutionException, InterruptedException {
+        objects = new Object[2];
+        objects[0] = host;
+        objects[1] = port;
         this.context = context;
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-        StrictMode.setThreadPolicy(policy);
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//
+//        StrictMode.setThreadPolicy(policy);
         try {
-            socket = createSSLSocket(host, port);
+            socket = createSSLSocket((String) objects[0], (Integer) objects[1]);
             os = socket.getOutputStream();
             is = socket.getInputStream();
         } catch (Exception e) {

@@ -9,7 +9,7 @@ import java.security.KeyStore;
 import java.security.SecureRandom;
 
 public class SslUtil {
-    private static final String JKS = "BKS";
+    private static final String BKS = "BKS";
     public static final int READ_LENGTH = 1024;
 
     public static KeyManager[] createKeyManagers(InputStream keystore, char[] password) throws GeneralSecurityException, IOException {
@@ -20,7 +20,7 @@ public class SslUtil {
         String algorithm = KeyManagerFactory.getDefaultAlgorithm();
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(algorithm);
 
-        KeyStore ks = KeyStore.getInstance(JKS);
+        KeyStore ks = KeyStore.getInstance(BKS);
         try {
             ks.load(ksIs, storePassword);
         }
@@ -61,7 +61,7 @@ public class SslUtil {
         String algorithm = TrustManagerFactory.getDefaultAlgorithm();
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(algorithm);
 
-        KeyStore ks = KeyStore.getInstance(JKS);
+        KeyStore ks = KeyStore.getInstance(BKS);
         try {
             ks.load(ksIs, password);
         }

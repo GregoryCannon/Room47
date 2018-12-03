@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import SSLPackage.Connection;
 import SSLPackage.ServerPacket;
@@ -51,6 +52,10 @@ public class SignupActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -67,7 +72,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void signup() throws IOException, ClassNotFoundException {
+    public void signup() throws IOException, ClassNotFoundException, ExecutionException, InterruptedException {
         Log.d(TAG, "Signup");
 
         if (!validate()) {

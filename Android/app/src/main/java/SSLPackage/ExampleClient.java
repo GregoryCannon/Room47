@@ -1,12 +1,13 @@
 package SSLPackage;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Greg on 11/13/18.
  */
 public class ExampleClient {
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, ExecutionException, InterruptedException {
         // Initialize server
         SslServerHandler handler = (clientPacket) -> {
             return new ServerPacket("Generic message");
