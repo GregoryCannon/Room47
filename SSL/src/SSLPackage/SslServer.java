@@ -80,7 +80,7 @@ public class SslServer implements SslContextProvider {
 
     @Override
     public KeyManager[] getKeyManagers() throws GeneralSecurityException, IOException {
-        return SslUtil.createKeyManagers("server.jks", "F8urious".toCharArray());
+        return SslUtil.createKeyManagers("SSL/server.jks", "F8urious".toCharArray());
     }
 
     @Override
@@ -90,7 +90,7 @@ public class SslServer implements SslContextProvider {
 
     @Override
     public TrustManager[] getTrustManagers() throws GeneralSecurityException, IOException {
-        return SslUtil.createTrustManagers("cacert.jks", "F8urious".toCharArray());
+        return SslUtil.createTrustManagers("SSL/cacert.jks", "F8urious".toCharArray());
     }
 
     private ServerSocket createSSLSocket(int port) throws Exception {

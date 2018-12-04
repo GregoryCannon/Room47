@@ -13,37 +13,36 @@ import static SSLPackage.ServerPacket.*;
 public class Server {
     private static RedisDB redis;
     private static HashUtil hashUtil;
+    private static StudentDataManager studentDataManager;
     private String authenticatedUser = null;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        new Server();
+        Server server = new Server();
+        SslServerHandler handler = server::handle;
+        SslServer sslServer = new SslServer(6667, handler);
     }
 
     public Server() throws NoSuchAlgorithmException{
         hashUtil = new HashUtil();
         redis = new RedisDB("localhost", 6379);
-        SslServerHandler handler = (clientPacket) -> handle(clientPacket);
-        SslServer server = new SslServer(6667, handler);
+        studentDataManager = new StudentDataManager();
     }
 
     public ServerPacket handle(ClientPacket p) {
         switch (p.action){
             case REGISTER:
-                String valid = "^[0-9]{8}$";
-                // TODO: check if username is already used
-                if (p.roomNumber.matches(valid)) {   // user room number as Student ID because the packet doesn't have a field for ID
-                    try {
-                        registerUser(p.username, p.password, p.roomNumber);
-                        logIn(p.username, p.password);
-
+                try {
+                    boolean regSuccess = registerUser(p.username, p.password, p.roomNumber);
+                    boolean loginSuccess = logIn(p.username, p.password);
+                    if (regSuccess && loginSuccess){
                         return new ServerPacket(REGISTRATION_SUCCESSFUL);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                        return new ServerPacket(e.getMessage());
                     }
-                } else {
                     return new ServerPacket(REGISTRATION_FAILED);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    return new ServerPacket(e.getMessage());
                 }
+
             case REQUEST_ROOM:
                 if (authenticatedUser != null){
                     boolean success = requestRoom(p.dormName, p.roomNumber);
@@ -55,6 +54,7 @@ public class Server {
                 } else {
                     return new ServerPacket(NOT_LOGGED_IN);
                 }
+
             case LOG_IN:
                 if (authenticatedUser != null) {
                     return new ServerPacket(ALREADY_LOGGED_IN);
@@ -70,6 +70,7 @@ public class Server {
                         return new ServerPacket(e.getMessage());
                     }
                 }
+
             case LOG_OUT:
                 if (authenticatedUser == null) {
                     return new ServerPacket(NOT_LOGGED_IN);
@@ -77,6 +78,7 @@ public class Server {
                     authenticatedUser = null;
                     return new ServerPacket(LOGOUT_SUCCESSFUL);
                 }
+
             case ADMIN_PLACE_STUDENT:
                 if (authenticatedUser == null || !redis.isAdmin(authenticatedUser)){
                     return new ServerPacket(ADMIN_UNAUTHORIZED);
@@ -88,6 +90,7 @@ public class Server {
                         return new ServerPacket(PLACE_STUDENT_FAILED);
                     }
                 }
+
             case ADMIN_REMOVE_STUDENT:
                 if (authenticatedUser == null || !redis.isAdmin(authenticatedUser)){
                     return new ServerPacket(ADMIN_UNAUTHORIZED);
@@ -99,6 +102,7 @@ public class Server {
                         return new ServerPacket(REMOVE_STUDENT_FAILED);
                     }
                 }
+
             case GET_INFO:
                 if (authenticatedUser != null){
                     String info = getInfo(authenticatedUser);
@@ -110,6 +114,7 @@ public class Server {
                 } else {
                     return new ServerPacket(NOT_LOGGED_IN);
                 }
+
             case GET_ROOMS:
                 return new ServerPacket(redis.getOccupiedRooms(p.dormName));
         }
@@ -155,24 +160,30 @@ public class Server {
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {
         String salt = redis.getSalt(username);
         if (salt == null) return false;
+
         String verificationHashPass = new String(hashUtil.hashPassword(salt, password), "UTF8");
         String redisHashedPassword = redis.getHashedPassword(username);
-        if (redisHashedPassword == null) return false;
-        if (redisHashedPassword.equals(verificationHashPass)){
+
+        if (redisHashedPassword != null && redisHashedPassword.equals(verificationHashPass)){
             authenticatedUser = username;
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
-    public void registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
+    public boolean registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
+        if (!studentDataManager.isValidStudentId(studentID)) return false;
+        //if (redis.getUserID(username))
+        String fullName = studentDataManager.getStudentFullName(studentID);
         String salt = "" + (int) (Math.random() * 999999);
         int regNumber = (int) (Math.random() * 1000);
         long regTimeMs = calculateRegistrationTime(regNumber, 10);
         String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
+
         redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt);
         redis.setRoomDrawNumber(username, "" + regNumber);
+        redis.setFullName(username, fullName);
+        return true;
     }
 
     private long calculateRegistrationTime(int registrationNumber, long timeDelta){

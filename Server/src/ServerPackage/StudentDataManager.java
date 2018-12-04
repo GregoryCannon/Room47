@@ -16,15 +16,16 @@ public class StudentDataManager {
 
         // Read student data
         try {
-            readStudentData();
+            readStudentData("Server/TestStudentData.txt");
+            readStudentData("Server/ValidStudentData.txt");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void readStudentData() throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("validStudentData.txt"));
+    public void readStudentData(String filename) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(filename));
         try {
             StringBuilder sb = new StringBuilder();
             String line = "";
