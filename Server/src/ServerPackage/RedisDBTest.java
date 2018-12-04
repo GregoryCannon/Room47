@@ -94,8 +94,8 @@ public class RedisDBTest {
     public void testRateLimit(){
         String username = "adumbledore";
         int rateLimit = 1000;
-        redis.setRateLimit(username, rateLimit);
-        assertEquals(redis.getRateLimit(username), 1000);
+        redis.setPacketCount(username, rateLimit);
+        assertEquals(redis.getPacketCount(username), 1000);
     }
 
     @Test

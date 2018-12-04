@@ -20,9 +20,9 @@ public class ServerActor {
     }
 
     public int getAndIncrementPacketCount(String username){
-        int rateLimit = redis.getRateLimit(username) + 1;
-        redis.setRateLimit(username, rateLimit);
-        return rateLimit;
+        int packetCount = redis.getPacketCount(username) + 1;
+        redis.setPacketCount(username, packetCount);
+        return packetCount;
     }
 
     public boolean adminPlaceUserInRoom(String studentUsername, String dormName, String dormRoomNumber){

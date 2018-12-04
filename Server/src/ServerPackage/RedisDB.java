@@ -160,12 +160,12 @@ public class RedisDB {
         commands.hset(username, USER_ID, userID);
     }
 
-    public int getRateLimit(String username){
-        return Integer.valueOf(commands.hget(username, RATE_LIMIT));
+    public int getPacketCount(String clientId){
+        return Integer.valueOf(commands.hget(clientId, RATE_LIMIT));
     }
 
-    public void setRateLimit(String username, int rateLimit){
-        commands.hset(username, RATE_LIMIT, ""+rateLimit);
+    public void setPacketCount(String clientId, int rateLimit){
+        commands.hset(clientId, RATE_LIMIT, ""+rateLimit);
     }
 
     public void clearRedisDB(){

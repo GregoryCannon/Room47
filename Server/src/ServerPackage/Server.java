@@ -13,6 +13,7 @@ import static SSLPackage.ServerPacket.*;
 public class Server {
     public ServerActor actor;
     private static SslServer sslServer;
+    private static String clientId;
 
     private String authenticatedUser = null;
 
@@ -23,6 +24,7 @@ public class Server {
         Server server = new Server();
         SslServerHandler handler = server::handle;
         sslServer = new SslServer(6667, handler);
+        clientId = sslServer.getClientId();
     }
 
     public Server() throws NoSuchAlgorithmException{
@@ -31,9 +33,11 @@ public class Server {
 
     public ServerPacket handle(ClientPacket p) {
         // Rate limiting
-        int packetCount = updatePacketCount();
+        int packetCount = actor.getAndIncrementPacketCount(clientId);
         if (packetCount > RATE_LIMIT){
-            closeSslSocket();
+            if (sslServer != null){     // sslServer is null during unit tests
+                sslServer.close();
+            }
             return new ServerPacket(RATE_LIMIT_REACHED);
         }
 
@@ -48,24 +52,6 @@ public class Server {
             case GET_ROOMS: return getOccupiedRooms(p);
         }
         return new ServerPacket(UNKNOWN_ACTION);
-    }
-
-    private int updatePacketCount(){
-        // If not logged in, locally track packet count
-        if (authenticatedUser == null){
-            preLoginPacketCount += 1;
-            return preLoginPacketCount;
-        }
-        // Otherwise, query the database for that user's packet count
-        else {
-            return actor.getAndIncrementPacketCount(authenticatedUser);
-        }
-    }
-
-    private void closeSslSocket(){
-        if (sslServer != null){     // sslServer is null during unit tests
-            sslServer.close();
-        }
     }
 
     private ServerPacket register(ClientPacket p){

@@ -15,7 +15,7 @@ public class SslServer implements SslContextProvider {
     ServerSocket socket;
     OutputStream os;
     InputStream is;
-
+    String clientId;
 
     public SslServer(int port, SslServerHandler handler){
         try {
@@ -23,9 +23,10 @@ public class SslServer implements SslContextProvider {
             System.out.println("Server: Server started. Awaiting client...");
 
             SSLSocket client = (SSLSocket) socket.accept();
+            clientId = SslUtil.getPeerIdentity(client);
             os = client.getOutputStream();
             is = client.getInputStream();
-            System.out.printf("Server: Client (%s) connected. Awaiting ping...%n", SslUtil.getPeerIdentity(client));
+            System.out.printf("Server: Client (%s) connected. Awaiting ping...%n", clientId);
 
             run(handler);
         } catch (Exception e){
@@ -41,6 +42,10 @@ public class SslServer implements SslContextProvider {
             sendBytes(Serializer.serialize(response));
             System.out.println("Server: response sent");
         }
+    }
+
+    public String getClientId(){
+        return clientId;
     }
 
     public void sendBytes(byte[] bytes) throws IOException {
