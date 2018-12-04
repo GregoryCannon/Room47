@@ -47,7 +47,7 @@ public class RedisDB {
         commands.hset(username, REGISTRATION_TIME, registrationTime);
         commands.hset(username, FULL_NAME, fullName);
         commands.hset(username, USER_ID, studentId);
-        commands.hset(username, RATE_LIMIT, rateLimit);
+        commands.hset(username, RATE_LIMIT, 1000);
     }
 
     public boolean isAdmin(String username){
