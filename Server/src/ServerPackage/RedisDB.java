@@ -26,6 +26,7 @@ public class RedisDB {
     private static final String USER_ID = "userID";
     private static final String USERS = "users";
     private static final String ADMIN = "admin";
+    private static final int RATE_LIMIT = 1000;
 
     public RedisDB(String host, int port){
         RedisURI uri = RedisURI.create(host, port);
@@ -46,6 +47,7 @@ public class RedisDB {
         commands.hset(username, REGISTRATION_TIME, registrationTime);
         commands.hset(username, FULL_NAME, fullName);
         commands.hset(username, USER_ID, studentId);
+        commands.hset(username, RATE_LIMIT, rateLimit);
     }
 
     public boolean isAdmin(String username){
@@ -156,6 +158,14 @@ public class RedisDB {
 
     public void setUserID(String username, String userID){
         commands.hset(username, USER_ID, userID);
+    }
+
+    public int getRateLimit(String username){
+        return commands.hget(username, RATE_LIMIT);
+    }
+
+    public void setRateLimit(String username, int rateLimit){
+        commands.hset(username, RATE_LIMIT, rateLimit);
     }
 
     public void clearRedisDB(){

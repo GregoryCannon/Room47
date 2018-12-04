@@ -29,6 +29,13 @@ public class Server {
     }
 
     public ServerPacket handle(ClientPacket p) {
+
+        int rateLimit = redis.getRateLimit(p.username);
+        redis.setRateLimit(p.username, rateLimit-1);
+        if (redis.getRateLimit(p.username) == 0) {
+            return;
+        }
+
         switch (p.action){
             case REGISTER:
                 try {

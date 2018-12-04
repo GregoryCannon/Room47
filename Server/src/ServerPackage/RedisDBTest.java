@@ -91,6 +91,14 @@ public class RedisDBTest {
     }
 
     @Test
+    public void testRateLimit(){
+        String username = "adumbledore";
+        int rateLimit = 1000;
+        redis.setRateLimit(username, rateLimit);
+        assertEquals(redis.getRateLimit(username), 1000);
+    }
+
+    @Test
     public void testGetOccupantOfRoom() throws UnsupportedEncodingException {
         String username = "user";
         String hashedPassword = "qwerty";
