@@ -36,7 +36,7 @@ public class RedisDB {
     }
 
     public void createAccount(String username, String hashedPassword, String registrationTime, String salt,
-                              String fullName) throws UnsupportedEncodingException {
+                              String fullName, String studentId) throws UnsupportedEncodingException {
         commands.sadd(USERS, username);
         commands.hset(username, PASSWORD, hashedPassword);
         commands.hset(username, SALT, salt);
@@ -45,7 +45,7 @@ public class RedisDB {
         commands.hset(username, DORM_ROOM_NUMBER, "-1");
         commands.hset(username, REGISTRATION_TIME, registrationTime);
         commands.hset(username, FULL_NAME, fullName);
-        commands.hset(username, USER_ID, "-1");
+        commands.hset(username, USER_ID, studentId);
     }
 
     public boolean isAdmin(String username){

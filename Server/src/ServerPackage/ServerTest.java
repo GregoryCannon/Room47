@@ -173,7 +173,8 @@ public class ServerTest {
     public void canGetInfo(){
         testAction(LOG_IN, jUsername, jPassword, null, null, LOGIN_SUCCESSFUL);
         ClientPacket p = new ClientPacket(GET_INFO, null, null, null, null);
-        assertTrue(server.handle(p).message.length() > 10);
+        String response = server.handle(p).message;
+        assertTrue(response.length() > 10);
         testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
     }
 

@@ -56,11 +56,12 @@ public class RedisDBTest {
         String username = "John Smith";
         String password = "passphrase";
         String fullName = "Johnathan Smith";
+        String studentId = "77779999";
         String salt = "123456";
         String registrationTime = "98765";
         String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
 
-        redis.createAccount(username, hashedPassword, registrationTime, salt, fullName);
+        redis.createAccount(username, hashedPassword, registrationTime, salt, fullName, studentId);
         assertEquals(redis.getSalt(username), "123456");
         assertEquals(redis.getHashedPassword(username), hashedPassword);
     }
@@ -95,10 +96,11 @@ public class RedisDBTest {
         String hashedPassword = "qwerty";
         String registrationTime = "1234";
         String fullName = "fully namey";
+        String studentId = "44443333";
         String salt = "321";
         for(int i = 0; i<10; i++){
             redis.createAccount(username + i, hashedPassword + i,
-                    registrationTime + i, salt + i, fullName);
+                    registrationTime + i, salt + i, fullName, studentId);
             if(i % 2 == 0){
                 redis.setDormName(username + i, "Walker");
             }

@@ -185,7 +185,7 @@ public class Server {
         String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
 
         // Add new user to database
-        redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt, fullName);
+        redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt, fullName, studentID);
         redis.setRoomDrawNumber(username, "" + regNumber);
         redis.setFullName(username, fullName);
         return true;
