@@ -15,6 +15,7 @@ public class RedisDB {
     private RedisClient client;
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> commands;
+    private StudentDataManager studentDataManager;
     private static final String PASSWORD = "password";
     private static final String SALT = "salt";
     private static final String ROOM_DRAW_NUMBER = "roomDrawNumber";
@@ -31,10 +32,11 @@ public class RedisDB {
         client = RedisClient.create(uri);
         connection = client.connect();
         commands = connection.sync();
+        studentDataManager = new StudentDataManager();
     }
 
-    public void createAccount(String username, String hashedPassword, String registrationTime, String salt) throws UnsupportedEncodingException {
-        // TODO: query student data for their English name
+    public void createAccount(String username, String hashedPassword, String registrationTime, String salt,
+                              String fullName) throws UnsupportedEncodingException {
         commands.sadd(USERS, username);
         commands.hset(username, PASSWORD, hashedPassword);
         commands.hset(username, SALT, salt);
@@ -42,7 +44,7 @@ public class RedisDB {
         commands.hset(username, DORM_NAME, "-1");
         commands.hset(username, DORM_ROOM_NUMBER, "-1");
         commands.hset(username, REGISTRATION_TIME, registrationTime);
-        commands.hset(username, FULL_NAME, "-1");
+        commands.hset(username, FULL_NAME, fullName);
         commands.hset(username, USER_ID, "-1");
     }
 

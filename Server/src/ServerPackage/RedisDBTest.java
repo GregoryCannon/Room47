@@ -55,11 +55,12 @@ public class RedisDBTest {
     public void testCreateAccountWithSalt() throws UnsupportedEncodingException {
         String username = "John Smith";
         String password = "passphrase";
+        String fullName = "Johnathan Smith";
         String salt = "123456";
         String registrationTime = "98765";
         String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
 
-        redis.createAccount(username, hashedPassword, registrationTime, salt);
+        redis.createAccount(username, hashedPassword, registrationTime, salt, fullName);
         assertEquals(redis.getSalt(username), "123456");
         assertEquals(redis.getHashedPassword(username), hashedPassword);
     }
@@ -93,10 +94,11 @@ public class RedisDBTest {
         String username = "user";
         String hashedPassword = "qwerty";
         String registrationTime = "1234";
+        String fullName = "fully namey";
         String salt = "321";
         for(int i = 0; i<10; i++){
             redis.createAccount(username + i, hashedPassword + i,
-                    registrationTime + i, salt + i);
+                    registrationTime + i, salt + i, fullName);
             if(i % 2 == 0){
                 redis.setDormName(username + i, "Walker");
             }

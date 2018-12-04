@@ -32,7 +32,7 @@ public class Server {
         switch (p.action){
             case REGISTER:
                 try {
-                    boolean regSuccess = registerUser(p.username, p.password, p.roomNumber);
+                    boolean regSuccess = registerUser(p.username, p.password, p.roomNumber, false);
                     boolean loginSuccess = logIn(p.username, p.password);
                     if (regSuccess && loginSuccess){
                         return new ServerPacket(REGISTRATION_SUCCESSFUL);
@@ -171,16 +171,21 @@ public class Server {
         return false;
     }
 
-    public boolean registerUser(String username, String password, String studentID) throws UnsupportedEncodingException {
+    public boolean registerUser(String username, String password, String studentID,
+                                boolean regTimeInPast) throws UnsupportedEncodingException {
+        // Check that their student ID is valid and they're not already registered
         if (!studentDataManager.isValidStudentId(studentID)) return false;
-        //if (redis.getUserID(username))
+        if (redis.getUserID(username) != null) return false;
+
+        // Calculate their registration time, salt, and hashed password
         String fullName = studentDataManager.getStudentFullName(studentID);
         String salt = "" + (int) (Math.random() * 999999);
         int regNumber = (int) (Math.random() * 1000);
-        long regTimeMs = calculateRegistrationTime(regNumber, 10);
+        long regTimeMs = regTimeInPast ? System.currentTimeMillis() - 1 : calculateRegistrationTime(regNumber, 3000000);
         String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
 
-        redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt);
+        // Add new user to database
+        redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt, fullName);
         redis.setRoomDrawNumber(username, "" + regNumber);
         redis.setFullName(username, fullName);
         return true;
