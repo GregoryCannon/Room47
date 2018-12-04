@@ -47,7 +47,7 @@ public class RedisDB {
         commands.hset(username, REGISTRATION_TIME, registrationTime);
         commands.hset(username, FULL_NAME, fullName);
         commands.hset(username, USER_ID, studentId);
-        commands.hset(username, RATE_LIMIT, 1000);
+        commands.hset(username, RATE_LIMIT, "0");
     }
 
     public boolean isAdmin(String username){
@@ -161,11 +161,11 @@ public class RedisDB {
     }
 
     public int getRateLimit(String username){
-        return commands.hget(username, RATE_LIMIT);
+        return Integer.valueOf(commands.hget(username, RATE_LIMIT));
     }
 
     public void setRateLimit(String username, int rateLimit){
-        commands.hset(username, RATE_LIMIT, rateLimit);
+        commands.hset(username, RATE_LIMIT, ""+rateLimit);
     }
 
     public void clearRedisDB(){

@@ -11,36 +11,41 @@ import java.security.NoSuchAlgorithmException;
 import static SSLPackage.ServerPacket.*;
 
 public class Server {
-    private static RedisDB redis;
-    private static HashUtil hashUtil;
-    private static StudentDataManager studentDataManager;
+    public ServerActor actor;
+    private static SslServer sslServer;
+
     private String authenticatedUser = null;
+    private int preLoginPacketCount = 0;
+    public static final int RATE_LIMIT = 1000;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         Server server = new Server();
         SslServerHandler handler = server::handle;
-        SslServer sslServer = new SslServer(6667, handler);
+        sslServer = new SslServer(6667, handler);
     }
 
     public Server() throws NoSuchAlgorithmException{
-        hashUtil = new HashUtil();
-        redis = new RedisDB("localhost", 6379);
-        studentDataManager = new StudentDataManager();
+        actor = new ServerActor();
     }
 
     public ServerPacket handle(ClientPacket p) {
-
-        int rateLimit = redis.getRateLimit(p.username);
-        redis.setRateLimit(p.username, rateLimit-1);
-        if (redis.getRateLimit(p.username) == 0) {
-            return;
+        // Rate limiting
+        int rateLimit;
+        if (authenticatedUser == null){
+            preLoginPacketCount += 1;
+            rateLimit = preLoginPacketCount;
+        } else {
+            rateLimit = actor.getAndIncrementPacketCount(authenticatedUser);
+        }
+        if (rateLimit > RATE_LIMIT) {
+            return new ServerPacket(RATE_LIMIT_REACHED);
         }
 
         switch (p.action){
             case REGISTER:
                 try {
-                    boolean regSuccess = registerUser(p.username, p.password, p.roomNumber, false);
-                    boolean loginSuccess = logIn(p.username, p.password);
+                    boolean regSuccess = actor.registerUser(p.username, p.password, p.roomNumber, false);
+                    boolean loginSuccess = actor.logIn(p.username, p.password);
                     if (regSuccess && loginSuccess){
                         return new ServerPacket(REGISTRATION_SUCCESSFUL);
                     }
@@ -52,7 +57,7 @@ public class Server {
 
             case REQUEST_ROOM:
                 if (authenticatedUser != null){
-                    boolean success = requestRoom(p.dormName, p.roomNumber);
+                    boolean success = actor.requestRoom(authenticatedUser, p.dormName, p.roomNumber);
                     if (success){
                         return new ServerPacket(RESERVE_SUCCESSFUL);
                     } else {
@@ -67,7 +72,8 @@ public class Server {
                     return new ServerPacket(ALREADY_LOGGED_IN);
                 } else {
                     try {
-                        if (logIn(p.username, p.password)){
+                        if (actor.logIn(p.username, p.password)){
+                            authenticatedUser = p.username;
                             return new ServerPacket(LOGIN_SUCCESSFUL);
                         } else {
                             return new ServerPacket(LOGIN_FAILED);
@@ -87,10 +93,10 @@ public class Server {
                 }
 
             case ADMIN_PLACE_STUDENT:
-                if (authenticatedUser == null || !redis.isAdmin(authenticatedUser)){
+                if (authenticatedUser == null || !actor.isAdmin(authenticatedUser)){
                     return new ServerPacket(ADMIN_UNAUTHORIZED);
                 } else {
-                    boolean success = adminPlaceUserInRoom(p.username, p.dormName, p.roomNumber);
+                    boolean success = actor.adminPlaceUserInRoom(p.username, p.dormName, p.roomNumber);
                     if (success) {
                         return new ServerPacket(PLACE_STUDENT_SUCCESSFUL);
                     } else {
@@ -99,10 +105,10 @@ public class Server {
                 }
 
             case ADMIN_REMOVE_STUDENT:
-                if (authenticatedUser == null || !redis.isAdmin(authenticatedUser)){
+                if (authenticatedUser == null || !actor.isAdmin(authenticatedUser)){
                     return new ServerPacket(ADMIN_UNAUTHORIZED);
                 } else {
-                    boolean success = adminRemoveUserFromRoom(p.dormName, p.roomNumber);
+                    boolean success = actor.adminRemoveUserFromRoom(p.dormName, p.roomNumber);
                     if (success) {
                         return new ServerPacket(REMOVE_STUDENT_SUCCESSFUL);
                     } else {
@@ -112,7 +118,7 @@ public class Server {
 
             case GET_INFO:
                 if (authenticatedUser != null){
-                    String info = getInfo(authenticatedUser);
+                    String info = actor.getInfo(authenticatedUser);
                     if (info.equals(GET_INFO_FAILED)){
                         return new ServerPacket(GET_INFO_FAILED);
                     } else {
@@ -123,98 +129,10 @@ public class Server {
                 }
 
             case GET_ROOMS:
-                return new ServerPacket(redis.getOccupiedRooms(p.dormName));
+                return new ServerPacket(actor.getOccupiedRooms(p.dormName));
         }
         return new ServerPacket(UNKNOWN_ACTION);
     }
 
-    public boolean adminPlaceUserInRoom(String studentUsername, String dormName, String dormRoomNumber){
-        adminRemoveUserFromRoom(dormName, dormRoomNumber);
 
-        // Add the specified person
-        redis.setDormName(studentUsername, dormName);
-        redis.setDormRoomNumber(studentUsername, dormRoomNumber);
-        return true;
-    }
-
-    public boolean adminRemoveUserFromRoom(String dormName, String dormRoomNumber){
-        // Kick out the current occupant if there is one
-        String currentOccupant = redis.getOccupantOfRoom(dormName, dormRoomNumber);
-        if (!currentOccupant.equals("-1")){
-            redis.setDormName(currentOccupant, "-1");
-            redis.setDormRoomNumber(currentOccupant, "-1");
-        }
-        return true;
-    }
-
-    public void addAdmin(String username){
-        redis.addAdmin(username);
-    }
-
-    public String getInfo(String username){
-        String fullName = redis.getFullName(username);
-        String dormName = redis.getDormName(username);
-        String dormRoomNumber = redis.getDormRoomNumber(username);
-        String regNumber = redis.getRoomDrawNumber(username);
-        String regTime = redis.getRegistrationTime(username);
-        String studentId = redis.getUserID(username);
-        String isAdmin = redis.isAdmin(username) + "";
-        if (regNumber == null) return GET_INFO_FAILED; // if they're not in the database
-        return fullName + "|" + dormName + "|" + dormRoomNumber + "|" + regNumber + "|"
-                + regTime + "|" + studentId + "|" + isAdmin;
-    }
-
-    public boolean logIn(String username, String password) throws UnsupportedEncodingException {
-        String salt = redis.getSalt(username);
-        if (salt == null) return false;
-
-        String verificationHashPass = new String(hashUtil.hashPassword(salt, password), "UTF8");
-        String redisHashedPassword = redis.getHashedPassword(username);
-
-        if (redisHashedPassword != null && redisHashedPassword.equals(verificationHashPass)){
-            authenticatedUser = username;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean registerUser(String username, String password, String studentID,
-                                boolean regTimeInPast) throws UnsupportedEncodingException {
-        // Check that their student ID is valid and they're not already registered
-        if (!studentDataManager.isValidStudentId(studentID)) return false;
-        if (redis.getUserID(username) != null) return false;
-
-        // Calculate their registration time, salt, and hashed password
-        String fullName = studentDataManager.getStudentFullName(studentID);
-        String salt = "" + (int) (Math.random() * 999999);
-        int regNumber = (int) (Math.random() * 1000);
-        long regTimeMs = regTimeInPast ? System.currentTimeMillis() - 1 : calculateRegistrationTime(regNumber, 3000000);
-        String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
-
-        // Add new user to database
-        redis.createAccount(username, hashedPassword, ""+ regTimeMs, salt, fullName, studentID);
-        redis.setRoomDrawNumber(username, "" + regNumber);
-        redis.setFullName(username, fullName);
-        return true;
-    }
-
-    private long calculateRegistrationTime(int registrationNumber, long timeDelta){
-        return System.currentTimeMillis() + registrationNumber * timeDelta;
-    }
-
-    public boolean requestRoom(String room, String roomNumber){
-        long currentTime = System.currentTimeMillis();
-        long regTime = Long.parseLong(redis.getRegistrationTime(authenticatedUser));
-        boolean validRegTime = regTime < currentTime;
-        boolean roomEmpty = redis.getOccupantOfRoom(room, roomNumber).equals("-1");
-        boolean notAlreadyInRoom = redis.getDormName(authenticatedUser).equals("-1")
-                && redis.getDormRoomNumber(authenticatedUser).equals("-1");
-
-        if (validRegTime && roomEmpty && notAlreadyInRoom){
-            redis.setDormName(authenticatedUser, room);
-            redis.setDormRoomNumber(authenticatedUser, roomNumber);
-            return true;
-        }
-        return false;
-    }
 }
