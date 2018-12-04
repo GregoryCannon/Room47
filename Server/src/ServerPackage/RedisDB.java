@@ -26,7 +26,7 @@ public class RedisDB {
     private static final String USER_ID = "userID";
     private static final String USERS = "users";
     private static final String ADMIN = "admin";
-    private static final int RATE_LIMIT = 1000;
+    private static final String RATE_LIMIT = "rateLimit";
 
     public RedisDB(String host, int port){
         RedisURI uri = RedisURI.create(host, port);
