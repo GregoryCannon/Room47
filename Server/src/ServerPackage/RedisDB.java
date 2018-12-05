@@ -10,12 +10,16 @@ import io.lettuce.core.api.sync.RedisCommands;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.*;
 
 public class RedisDB {
     private RedisClient client;
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> commands;
     private String dbEncryptionKey;
+    private String initVector = "encryptionIntVec";
 
     private static final String PASSWORD = "password";
     private static final String SALT = "salt";
@@ -29,25 +33,49 @@ public class RedisDB {
     private static final String ADMIN = "admin";
     private static final String RATE_LIMIT = "rateLimit";
 
-    public RedisDB(String host, int port, String dbEncryptionKey){
+    public RedisDB(String host, int port, String dbEncryptionKey, String initVector){
         RedisURI uri = RedisURI.create(host, port);
         client = RedisClient.create(uri);
         connection = client.connect();
         commands = connection.sync();
         this.dbEncryptionKey = dbEncryptionKey;
+        this.initVector = initVector;
     }
 
     /*
         DB Commands With Encryption
      */
     private String AESEncrypt(String plaintext){
-        // TODO: complete
-        return plaintext;
+        try {
+            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
+            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+            byte[] ciphertext = cipher.doFinal(plaintext.getBytes());
+            return Base64.encodeBase64String(ciphertext);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     private String AESDecrypt(String ciphertext){
-        // TODO: complete
-        return ciphertext;
+        try {
+            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
+            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+            byte[] original = cipher.doFinal(Base64.decodeBase64(ciphertext));
+
+            return new String(plaintext);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
     }
 
     // TODO: Encrypt all arguments to the commands.___ functions, then decrypt any Strings that are returned
