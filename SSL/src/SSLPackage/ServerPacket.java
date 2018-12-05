@@ -22,11 +22,8 @@ public class ServerPacket implements java.io.Serializable{
     public static final String REMOVE_STUDENT_SUCCESSFUL = "Successfully removed student!";
     public static final String REMOVE_STUDENT_FAILED = "Failed to remove student";
     public static final String GET_INFO_FAILED = "Failed to get student info. Check that the student is registered in the database.";
+    public static final String RATE_LIMIT_REACHED = "You have reached your limit for requests to the server. Check back later.";
     public static final String UNKNOWN_ACTION = "Unknown action requested";
-
-    public enum Responses{
-
-    }
 
     public ServerPacket(String response){
         this.message = response;

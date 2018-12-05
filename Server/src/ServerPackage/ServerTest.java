@@ -1,205 +1,267 @@
-//package ServerPackage;
-//
-//import SSLPackage.Action;
-//import SSLPackage.ClientPacket;
-//import org.junit.Before;
-//import org.junit.BeforeClass;
-//import org.junit.Test;
-//
-//import java.io.UnsupportedEncodingException;
-//import java.security.NoSuchAlgorithmException;
-//
-//import static SSLPackage.Action.*;
-//import static SSLPackage.ServerPacket.*;
-//import static org.junit.Assert.*;
-//
-///**
-// * Created by Greg on 11/14/18.
-// */
-//public class ServerTest {
-//    private static Server server;
-//    private static RedisDB redis;
-//    private static HashUtil hashUtil;
-//
-//    @BeforeClass
-//    public static void init() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-//        hashUtil = new HashUtil();
-//        redis = new RedisDB("localhost", 6379);
-//        setupJohnSmith();
-//    }
-//
-//    @Before
-//    public void createServer() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-//        server = new Server();
-//        server.registerUser("testadmin", "adminpass", "01234567");
-//        server.addAdmin("testadmin");
-//    }
-//
-//    private static final String jUsername = "John Smith";
-//    private static final String jPassword = "passphrase";
-//    private static void setupJohnSmith() throws UnsupportedEncodingException {
-//        String salt = "mySalt";
-//        String registrationTime = "12345";
-//        String hashedPassword = new String(hashUtil.hashPassword(salt, jPassword), "UTF8");
-//        redis.createAccount(jUsername, hashedPassword, registrationTime, salt);
-//    }
-//
-//
-//    @Test
-//    public void canLogIn() throws UnsupportedEncodingException{
-//        testAction(LOG_IN, jUsername, jPassword, null, null, LOGIN_SUCCESSFUL);
-//    }
-//
-//    @Test
-//    public void loginFailsWithWrongPassword() throws UnsupportedEncodingException {
-//        testAction(LOG_IN, jUsername, "this password is wrong", null, null, LOGIN_FAILED);
-//    }
-//
-//    @Test
-//<<<<<<< HEAD
-//    public void canLogInWithPacket() throws UnsupportedEncodingException{
-//        ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, jPassword, null, null);
-//        assertEquals(server.handle(p).message, "Login successful");
-//=======
-//    public void loginFailsWithWrongUsername() throws UnsupportedEncodingException {
-//        testAction(LOG_IN, "Jane Doe", jPassword, null, null, LOGIN_FAILED);
-//>>>>>>> b185071e165efa5ecbe9700e9d5788097178cd21
-//    }
-//
-//    @Test
-//    public void cantLogOutWhenNotLoggedIn() {
-//        testAction(LOG_OUT, null, null, null, null, NOT_LOGGED_IN);
-//    }
-//
-//    @Test
-//<<<<<<< HEAD
-//    public void loginFailsWithWrongPasswordWithPacket() throws UnsupportedEncodingException {
-//        ClientPacket p = new ClientPacket(Action.LOG_IN, jUsername, "incorrect password", null, null);
-//        assertEquals(server.handle(p).message, "Login failed");
-//=======
-//    public void canLogOutAfterLoggingIn(){
-//        testAction(LOG_IN, jUsername, jPassword, null, null, LOGIN_SUCCESSFUL);
-//        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
-//>>>>>>> b185071e165efa5ecbe9700e9d5788097178cd21
-//    }
-//
-//    @Test
-//    public void userCanRegister(){
-//        testAction(REGISTER, "elmer", "fudd12", null, "00001111", REGISTRATION_SUCCESSFUL);
-//    }
-//
-//    @Test
-//    public void registrationFailsWithBadStudentId(){
-//        testAction(REGISTER, "elmer", "fudd12", null, "badID", REGISTRATION_FAILED);
-//    }
-//
-//    @Test
-//    public void userCantReserveFilledRoom(){
-//        writeDummyData();
-//        redis.clearRoom("Walker", "208");
-//        testAction(LOG_IN, "greg", "passphrase4", null, null, LOGIN_SUCCESSFUL);
-//        testAction(REQUEST_ROOM, null, null, "Walker", "208", RESERVE_SUCCESSFUL);
-//        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
-//
-//        testAction(LOG_IN, "patrick", "passphrase3", null, null, LOGIN_SUCCESSFUL);
-//        testAction(REQUEST_ROOM, null, null, "Walker", "208", RESERVE_FAILED);
-//        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
-//    }
-//
-//    @Test
-//    public void userCanRequestRoom(){
-//        redis.clearRoom("Clark I", "117");
-//        testAction(LOG_IN, jUsername, jPassword, null, null, LOGIN_SUCCESSFUL);
-//        testAction(REQUEST_ROOM, null, null, "Clark I", "117", RESERVE_SUCCESSFUL);
-//        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
-//    }
-//
-//    @Test
-//<<<<<<< HEAD
-//    public void loginFailsWithWrongUsernameWithPacket() throws UnsupportedEncodingException {
-//        ClientPacket p = new ClientPacket(Action.LOG_IN, "Jane Doe", jPassword, null, null);
-//        assertEquals(server.handle(p).message, "Login failed");
-//=======
-//    public void adminFunctionsDontWorkWhenNotAuthenticated(){
-//        testAction(ADMIN_REMOVE_STUDENT, null, null, "Clark I", "117", ADMIN_UNAUTHORIZED);
-//
-//        testAction(ADMIN_PLACE_STUDENT, "sam", null, "Clark I", "117", ADMIN_UNAUTHORIZED);
-//    }
-//
-//    @Test
-//    public void onlyAdminsCanUseAdminFunctions(){
-//        testAction(LOG_IN, "greg", "passphrase4", null, null, LOGIN_SUCCESSFUL);
-//        testAction(ADMIN_REMOVE_STUDENT, null, null, "Clark I", "117", ADMIN_UNAUTHORIZED);
-//        testAction(ADMIN_PLACE_STUDENT, "sam", null, "Clark I", "117", ADMIN_UNAUTHORIZED);
-//        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
-//
-//        testAction(LOG_IN, "testadmin", "adminpass", null, null, LOGIN_SUCCESSFUL);
-//        testAction(ADMIN_REMOVE_STUDENT, null, null, "Clark I", "117", REMOVE_STUDENT_SUCCESSFUL);
-//        testAction(ADMIN_PLACE_STUDENT, "sam", null, "Clark I", "117", PLACE_STUDENT_SUCCESSFUL);
-//        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
-//    }
-//
-//    @Test
-//    public void adminCanPlaceStudents(){
-//        writeDummyData();
-//
-//        testAction(LOG_IN, "testadmin", "adminpass", null, null, LOGIN_SUCCESSFUL);
-//        testAction(ADMIN_PLACE_STUDENT, "sam", null, "Clark V", "117", PLACE_STUDENT_SUCCESSFUL);
-//        testAction(ADMIN_PLACE_STUDENT, "josh", null, "Clark I", "117", PLACE_STUDENT_SUCCESSFUL);
-//        testAction(ADMIN_PLACE_STUDENT, "greg", null, "Walker", "204", PLACE_STUDENT_SUCCESSFUL);
-//        testAction(ADMIN_PLACE_STUDENT, "patrick", null, "Walker", "208", PLACE_STUDENT_SUCCESSFUL);
-//        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
-//
-//        assertEquals(redis.getDormName("sam"), "Clark V");
-//        assertEquals(redis.getDormRoomNumber("sam"), "117");
-//        assertEquals(redis.getDormName("josh"), "Clark I");
-//        assertEquals(redis.getDormRoomNumber("josh"), "117");
-//        assertEquals(redis.getDormName("greg"), "Walker");
-//        assertEquals(redis.getDormRoomNumber("greg"), "204");
-//        assertEquals(redis.getDormName("patrick"), "Walker");
-//        assertEquals(redis.getDormRoomNumber("patrick"), "208");
-//    }
-//
-//    @Test
-//    public void canGetOccupiedRooms(){
-//        redis.setDormName(jUsername, "-1");
-//        redis.setDormRoomNumber(jUsername, "-1");
-//        redis.clearRoom("Walker", "208");
-//
-//        String oldList = redis.getOccupiedRooms("Walker").trim();
-//        int oldCount = oldList.split(" ").length;
-//
-//        testAction(LOG_IN, jUsername, jPassword, null, null, LOGIN_SUCCESSFUL);
-//        testAction(REQUEST_ROOM, jUsername, jPassword, "Walker", "208", RESERVE_SUCCESSFUL);
-//        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
-//
-//        String newList = redis.getOccupiedRooms("Walker").trim();
-//        int newCount = newList.split(" ").length;
-//
-//        assertEquals(oldCount + 1, newCount);
-//    }
-//
-//
-//
-//
-//
-//    private void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
-//                            String expectedResult){
-//        ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
-//        assertEquals(expectedResult, server.handle(p).message);
-//>>>>>>> b185071e165efa5ecbe9700e9d5788097178cd21
-//    }
-//
-//    private static void writeDummyData(){
-//        try {
-//            server.registerUser("sam", "passphrase1", "00011122");
-//            server.registerUser("josh", "passphrase2", "0");
-//            server.registerUser("patrick", "passphrase3", "000");
-//            server.registerUser("greg", "passphrase4", "00011133");
-//        }
-//        catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//}
+package ServerPackage;
+
+import SSLPackage.Action;
+import SSLPackage.ClientPacket;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.UnsupportedEncodingException;
+
+import static SSLPackage.Action.*;
+import static SSLPackage.ServerPacket.*;
+import static ServerPackage.ServerTestAccounts.*;
+import static org.junit.Assert.*;
+
+/**
+ * Created by Greg on 11/14/18.
+ */
+public class ServerTest {
+    private static Server server;
+    private static RedisDB redis;
+
+    @BeforeClass
+    public static void init() throws Exception {
+        redis = new RedisDB("localhost", 6379, "aaa");
+    }
+
+    @Before
+    public void createServer() throws Exception {
+        redis.clearRedisDB();
+        server = new Server("aaa");
+        setupTestData();
+    }
+
+    /*
+        LOGIN
+     */
+
+    @Test
+    public void canLogIn() throws UnsupportedEncodingException{
+        testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
+    }
+
+    @Test
+    public void loginFailsWithWrongPassword() throws UnsupportedEncodingException {
+        testAction(LOG_IN, JS_USERNAME, "this password is wrong", null, null, LOGIN_FAILED);
+    }
+
+    @Test
+    public void loginFailsWithWrongUsername() throws UnsupportedEncodingException {
+        testAction(LOG_IN, "Jane Doe", JS_PASS, null, null, LOGIN_FAILED);
+    }
+
+    @Test
+    public void cannotLogOutWhenNotLoggedIn() {
+        testAction(LOG_OUT, null, null, null, null, NOT_LOGGED_IN);
+    }
+
+    @Test
+    public void canLogOutAfterLoggingIn(){
+        testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+    }
+
+    /*
+        REGISTRATION
+     */
+
+    @Test
+    public void canRegister(){
+        testAction(REGISTER, "elmer", "fudd12", null, "00001111", REGISTRATION_SUCCESSFUL);
+    }
+
+    @Test
+    public void cannotRegisterTwice(){
+        testAction(REGISTER, "elmer", "fudd12", null, "00001111", REGISTRATION_SUCCESSFUL);
+        testAction(REGISTER, "elmer", "fudd12", null, "00001111", REGISTRATION_FAILED);
+    }
+
+    @Test
+    public void registrationFailsWithBadStudentId(){
+        testAction(REGISTER, "elmer", "fudd12", null, "badID", REGISTRATION_FAILED);
+    }
+
+    @Test
+    public void cannotReserveFilledRoom(){
+        redis.clearRoom("Walker", "208");
+        testAction(LOG_IN, GREG_USERNAME, GREG_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(REQUEST_ROOM, null, null, "Walker", "208", RESERVE_SUCCESSFUL);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+
+        testAction(LOG_IN, PATRICK_USERNAME, PATRICK_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(REQUEST_ROOM, null, null, "Walker", "208", RESERVE_FAILED);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+    }
+
+    /*
+        REQUESTING ROOMS
+     */
+
+    @Test
+    public void canRequestRoom(){
+        redis.clearRoom("Clark I", "117");
+        testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(REQUEST_ROOM, null, null, "Clark I", "117", RESERVE_SUCCESSFUL);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+    }
+
+    @Test
+    public void cannotRequestRoomBeforeTheirTime(){
+        redis.clearRoom("Clark I", "117");
+        testAction(LOG_IN, WAITING_USERNAME, WAITING_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(REQUEST_ROOM, null, null, "Clark I", "117", RESERVE_FAILED);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+    }
+
+    @Test
+    public void cannotRequestRoomWhenNotLoggedIn(){
+        testAction(REQUEST_ROOM, null, null, "Clark I", "117", NOT_LOGGED_IN);
+    }
+
+    /*
+        ADMIN FUNCTIONS
+     */
+
+    @Test
+    public void cannotUseAdminFunctionsWhenNotLoggedIn(){
+        testAction(ADMIN_REMOVE_STUDENT, null, null, "Clark I", "117", ADMIN_UNAUTHORIZED);
+        testAction(ADMIN_PLACE_STUDENT, "sam", null, "Clark I", "117", ADMIN_UNAUTHORIZED);
+    }
+
+    @Test
+    public void onlyAdminsCanUseAdminFunctions(){
+        testAction(LOG_IN, GREG_USERNAME, GREG_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(ADMIN_REMOVE_STUDENT, null, null, "Clark I", "117", ADMIN_UNAUTHORIZED);
+        testAction(ADMIN_PLACE_STUDENT, SAM_USERNAME, null, "Clark I", "117", ADMIN_UNAUTHORIZED);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+
+        testAction(LOG_IN, ADMIN_USERNAME, ADMIN_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(ADMIN_REMOVE_STUDENT, null, null, "Clark I", "117", REMOVE_STUDENT_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, SAM_USERNAME, null, "Clark I", "117", PLACE_STUDENT_SUCCESSFUL);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+    }
+
+    @Test
+    public void adminCanPlaceStudents(){
+        testAction(LOG_IN, ADMIN_USERNAME, ADMIN_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, SAM_USERNAME, null, "Clark V", "117", PLACE_STUDENT_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, JOSH_USERNAME, null, "Clark I", "117", PLACE_STUDENT_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, GREG_USERNAME, null, "Walker", "204", PLACE_STUDENT_SUCCESSFUL);
+        testAction(ADMIN_PLACE_STUDENT, PATRICK_USERNAME, null, "Walker", "208", PLACE_STUDENT_SUCCESSFUL);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+
+        assertEquals(redis.getDormName(SAM_USERNAME), "Clark V");
+        assertEquals(redis.getDormRoomNumber(SAM_USERNAME), "117");
+        assertEquals(redis.getDormName(JOSH_USERNAME), "Clark I");
+        assertEquals(redis.getDormRoomNumber(JOSH_USERNAME), "117");
+        assertEquals(redis.getDormName(GREG_USERNAME), "Walker");
+        assertEquals(redis.getDormRoomNumber(GREG_USERNAME), "204");
+        assertEquals(redis.getDormName(PATRICK_USERNAME), "Walker");
+        assertEquals(redis.getDormRoomNumber(PATRICK_USERNAME), "208");
+    }
+
+    /*
+        GETTING INFO
+     */
+
+    @Test
+    public void canGetOccupiedRooms(){
+        redis.setDormName(JS_USERNAME, "-1");
+        redis.setDormRoomNumber(JS_USERNAME, "-1");
+        redis.clearRoom("Walker", "208");
+        redis.clearRoom("Walker", "204");
+
+        String oldList = redis.getOccupiedRooms("Walker").trim();
+        int oldCount = Math.min(oldList.split(" ").length, oldList.length());
+
+        testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(REQUEST_ROOM, null, null, "Walker", "208", RESERVE_SUCCESSFUL);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+
+        testAction(LOG_IN, ServerTestAccounts.GREG_USERNAME, GREG_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(REQUEST_ROOM, null, null, "Walker", "204", RESERVE_SUCCESSFUL);
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+
+        String newList = redis.getOccupiedRooms("Walker").trim();
+        int newCount = newList.split(" ").length;
+
+        assertEquals(oldCount + 2, newCount);
+    }
+
+    @Test
+    public void canGetInfo(){
+        testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
+
+        // Manually validate the response
+        ClientPacket p = new ClientPacket(GET_INFO, null, null, null, null);
+        String response = server.handle(p).message;
+        assertTrue(response.length() > 10);
+
+        testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
+    }
+
+    @Test
+    public void cannotGetInfoWhenNotLoggedIn(){
+        testAction(GET_INFO, null, null, null, null, NOT_LOGGED_IN);
+    }
+
+    @Test
+    public void canGetOccupiedRoomsWhenNotLoggedIn(){
+        // Manually validate the response
+        ClientPacket p = new ClientPacket(GET_ROOMS, null, null, null, null);
+        String response = server.handle(p).message;
+        assertNotEquals(response, NOT_LOGGED_IN);
+    }
+
+    /*
+        RATE LIMITING
+     */
+
+    @Test
+    public void doesCapPacketsBeforeLogin(){
+        for (int i = 0; i < Server.RATE_LIMIT; i++){
+            testAction(LOG_IN, JS_USERNAME, "notJohnsPassword", null, null, LOGIN_FAILED);
+        }
+        testAction(LOG_IN, JS_USERNAME, "stillNotHisPassword", null, null, RATE_LIMIT_REACHED);
+    }
+
+    @Test
+    public void doesCapPacketsAfterLogin(){
+        testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
+        for (int i = 0; i < Server.RATE_LIMIT; i++){
+            testAction(ADMIN_PLACE_STUDENT, GREG_USERNAME, null, "Smiley", "303", ADMIN_UNAUTHORIZED);
+        }
+        testAction(ADMIN_PLACE_STUDENT, GREG_USERNAME, null, "Smiley", "303", RATE_LIMIT_REACHED);
+    }
+
+    /*
+        HELPER METHODS
+     */
+
+    private void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
+                            String expectedResult){
+        ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
+        assertEquals(expectedResult, server.handle(p).message);
+    }
+
+    private static void setupTestData() throws Exception{
+        try {
+            boolean success = server.actor.registerUser(SAM_USERNAME, SAM_PASS, SAM_ID, true);
+            success = success & server.actor.registerUser(JOSH_USERNAME, JOSH_PASS, JOSH_ID, true);
+            success = success & server.actor.registerUser(PATRICK_USERNAME, PATRICK_PASS, PATRICK_ID, true);
+            success = success & server.actor.registerUser(GREG_USERNAME, GREG_PASS, GREG_ID, true);
+
+            success = success & server.actor.registerUser(JS_USERNAME, JS_PASS, JS_ID, true);
+            success = success & server.actor.registerUser(WAITING_USERNAME, WAITING_PASS, WAITING_ID, false);
+
+            success = success & server.actor.registerUser(ADMIN_USERNAME, ADMIN_PASS, ADMIN_ID, true);
+            server.actor.addAdmin(ADMIN_USERNAME);
+            if (!success) throw new Exception("Failed to initialize test data.");
+        }
+        catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+}

@@ -54,7 +54,14 @@ public class SslUtil {
     public static SSLServerSocket createSSLServerSocket(int port, SslContextProvider provider) throws Exception {
         SSLContext context = createSSLContext(provider);
         SSLServerSocketFactory factory = context.getServerSocketFactory();
+        for (String cipher: factory.getDefaultCipherSuites()){
+            System.out.println("Default Cipher: " + cipher);
+        }
+        for (String cipher: factory.getSupportedCipherSuites()){
+            System.out.println("Supported Cipher: " + cipher);
+        }
         SSLServerSocket socket = (SSLServerSocket) factory.createServerSocket(port);
+        //socket.setEnabledCipherSuites();
         socket.setEnabledProtocols(new String[] { provider.getProtocol() });
         socket.setNeedClientAuth(false);
         return socket;

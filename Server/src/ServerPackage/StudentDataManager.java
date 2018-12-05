@@ -16,14 +16,16 @@ public class StudentDataManager {
 
         // Read student data
         try {
-            readStudentData();
+            readStudentData("Server/TestStudentData.txt");
+            readStudentData("Server/ValidStudentData.txt");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void readStudentData() throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("file.txt"));
+    public void readStudentData(String filename) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(filename));
         try {
             StringBuilder sb = new StringBuilder();
             String line = "";
@@ -49,13 +51,16 @@ public class StudentDataManager {
     }
 
     private boolean addStudentToMap(String rawLine){
-        String[] chunks = rawLine.split("|");
+
+        String[] chunks = rawLine.split("@",2);
+
         if (chunks.length != 2) return false;
 
         String studentId = chunks[1];
         String fullName = chunks[0];
 
         fullNamesById.put(studentId, fullName);
+
         return true;
     }
 }
