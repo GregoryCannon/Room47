@@ -13,9 +13,9 @@ public class ServerActor {
     private static HashUtil hashUtil;
     private static StudentDataManager studentDataManager;
 
-    ServerActor() throws NoSuchAlgorithmException {
+    ServerActor(String dbEncryptionKey) throws NoSuchAlgorithmException {
         hashUtil = new HashUtil();
-        redis = new RedisDB("localhost", 6379);
+        redis = new RedisDB("localhost", 6379, dbEncryptionKey);
         studentDataManager = new StudentDataManager();
     }
 

@@ -10,11 +10,13 @@ import static junit.framework.TestCase.assertEquals;
 public class RedisDBTest {
     private static RedisDB redis;
     private static HashUtil hashUtil;
+    private static final int port = 6379;
+    private static final String dbEncryptionKey = "12341234";
 
     @BeforeClass
     public static void setUp() throws NoSuchAlgorithmException {
         hashUtil = new HashUtil();
-        redis = new RedisDB("localhost", 6379);
+        redis = new RedisDB("localhost", 6379, dbEncryptionKey);
     }
 
     @AfterClass

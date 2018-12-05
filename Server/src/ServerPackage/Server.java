@@ -14,6 +14,7 @@ public class Server {
     public ServerActor actor;
     private static SslServer sslServer;
     private static String clientId;
+    private static String dbEncryptionKey;
 
     private String authenticatedUser = null;
 
@@ -21,14 +22,24 @@ public class Server {
     private int preLoginPacketCount = 0;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        Server server = new Server();
+        /*if (args.length == 1){
+            dbEncryptionKey = args[0];
+        } else {
+            System.out.println("Please enter the encryption key for the database, as a command line argument!");
+            return;
+        }*/
+        dbEncryptionKey = "aa";
+
+        Server server = new Server(dbEncryptionKey);
         SslServerHandler handler = server::handle;
         sslServer = new SslServer(6667, handler);
         clientId = sslServer.getClientId();
+
+
     }
 
-    public Server() throws NoSuchAlgorithmException{
-        actor = new ServerActor();
+    public Server(String dbEncryptionKey) throws NoSuchAlgorithmException{
+        actor = new ServerActor(dbEncryptionKey);
     }
 
     public ServerPacket handle(ClientPacket p) {

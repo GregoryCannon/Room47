@@ -22,13 +22,13 @@ public class ServerTest {
 
     @BeforeClass
     public static void init() throws Exception {
-        redis = new RedisDB("localhost", 6379);
+        redis = new RedisDB("localhost", 6379, "aaa");
     }
 
     @Before
     public void createServer() throws Exception {
         redis.clearRedisDB();
-        server = new Server();
+        server = new Server("aaa");
         setupTestData();
     }
 
