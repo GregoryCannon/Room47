@@ -16,9 +16,6 @@ public class ServerActor {
     ServerActor(String dbEncryptionKey) throws NoSuchAlgorithmException {
         hashUtil = new HashUtil();
         redis = new RedisDB("localhost", 6379, dbEncryptionKey);
-        String cipher = redis.AESEncrypt("Hello");
-        System.out.println("Hello --> " + cipher);
-        System.out.println(cipher + " --> " + redis.AESDecrypt(cipher));
         studentDataManager = new StudentDataManager();
     }
 

@@ -13,7 +13,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class RedisDB {
@@ -33,6 +32,7 @@ public class RedisDB {
     private static final String USER_ID = "userID";
     private static final String USERS = "users";
     private static final String ADMIN = "admin";
+    private static final String CLIENT_IDS = "clientIds";
     private static final String PACKET_COUNT = "packetCount";
 
     public RedisDB(String host, int port, String dbEncryptionKey){
@@ -41,6 +41,7 @@ public class RedisDB {
         connection = client.connect();
         commands = connection.sync();
         this.dbEncryptionKey = dbEncryptionKey;
+        startTrackingPacketCount("_");
         //this.initVector = initVector;
     }
 
@@ -115,6 +116,7 @@ public class RedisDB {
         key = AESEncrypt(key);
         key1 = AESEncrypt(key1);
         String encryptedResponse = commands.hget(key, key1);
+        if (encryptedResponse == null) return null;
         return AESDecrypt(encryptedResponse);
     }
 
@@ -131,11 +133,13 @@ public class RedisDB {
 
 
 
-    /*
+    /*-----------------------------------
         Functions used by the server
+    -----------------------------------*/
+
+    /*
+        Set management
      */
-
-
     public void createAccount(String username, String hashedPassword, String registrationTime, String salt,
                               String fullName, String studentId) throws UnsupportedEncodingException {
         sadd(USERS, username);
@@ -149,23 +153,59 @@ public class RedisDB {
         hset(username, USER_ID, studentId);
     }
 
-    public boolean isAdmin(String username){
-        return sismember(ADMIN, username);
+    public void startTrackingPacketCount(String clientId){
+        sadd(CLIENT_IDS, clientId);
+        hset(clientId, PACKET_COUNT, "1");
     }
 
     public long addAdmin(String username) { return sadd(ADMIN, username); }
+
+    public boolean isAdmin(String username){
+        return sismember(ADMIN, username);
+    }
 
     public boolean isUser(String username){
         return sismember(USERS, username);
     }
 
-    public Set<String> getAdmin(){
+    public Set<String> getAdmins(){
         return smembers(ADMIN);
     }
 
     public Set<String> getUsers(){
         return smembers(USERS);
     }
+
+    public Set<String> getClientIds(){
+        return smembers(CLIENT_IDS);
+    }
+
+    /*
+        Rate limiting
+     */
+
+    public int getPacketCount(String clientId){
+        if (sismember(CLIENT_IDS, clientId)){
+            String response = hget(clientId, PACKET_COUNT);
+            if (response == null){
+                return 0;
+            }
+            return Integer.valueOf(response);
+        }
+        return 0;
+    }
+
+    public void setPacketCount(String clientId, int rateLimit){
+        if (sismember(CLIENT_IDS, clientId)) {
+            hset(clientId, PACKET_COUNT, "" + rateLimit);
+        } else {
+            startTrackingPacketCount(clientId);
+        }
+    }
+
+    /*
+        Room Occupancy
+     */
 
     public void clearRoom(String dormName, String dormRoomNumber){
         String occupant;
@@ -175,8 +215,8 @@ public class RedisDB {
         }
     }
 
-    //O(n) search for now
     public String getOccupantOfRoom(String dormName, String dormRoomNumber){
+        //O(n) search for now
         Set<String> users = smembers(USERS);
         for (String user : users){
             String userDormName = hget(user, DORM_NAME);
@@ -202,6 +242,10 @@ public class RedisDB {
         }
         return occupiedRooms;
     }
+
+    /*
+        Individual User Properties
+     */
 
     public String getHashedPassword(String username){
         return hget(username, PASSWORD);
@@ -263,21 +307,18 @@ public class RedisDB {
         hset(username, USER_ID, userID);
     }
 
-    public int getPacketCount(String clientId){
-        return Integer.valueOf(hget(clientId, PACKET_COUNT));
-    }
-
-    public void setPacketCount(String clientId, int rateLimit){
-        hset(clientId, PACKET_COUNT, ""+rateLimit);
-    }
+    /*
+        DB Management
+     */
 
     public void clearRedisDB(){
-        Set<String> users = getUsers();
-        Iterator<String> usersIterator = users.iterator();
-        while(usersIterator.hasNext()){
-            String currentUser = usersIterator.next();
+        for (String currentUser : getUsers()) {
             del(currentUser);
             srem(USERS, currentUser);
+        }
+        for (String clientId : getClientIds()) {
+            del(clientId);
+            srem(USERS, clientId);
         }
     }
 

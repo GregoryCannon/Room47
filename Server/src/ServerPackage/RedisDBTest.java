@@ -94,10 +94,11 @@ public class RedisDBTest {
 
     @Test
     public void testRateLimit(){
-        String username = "adumbledore";
-        int rateLimit = 1000;
-        redis.setPacketCount(username, rateLimit);
-        assertEquals(redis.getPacketCount(username), 1000);
+        String clientId = "adumbledore";
+        int packetCount = 345;
+        redis.startTrackingPacketCount(clientId);
+        redis.setPacketCount(clientId, packetCount);
+        assertEquals(redis.getPacketCount(clientId), 345);
     }
 
     @Test

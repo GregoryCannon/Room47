@@ -231,7 +231,7 @@ public class ServerTest {
     @Test
     public void doesCapPacketsAfterLogin(){
         testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
-        for (int i = 0; i < Server.RATE_LIMIT; i++){
+        for (int i = 0; i < Server.RATE_LIMIT - 1; i++){
             testAction(ADMIN_PLACE_STUDENT, GREG_USERNAME, null, "Smiley", "303", ADMIN_UNAUTHORIZED);
         }
         testAction(ADMIN_PLACE_STUDENT, GREG_USERNAME, null, "Smiley", "303", RATE_LIMIT_REACHED);

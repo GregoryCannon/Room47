@@ -18,7 +18,7 @@ public class Server {
 
     private String authenticatedUser = null;
 
-    public static final int RATE_LIMIT = 1000;
+    public static final int RATE_LIMIT = 100;
     private int preLoginPacketCount = 0;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
@@ -40,6 +40,7 @@ public class Server {
 
     public Server(String dbEncryptionKey) throws NoSuchAlgorithmException{
         actor = new ServerActor(dbEncryptionKey);
+        clientId = "UnitTestClientId";
     }
 
     public ServerPacket handle(ClientPacket p) {
