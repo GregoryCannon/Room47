@@ -28,7 +28,7 @@ public class Server {
             System.out.println("Please enter the encryption key for the database, as a command line argument!");
             return;
         }*/
-        dbEncryptionKey = "aa";
+        dbEncryptionKey = "CecilSagehen1987";
 
         Server server = new Server(dbEncryptionKey);
         SslServerHandler handler = server::handle;

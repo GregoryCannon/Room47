@@ -16,6 +16,9 @@ public class ServerActor {
     ServerActor(String dbEncryptionKey) throws NoSuchAlgorithmException {
         hashUtil = new HashUtil();
         redis = new RedisDB("localhost", 6379, dbEncryptionKey);
+        String cipher = redis.AESEncrypt("Hello");
+        System.out.println("Hello --> " + cipher);
+        System.out.println(cipher + " --> " + redis.AESDecrypt(cipher));
         studentDataManager = new StudentDataManager();
     }
 
@@ -81,7 +84,7 @@ public class ServerActor {
                                 boolean regTimeInPast) throws UnsupportedEncodingException {
         // Check that their student ID is valid and they're not already registered
         if (!studentDataManager.isValidStudentId(studentID)) return false;
-        if (redis.getUserID(username) != null) return false;
+        if (redis.isUser(username)) return false;
 
         // Calculate their registration time, salt, and hashed password
         String fullName = studentDataManager.getStudentFullName(studentID);
