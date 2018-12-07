@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DormsAdapter extends RecyclerView.Adapter<DormsAdapter.MyViewHolder> {
+    public static String dormName;
     List<Dorm> dorms;
 
     public DormsAdapter(List<Dorm> dorms) {
@@ -32,7 +33,9 @@ public class DormsAdapter extends RecyclerView.Adapter<DormsAdapter.MyViewHolder
                 @Override
                 public void onClick(View view) {
                     Context context = view.getContext();
+                    dormName = dorm.getText().toString();
                     context.startActivity(new Intent(context, RoomSelectionActivity.class));
+
                 }
             });
     }
@@ -54,4 +57,8 @@ public class DormsAdapter extends RecyclerView.Adapter<DormsAdapter.MyViewHolder
     public int getItemCount() {
         return dorms.size();
     }
+
+    public static String getDormName() {
+    return dormName;
     }
+}

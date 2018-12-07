@@ -25,6 +25,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     public static ServerPacket response = null;
+    private static String username;
+    private static String password;
 
     @BindView(R.id.input_username) EditText _userNameText;
     @BindView(R.id.input_password) EditText _passwordText;
@@ -96,8 +98,11 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String username = _userNameText.getText().toString();
-        String password = _passwordText.getText().toString();
+        username = _userNameText.getText().toString();
+        password = _passwordText.getText().toString();
+
+        DashboardActivity.setUsername(username);
+        DashboardActivity.setPassword(password);
 
         new SslClientToServer().execute((Object) null).get();
 

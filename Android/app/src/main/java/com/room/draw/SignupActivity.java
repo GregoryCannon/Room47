@@ -2,6 +2,7 @@ package com.room.draw;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +22,10 @@ import butterknife.ButterKnife;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
+    public static ServerPacket response = null;
+    private static String username;
+    private static String password;
+    private static String userId;
 
     @BindView(R.id.input_name)
     EditText _nameText;
@@ -89,12 +94,14 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.show();
 
         String name = _nameText.getText().toString();
-        String username = _userNameText.getText().toString();
-        String password = _passwordText.getText().toString();
+          username = _userNameText.getText().toString();
+          password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
-        String userId = _userID.getText().toString();
+          userId = _userID.getText().toString();
+          DashboardActivity.setUsername(username);
+          DashboardActivity.setPassword(password);
 
-        final ServerPacket response = Connection.register(username, password, userId, getApplicationContext());
+        new SignupActivity.SslClientToServer().execute((Object) null).get();
 
 
         // TODO: Implement your own signup logic here.
@@ -176,5 +183,24 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    private class SslClientToServer extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            try {
+                response = Connection.register(username, password, userId, getApplicationContext());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }
