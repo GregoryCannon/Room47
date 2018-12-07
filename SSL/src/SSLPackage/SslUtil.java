@@ -45,6 +45,33 @@ public class SslUtil {
         return kmf.getKeyManagers();
     }
 
+    // Our own custom list of supported cipher suites, which disallows all 3DES variants and "TLS_EMPTY_RENEGOTIATION_INFO_SCSV"
+    private static String[] getCipherSuites(){
+        return new String[]{
+            "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+            "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+            "TLS_RSA_WITH_AES_128_CBC_SHA256",
+            "TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256",
+            "TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256",
+            "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256",
+            "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256",
+            "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+            "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+            "TLS_RSA_WITH_AES_128_CBC_SHA",
+            "TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA",
+            "TLS_ECDH_RSA_WITH_AES_128_CBC_SHA",
+            "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
+            "TLS_DHE_DSS_WITH_AES_128_CBC_SHA",
+            "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+            "TLS_RSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256",
+            "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
+            "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256"
+        };
+    }
+
     public static SSLContext createSSLContext(SslContextProvider provider) throws Exception {
         SSLContext context = SSLContext.getInstance(provider.getProtocol());
         context.init(provider.getKeyManagers(), provider.getTrustManagers(), new SecureRandom());
@@ -61,7 +88,7 @@ public class SslUtil {
             System.out.println("Supported Cipher: " + cipher);
         }
         SSLServerSocket socket = (SSLServerSocket) factory.createServerSocket(port);
-        //socket.setEnabledCipherSuites();
+        socket.setEnabledCipherSuites(getCipherSuites());
         socket.setEnabledProtocols(new String[] { provider.getProtocol() });
         socket.setNeedClientAuth(false);
         return socket;
@@ -71,6 +98,7 @@ public class SslUtil {
         SSLContext context = createSSLContext(provider);
         SSLSocketFactory factory = context.getSocketFactory();
         SSLSocket socket = (SSLSocket) factory.createSocket(host, port);
+        socket.setEnabledCipherSuites(getCipherSuites());
         socket.setEnabledProtocols(new String[] { provider.getProtocol() });
         return socket;
     }

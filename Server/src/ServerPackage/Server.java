@@ -18,7 +18,7 @@ public class Server {
 
     private String authenticatedUser = null;
 
-    public static final int RATE_LIMIT = 1000;
+    public static final int RATE_LIMIT = 100;
     private int preLoginPacketCount = 0;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
@@ -28,7 +28,7 @@ public class Server {
             System.out.println("Please enter the encryption key for the database, as a command line argument!");
             return;
         }*/
-        dbEncryptionKey = "aa";
+        dbEncryptionKey = "CecilSagehen1987";
 
         Server server = new Server(dbEncryptionKey);
         SslServerHandler handler = server::handle;
@@ -40,6 +40,7 @@ public class Server {
 
     public Server(String dbEncryptionKey) throws NoSuchAlgorithmException{
         actor = new ServerActor(dbEncryptionKey);
+        clientId = "UnitTestClientId";
     }
 
     public ServerPacket handle(ClientPacket p) {

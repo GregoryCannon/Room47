@@ -23,7 +23,8 @@ public class SslServer implements SslContextProvider {
             System.out.println("Server: Server started. Awaiting client...");
 
             SSLSocket client = (SSLSocket) socket.accept();
-            clientId = SslUtil.getPeerIdentity(client);
+            //clientId = SslUtil.getPeerIdentity(client);
+            clientId = client.getRemoteSocketAddress().toString();
             os = client.getOutputStream();
             is = client.getInputStream();
             System.out.printf("Server: Client (%s) connected. Awaiting ping...%n", clientId);

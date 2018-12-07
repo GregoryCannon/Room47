@@ -81,7 +81,7 @@ public class ServerActor {
                                 boolean regTimeInPast) throws UnsupportedEncodingException {
         // Check that their student ID is valid and they're not already registered
         if (!studentDataManager.isValidStudentId(studentID)) return false;
-        if (redis.getUserID(username) != null) return false;
+        if (redis.isUser(username)) return false;
 
         // Calculate their registration time, salt, and hashed password
         String fullName = studentDataManager.getStudentFullName(studentID);

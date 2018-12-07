@@ -11,7 +11,7 @@ public class RedisDBTest {
     private static RedisDB redis;
     private static HashUtil hashUtil;
     private static final int port = 6379;
-    private static final String dbEncryptionKey = "12341234";
+    private static final String dbEncryptionKey = "CecilSagehen1987";
 
     @BeforeClass
     public static void setUp() throws NoSuchAlgorithmException {
@@ -94,10 +94,11 @@ public class RedisDBTest {
 
     @Test
     public void testRateLimit(){
-        String username = "adumbledore";
-        int rateLimit = 1000;
-        redis.setPacketCount(username, rateLimit);
-        assertEquals(redis.getPacketCount(username), 1000);
+        String clientId = "adumbledore";
+        int packetCount = 345;
+        redis.startTrackingPacketCount(clientId);
+        redis.setPacketCount(clientId, packetCount);
+        assertEquals(redis.getPacketCount(clientId), 345);
     }
 
     @Test
