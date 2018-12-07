@@ -1,5 +1,6 @@
 package com.room.draw;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -69,7 +70,7 @@ public class RoomAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 currentRoom = imageView;
-                Toast.makeText(mContext, "Congratulations on picking a room!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(mContext, "Congratulations on picking a room!", Toast.LENGTH_LONG).show();
                 dormName = DormsAdapter.getDormName();
                 roomNumber = imageView.getText().toString();
                 try {
@@ -104,7 +105,6 @@ public class RoomAdapter extends BaseAdapter {
                 if (message.equals("Room reserved!")) {
                     currentRoom.setTextColor(Color.BLUE);
                 }
-                rooms.remove(roomNumber);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -114,6 +114,17 @@ public class RoomAdapter extends BaseAdapter {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+//            final ProgressDialog progressDialog = new ProgressDialog(mContext,
+//                    R.style.AppTheme_Dark_Dialog);
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setMessage("Choosing Room...");
+//            progressDialog.show();
+//            new android.os.Handler().postDelayed(
+//                    new Runnable() {
+//                        public void run() {
+//                            progressDialog.dismiss();
+//                        }
+//                    }, 3000);
             return null;
         }
     }

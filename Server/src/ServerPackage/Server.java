@@ -70,6 +70,7 @@ public class Server {
         try {
             boolean regSuccess = actor.registerUser(p.username, p.password, p.roomNumber, false);
             boolean loginSuccess = actor.logIn(p.username, p.password);
+            authenticatedUser = p.username;
             if (regSuccess && loginSuccess){
                 return new ServerPacket(REGISTRATION_SUCCESSFUL);
             }

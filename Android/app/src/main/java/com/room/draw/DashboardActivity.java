@@ -29,6 +29,8 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.logout) Button _logout;
     private static String username;
     private static String password;
+    private static boolean logoutButtonClicked;
+    private static boolean roomStatusButtonClicked;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +50,14 @@ public class DashboardActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                finish();
+                logoutButtonClicked = true;
+                try {
+                    new SslClientToServer().execute((Object) null).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -59,6 +66,7 @@ public class DashboardActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                roomStatusButtonClicked = true;
                 try {
                     new SslClientToServer().execute((Object) null).get();
                 } catch (InterruptedException e) {
@@ -88,25 +96,51 @@ public class DashboardActivity extends AppCompatActivity {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            try {
-                ServerPacket response = Connection.getInfo(username, password, getApplicationContext());
+            if (roomStatusButtonClicked) {
+                ServerPacket response = null;
+                try {
+                    response = Connection.getInfo(username, password, getApplicationContext());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 String message = response.message;
-                String [] userInfo = new String[7];
+                String[] userInfo = new String[7];
                 StringTokenizer str = new StringTokenizer(message);
-                for (int i=0; i<userInfo.length; i++) {
+                for (int i = 0; i < userInfo.length; i++) {
                     userInfo[i] = str.nextToken("|");
                 }
                 StatusActivity.setUserData(userInfo);
                 Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
                 startActivity(intent);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                roomStatusButtonClicked = false;
+            }
+
+            if (logoutButtonClicked) {
+                ServerPacket response = null;
+                try {
+                    response = Connection.logout(username, password, getApplicationContext());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                String message = response.message;
+                if (message.equals("Logout successful")) {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                logoutButtonClicked = false;
             }
             return null;
         }
