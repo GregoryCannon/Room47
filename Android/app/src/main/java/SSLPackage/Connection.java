@@ -20,7 +20,7 @@ public class Connection {
         return client.readServerPacket();
     }
 
-    public static ServerPacket logout(String username, String password, Context context) throws IOException, ClassNotFoundException, ExecutionException, InterruptedException {
+    public static ServerPacket logout(String username, String password, Context context) throws IOException, ClassNotFoundException {
         ClientPacket testClientPacket = new ClientPacket(Action.LOG_OUT, username, password, "dormName", "userId");
         client.sendClientPacket(testClientPacket);
         return client.readServerPacket();
@@ -36,14 +36,32 @@ public class Connection {
         return client.readServerPacket();
     }
 
-    public static ServerPacket getInfo(String username, String password, Context context) throws IOException, ClassNotFoundException, ExecutionException, InterruptedException {
+    public static ServerPacket getInfo(String username, String password, Context context) throws IOException, ClassNotFoundException {
         ClientPacket testClientPacket = new ClientPacket(Action.GET_INFO, username, password, "dormName", "userId");
         client.sendClientPacket(testClientPacket);
         return client.readServerPacket();
     }
 
-    public static ServerPacket requestRoom(String username, String password, String dorm, String roomNumber) throws IOException, ClassNotFoundException, ExecutionException, InterruptedException {
+    public static ServerPacket requestRoom(String username, String password, String dorm, String roomNumber) throws IOException, ClassNotFoundException {
         ClientPacket testClientPacket = new ClientPacket(Action.REQUEST_ROOM, username, password, dorm, roomNumber);
+        client.sendClientPacket(testClientPacket);
+        return client.readServerPacket();
+    }
+
+    public static ServerPacket getOccupiedRooms(String username, String password, String dorm) throws IOException, ClassNotFoundException {
+        ClientPacket testClientPacket = new ClientPacket(Action.GET_ROOMS, username, password, dorm, "roomNumber");
+        client.sendClientPacket(testClientPacket);
+        return client.readServerPacket();
+    }
+
+    public static ServerPacket placeStudentInRoom(String username, String dorm, String room) throws IOException, ClassNotFoundException {
+        ClientPacket testClientPacket = new ClientPacket(Action.ADMIN_PLACE_STUDENT, username, "password", dorm, room);
+        client.sendClientPacket(testClientPacket);
+        return client.readServerPacket();
+    }
+
+    public static ServerPacket removeStudentFromRoom(String dorm, String room) throws IOException, ClassNotFoundException {
+        ClientPacket testClientPacket = new ClientPacket(Action.ADMIN_REMOVE_STUDENT, "username", "password", dorm, room);
         client.sendClientPacket(testClientPacket);
         return client.readServerPacket();
     }

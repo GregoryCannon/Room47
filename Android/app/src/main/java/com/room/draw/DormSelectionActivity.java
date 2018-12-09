@@ -18,7 +18,7 @@ public class DormSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dorm_selection_activity);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mAdapter = new DormsAdapter(dorms);
+        mAdapter = new DormsAdapter(this,dorms);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);

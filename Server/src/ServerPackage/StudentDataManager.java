@@ -25,6 +25,7 @@ public class StudentDataManager {
     }
 
     public void readStudentData(String filename) throws IOException {
+        System.out.println(filename);
         BufferedReader br = new BufferedReader(new FileReader(filename));
         try {
             StringBuilder sb = new StringBuilder();
@@ -52,14 +53,18 @@ public class StudentDataManager {
 
     private boolean addStudentToMap(String rawLine){
 
-        String[] chunks = rawLine.split("@",2);
+        String[] chunks = rawLine.split("@",3);
 
-        if (chunks.length != 2) return false;
+        if (chunks.length != 3) return false;
 
         String studentId = chunks[1];
         String fullName = chunks[0];
+        String isAdmin = chunks[2];
 
         fullNamesById.put(studentId, fullName);
+        if(isAdmin.equals("A")) {
+            ServerActor.getRedisInstance().addAdmin(fullName);
+        }
 
         return true;
     }

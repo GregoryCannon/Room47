@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Set;
 
 import static SSLPackage.Action.*;
 import static SSLPackage.ServerPacket.*;
@@ -174,8 +175,8 @@ public class ServerTest {
         redis.clearRoom("Walker", "208");
         redis.clearRoom("Walker", "204");
 
-        String oldList = redis.getOccupiedRooms("Walker").trim();
-        int oldCount = Math.min(oldList.split(" ").length, oldList.length());
+        Set<String> oldList = redis.getOccupiedRooms("Walker");
+        int oldCount = oldList.size();
 
         testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
         testAction(REQUEST_ROOM, null, null, "Walker", "208", RESERVE_SUCCESSFUL);
@@ -185,8 +186,8 @@ public class ServerTest {
         testAction(REQUEST_ROOM, null, null, "Walker", "204", RESERVE_SUCCESSFUL);
         testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
 
-        String newList = redis.getOccupiedRooms("Walker").trim();
-        int newCount = newList.split(" ").length;
+        Set<String> newList = redis.getOccupiedRooms("Walker");
+        int newCount = newList.size();
 
         assertEquals(oldCount + 2, newCount);
     }

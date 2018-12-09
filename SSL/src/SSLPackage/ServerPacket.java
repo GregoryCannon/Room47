@@ -1,7 +1,10 @@
 package SSLPackage;
 
+import java.util.Set;
+
 public class ServerPacket implements java.io.Serializable{
     public String message;
+    public Set<String> occupiedRooms;
 
     private static final long serialVersionUID = 1234567L;
 
@@ -27,5 +30,9 @@ public class ServerPacket implements java.io.Serializable{
 
     public ServerPacket(String response){
         this.message = response;
+    }
+
+    public ServerPacket(Set<String> occupiedRoomms){
+        this.occupiedRooms = occupiedRoomms;
     }
 }

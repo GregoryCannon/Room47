@@ -141,16 +141,20 @@ public class RedisDB {
         Set management
      */
     public void createAccount(String username, String hashedPassword, String registrationTime, String salt,
-                              String fullName, String studentId) throws UnsupportedEncodingException {
-        sadd(USERS, username);
-        hset(username, PASSWORD, hashedPassword);
-        hset(username, SALT, salt);
-        hset(username, ROOM_DRAW_NUMBER, "-1");
-        hset(username, DORM_NAME, "-1");
-        hset(username, DORM_ROOM_NUMBER, "-1");
-        hset(username, REGISTRATION_TIME, registrationTime);
-        hset(username, FULL_NAME, fullName);
-        hset(username, USER_ID, studentId);
+                              String fullName, String studentId){
+            sadd(USERS, username);
+            hset(username, PASSWORD, hashedPassword);
+            hset(username, SALT, salt);
+            hset(username, ROOM_DRAW_NUMBER, "-1");
+            if(ServerActor.getRedisInstance().getDormName(username)==null) {
+                hset(username, DORM_NAME, "-1");
+            }
+            if(ServerActor.getRedisInstance().getDormRoomNumber(username)==null) {
+                hset(username, DORM_ROOM_NUMBER, "-1");
+            }
+            hset(username, REGISTRATION_TIME, registrationTime);
+            hset(username, FULL_NAME, fullName);
+            hset(username, USER_ID, studentId);
     }
 
     public void startTrackingPacketCount(String clientId){
@@ -229,15 +233,18 @@ public class RedisDB {
     }
 
     // Returns a space-separated string of room numbers that are occupied, within a given dorm
-    public String getOccupiedRooms(String dormName){
+    public Set<String> getOccupiedRooms(String dormName){
         Set<String> users = smembers(USERS);
-        String occupiedRooms = "";
+        for (String user:users) {
+            System.out.println(user);
+        }
+        Set<String> occupiedRooms = new HashSet<>();
 
         for (String user : users){
             String userDormName = hget(user, DORM_NAME);
             String userDormRoomNumber = hget(user, DORM_ROOM_NUMBER);
             if (userDormName.equals(dormName) && !userDormRoomNumber.equals("-1")){
-                occupiedRooms += " " + userDormRoomNumber;
+                occupiedRooms.add(userDormRoomNumber);
             }
         }
         return occupiedRooms;

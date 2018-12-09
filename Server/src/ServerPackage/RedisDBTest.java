@@ -16,7 +16,7 @@ public class RedisDBTest {
     @BeforeClass
     public static void setUp() throws NoSuchAlgorithmException {
         hashUtil = new HashUtil();
-        redis = new RedisDB("localhost", 6379, dbEncryptionKey);
+        redis = new RedisDB("localhost", port, dbEncryptionKey);
     }
 
     @AfterClass
@@ -102,7 +102,7 @@ public class RedisDBTest {
     }
 
     @Test
-    public void testGetOccupantOfRoom() throws UnsupportedEncodingException {
+    public void testGetOccupantOfRoom() {
         String username = "user";
         String hashedPassword = "qwerty";
         String registrationTime = "1234";

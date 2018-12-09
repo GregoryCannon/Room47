@@ -2,6 +2,7 @@ package ServerPackage;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 
 import static SSLPackage.ServerPacket.GET_INFO_FAILED;
 
@@ -59,7 +60,7 @@ public class ServerActor {
                 + regTime + "|" + studentId + "|" + isAdmin;
     }
 
-    public String getOccupiedRooms(String dormName){
+    public Set<String> getOccupiedRooms(String dormName){
         return redis.getOccupiedRooms(dormName);
     }
 
@@ -80,8 +81,12 @@ public class ServerActor {
     public boolean registerUser(String username, String password, String studentID,
                                 boolean regTimeInPast) throws UnsupportedEncodingException {
         // Check that their student ID is valid and they're not already registered
-        if (!studentDataManager.isValidStudentId(studentID)) return false;
-        if (redis.isUser(username)) return false;
+        if (!studentDataManager.isValidStudentId(studentID)) {
+            return false;
+        }
+        if (redis.isUser(username)) {
+            return false;
+        }
 
         // Calculate their registration time, salt, and hashed password
         String fullName = studentDataManager.getStudentFullName(studentID);
@@ -115,5 +120,9 @@ public class ServerActor {
             return true;
         }
         return false;
+    }
+
+    public static RedisDB getRedisInstance() {
+        return redis;
     }
 }

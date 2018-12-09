@@ -58,7 +58,7 @@ public class StatusActivity extends AppCompatActivity {
             _regNumber.setText("Don't have a registration number");
         }
         if (!userInfo[4].equals("-1")) {
-            _regTime.setText("Registration Time: " + userInfo[4]);
+            _regTime.setText("Registration Time: " + DashboardActivity.setDate(Long.parseLong(userInfo[4])));
         }
         else {
             _regTime.setText("Don't have a registration time");

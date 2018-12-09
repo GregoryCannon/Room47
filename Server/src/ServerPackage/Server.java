@@ -15,10 +15,11 @@ public class Server {
     private static SslServer sslServer;
     private static String clientId;
     private static String dbEncryptionKey;
+    private static RedisDB redisDB;
 
     private String authenticatedUser = null;
 
-    public static final int RATE_LIMIT = 100;
+    public static final int RATE_LIMIT = 400;
     private int preLoginPacketCount = 0;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
@@ -34,7 +35,7 @@ public class Server {
         SslServerHandler handler = server::handle;
         sslServer = new SslServer(6667, handler);
         clientId = sslServer.getClientId();
-
+        redisDB = new RedisDB("localhost", 6379, dbEncryptionKey);
 
     }
 
