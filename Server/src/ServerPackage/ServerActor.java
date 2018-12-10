@@ -8,6 +8,10 @@ import static SSLPackage.ServerPacket.GET_INFO_FAILED;
 
 /**
  * Created by Greg on 12/4/18.
+ *
+ * Handles the nitty-gritty of taking actions based on the incoming requests.
+ * All interactions with the DB are managed here, NOT in Server.java
+ * All packets and authorization is handled in Server.java
  */
 public class ServerActor {
     private static RedisDB redis;

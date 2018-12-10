@@ -10,6 +10,10 @@ import java.security.NoSuchAlgorithmException;
 
 import static SSLPackage.ServerPacket.*;
 
+/**
+ * Reads and processes incoming packets, and handles all authorization checks.
+ * Does not take any actions on the DB. That functionality is in ServerActor.java
+ */
 public class Server {
     public ServerActor actor;
     private static SslServer sslServer;
