@@ -145,12 +145,8 @@ public class RedisDB {
             hset(username, PASSWORD, hashedPassword);
             hset(username, SALT, salt);
             hset(username, ROOM_DRAW_NUMBER, "-1");
-            if(getDormName(username)==null) {
-                hset(username, DORM_NAME, "-1");
-            }
-            if(getDormRoomNumber(username)==null) {
-                hset(username, DORM_ROOM_NUMBER, "-1");
-            }
+            hset(username, DORM_NAME, "-1");
+            hset(username, DORM_ROOM_NUMBER, "-1");
             hset(username, REGISTRATION_TIME, registrationTime);
             hset(username, FULL_NAME, fullName);
             hset(username, USER_ID, studentId);

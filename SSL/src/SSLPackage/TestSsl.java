@@ -23,11 +23,6 @@ public class TestSsl {
     }
 
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
-
-    @Test
     public void canSendPackets() throws IOException, ClassNotFoundException {
         // Setup
         ClientPacket testClientPacket = new ClientPacket(Action.REGISTER, "username", "password", "dormName", "roomNumber");
