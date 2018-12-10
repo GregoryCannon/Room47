@@ -27,7 +27,6 @@ public class StudentDataManager {
     }
 
     public void readStudentData(String filename) throws IOException {
-        System.out.println(filename);
         BufferedReader br = new BufferedReader(new FileReader(filename));
         try {
             StringBuilder sb = new StringBuilder();

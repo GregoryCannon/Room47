@@ -2,6 +2,7 @@ package ServerPackage;
 
 import SSLPackage.Action;
 import SSLPackage.ClientPacket;
+import SSLPackage.ServerPacket;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -175,7 +176,7 @@ public class ServerTest {
         redis.clearRoom("Walker", "208");
         redis.clearRoom("Walker", "204");
 
-        Set<String> oldList = redis.getOccupiedRooms("Walker");
+        Set<String> oldList = responseFromTestingAction(GET_ROOMS, null, null, "Walker", null).occupiedRooms;
         int oldCount = oldList.size();
 
         testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
@@ -186,7 +187,7 @@ public class ServerTest {
         testAction(REQUEST_ROOM, null, null, "Walker", "204", RESERVE_SUCCESSFUL);
         testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
 
-        Set<String> newList = redis.getOccupiedRooms("Walker");
+        Set<String> newList = responseFromTestingAction(GET_ROOMS, null, null, "Walker", null).occupiedRooms;
         int newCount = newList.size();
 
         assertEquals(oldCount + 2, newCount);
@@ -197,8 +198,8 @@ public class ServerTest {
         testAction(LOG_IN, JS_USERNAME, JS_PASS, null, null, LOGIN_SUCCESSFUL);
 
         // Manually validate the response
-        ClientPacket p = new ClientPacket(GET_INFO, null, null, null, null);
-        String response = server.handle(p).message;
+        String response = responseFromTestingAction(GET_INFO, null, null, null, null).message;
+        assertNotEquals(response, GET_INFO_FAILED);
         assertTrue(response.length() > 10);
 
         testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
@@ -212,8 +213,7 @@ public class ServerTest {
     @Test
     public void canGetOccupiedRoomsWhenNotLoggedIn(){
         // Manually validate the response
-        ClientPacket p = new ClientPacket(GET_ROOMS, null, null, null, null);
-        String response = server.handle(p).message;
+        String response = responseFromTestingAction(GET_ROOMS, null, null, null, null).message;
         assertNotEquals(response, NOT_LOGGED_IN);
     }
 
@@ -246,6 +246,12 @@ public class ServerTest {
                             String expectedResult){
         ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
         assertEquals(expectedResult, server.handle(p).message);
+    }
+
+    private ServerPacket responseFromTestingAction(Action a, String username, String password, String dormName,
+                                                   String dormRoomNumber){
+        ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
+        return server.handle(p);
     }
 
     private static void setupTestData() throws Exception{

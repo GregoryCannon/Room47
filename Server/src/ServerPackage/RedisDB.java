@@ -234,9 +234,6 @@ public class RedisDB {
     // Returns a space-separated string of room numbers that are occupied, within a given dorm
     public Set<String> getOccupiedRooms(String dormName){
         Set<String> users = smembers(USERS);
-        for (String user:users) {
-            System.out.println(user);
-        }
         Set<String> occupiedRooms = new HashSet<>();
 
         for (String user : users){

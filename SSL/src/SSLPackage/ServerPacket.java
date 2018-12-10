@@ -32,7 +32,7 @@ public class ServerPacket implements java.io.Serializable{
         this.message = response;
     }
 
-    public ServerPacket(Set<String> occupiedRoomms){
-        this.occupiedRooms = occupiedRoomms;
+    public ServerPacket(Set<String> occupiedRooms){
+        this.occupiedRooms = occupiedRooms;
     }
 }
