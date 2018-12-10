@@ -10,7 +10,6 @@ import io.lettuce.core.api.sync.RedisCommands;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
@@ -146,10 +145,10 @@ public class RedisDB {
             hset(username, PASSWORD, hashedPassword);
             hset(username, SALT, salt);
             hset(username, ROOM_DRAW_NUMBER, "-1");
-            if(ServerActor.getRedisInstance().getDormName(username)==null) {
+            if(getDormName(username)==null) {
                 hset(username, DORM_NAME, "-1");
             }
-            if(ServerActor.getRedisInstance().getDormRoomNumber(username)==null) {
+            if(getDormRoomNumber(username)==null) {
                 hset(username, DORM_ROOM_NUMBER, "-1");
             }
             hset(username, REGISTRATION_TIME, registrationTime);

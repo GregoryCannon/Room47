@@ -17,13 +17,25 @@ public class ServerActor {
     ServerActor(String dbEncryptionKey) throws NoSuchAlgorithmException {
         hashUtil = new HashUtil();
         redis = new RedisDB("localhost", 6379, dbEncryptionKey);
-        studentDataManager = new StudentDataManager();
+        studentDataManager = new StudentDataManager(redis);
     }
 
     public int getAndIncrementPacketCount(String username){
         int packetCount = redis.getPacketCount(username) + 1;
         redis.setPacketCount(username, packetCount);
         return packetCount;
+    }
+
+    /*
+        Admin-related actions
+     */
+
+    public void addAdmin(String username){
+        redis.addAdmin(username);
+    }
+
+    public boolean isAdmin(String username){
+        return redis.isAdmin(username);
     }
 
     public boolean adminPlaceUserInRoom(String studentUsername, String dormName, String dormRoomNumber){
@@ -43,9 +55,9 @@ public class ServerActor {
         return true;
     }
 
-    public void addAdmin(String username){
-        redis.addAdmin(username);
-    }
+    /*
+        Querying info
+     */
 
     public String getInfo(String username){
         String fullName = redis.getFullName(username);
@@ -64,9 +76,9 @@ public class ServerActor {
         return redis.getOccupiedRooms(dormName);
     }
 
-    public boolean isAdmin(String username){
-        return redis.isAdmin(username);
-    }
+    /*
+        Authentication
+     */
 
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {
         String salt = redis.getSalt(username);
@@ -106,6 +118,10 @@ public class ServerActor {
         return System.currentTimeMillis() + registrationNumber * timeDelta;
     }
 
+    /*
+        Requesting a room
+     */
+
     public boolean requestRoom(String username, String room, String roomNumber){
         long currentTime = System.currentTimeMillis();
         long regTime = Long.parseLong(redis.getRegistrationTime(username));
@@ -120,9 +136,5 @@ public class ServerActor {
             return true;
         }
         return false;
-    }
-
-    public static RedisDB getRedisInstance() {
-        return redis;
     }
 }
