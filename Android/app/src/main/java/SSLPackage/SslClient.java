@@ -1,46 +1,32 @@
 package SSLPackage;
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.os.AsyncTask;
-
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
-import java.util.concurrent.ExecutionException;
 
 public class SslClient implements SslContextProvider {
-    public static SSLSocket socket;
-    public static OutputStream os;
-    public static InputStream is;
+    SSLSocket socket;
+    OutputStream os;
+    InputStream is;
     final int READ_LENGTH = 1024;
-    Context context;
-    Object[] objects;
 
-    public SslClient(String host, int port, Context context) throws ExecutionException, InterruptedException {
-        objects = new Object[2];
-        objects[0] = host;
-        objects[1] = port;
-        this.context = context;
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//
-//        StrictMode.setThreadPolicy(policy);
+    public SslClient(String host, int port) {
         try {
-            socket = createSSLSocket((String) objects[0], (Integer) objects[1]);
+            socket = createSSLSocket(host, port);
             os = socket.getOutputStream();
             is = socket.getInputStream();
+            System.out.printf("Connected to server (%s). Writing ping...%n", SslUtil.getPeerIdentity(socket));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void sendClientPacket(ClientPacket clientPacket) throws IOException {
-        String s = new String(Serializer.serialize(clientPacket));
+    public void sendClientPacket(ClientPacket clientPacket) throws IOException{
+        System.out.println(new String(Serializer.serialize(clientPacket)));
         sendBytes(Serializer.serialize(clientPacket));
     }
 
@@ -55,7 +41,7 @@ public class SslClient implements SslContextProvider {
         return (ServerPacket) Serializer.deserialize(readBytes(SslUtil.READ_LENGTH));
     }
 
-    public String readString() throws IOException {
+    public String readString() throws IOException{
         return new String(readBytes(SslUtil.READ_LENGTH)).replaceAll("\0", "");
     }
 
@@ -68,7 +54,7 @@ public class SslClient implements SslContextProvider {
         return buf;
     }
 
-    public void close() {
+    public void close(){
         try {
             os.close();
             is.close();
@@ -84,9 +70,7 @@ public class SslClient implements SslContextProvider {
 
     @Override
     public KeyManager[] getKeyManagers() throws GeneralSecurityException, IOException {
-        AssetManager am = context.getAssets();
-        InputStream is = am.open("client.bks");
-        return SslUtil.createKeyManagers(is, "F8urious".toCharArray());
+        return SslUtil.createKeyManagers("SSL/client.jks", "F8urious".toCharArray());
     }
 
     @Override
@@ -96,9 +80,7 @@ public class SslClient implements SslContextProvider {
 
     @Override
     public TrustManager[] getTrustManagers() throws GeneralSecurityException, IOException {
-        AssetManager am = context.getAssets();
-        InputStream is = am.open("cacert.bks");
-        return SslUtil.createTrustManagers(is, "F8urious".toCharArray());
+        return SslUtil.createTrustManagers("SSL/cacert.jks", "F8urious".toCharArray());
     }
 
     private SSLSocket createSSLSocket(String host, int port) throws Exception {

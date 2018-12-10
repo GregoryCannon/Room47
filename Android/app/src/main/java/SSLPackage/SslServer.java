@@ -10,19 +10,12 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.security.GeneralSecurityException;
 
-import SSLPackage.ClientPacket;
-import SSLPackage.Serializer;
-import SSLPackage.ServerPacket;
-import SSLPackage.SslContextProvider;
-import SSLPackage.SslServerHandler;
-import SSLPackage.SslUtil;
-
 
 public class SslServer implements SslContextProvider {
     ServerSocket socket;
     OutputStream os;
     InputStream is;
-
+    String clientId;
 
     public SslServer(int port, SslServerHandler handler){
         try {
@@ -30,8 +23,12 @@ public class SslServer implements SslContextProvider {
             System.out.println("Server: Server started. Awaiting client...");
 
             SSLSocket client = (SSLSocket) socket.accept();
+            //clientId = SslUtil.getPeerIdentity(client);
+            clientId = client.getRemoteSocketAddress().toString();
             os = client.getOutputStream();
             is = client.getInputStream();
+            System.out.printf("Server: Client (%s) connected. Awaiting ping...%n", clientId);
+
             run(handler);
         } catch (Exception e){
             e.printStackTrace();
@@ -46,6 +43,10 @@ public class SslServer implements SslContextProvider {
             sendBytes(Serializer.serialize(response));
             System.out.println("Server: response sent");
         }
+    }
+
+    public String getClientId(){
+        return clientId;
     }
 
     public void sendBytes(byte[] bytes) throws IOException {
@@ -85,8 +86,7 @@ public class SslServer implements SslContextProvider {
 
     @Override
     public KeyManager[] getKeyManagers() throws GeneralSecurityException, IOException {
-        InputStream is = null;
-        return SslUtil.createKeyManagers(is, "F8urious".toCharArray());
+        return SslUtil.createKeyManagers("SSL/server.jks", "F8urious".toCharArray());
     }
 
     @Override
@@ -96,8 +96,7 @@ public class SslServer implements SslContextProvider {
 
     @Override
     public TrustManager[] getTrustManagers() throws GeneralSecurityException, IOException {
-        InputStream is=null;
-        return SslUtil.createTrustManagers(is, "F8urious".toCharArray());
+        return SslUtil.createTrustManagers("SSL/cacert.jks", "F8urious".toCharArray());
     }
 
     private ServerSocket createSSLSocket(int port) throws Exception {
