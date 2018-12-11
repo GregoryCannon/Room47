@@ -47,6 +47,7 @@ public class ServerActor {
 
         redis.setDormName(studentUsername, dormName);
         redis.setDormRoomNumber(studentUsername, dormRoomNumber);
+        redis.sadd(redis.USERS, studentUsername);
         return true;
     }
 
@@ -100,7 +101,7 @@ public class ServerActor {
         if (!studentDataManager.isValidStudentId(studentID)) {
             return false;
         }
-        if (redis.isUser(username)) {
+        if (redis.getUserID(studentID)!=null) {
             return false;
         }
 

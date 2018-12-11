@@ -1,5 +1,9 @@
 package SSLPackage;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.net.SSLCertificateSocketFactory;
+
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
@@ -13,13 +17,14 @@ public class SslClient implements SslContextProvider {
     OutputStream os;
     InputStream is;
     final int READ_LENGTH = 1024;
+    Context context;
 
-    public SslClient(String host, int port) {
+    public SslClient(String host, int port, Context context) {
+        this.context = context;
         try {
             socket = createSSLSocket(host, port);
             os = socket.getOutputStream();
             is = socket.getInputStream();
-            System.out.printf("Connected to server (%s). Writing ping...%n", SslUtil.getPeerIdentity(socket));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,7 +75,9 @@ public class SslClient implements SslContextProvider {
 
     @Override
     public KeyManager[] getKeyManagers() throws GeneralSecurityException, IOException {
-        return SslUtil.createKeyManagers("SSL/client.jks", "F8urious".toCharArray());
+        AssetManager am = context.getAssets();
+        InputStream is = am.open("client.bks");
+        return SslUtil.createKeyManagers(is, "F8urious".toCharArray());
     }
 
     @Override
@@ -80,7 +87,9 @@ public class SslClient implements SslContextProvider {
 
     @Override
     public TrustManager[] getTrustManagers() throws GeneralSecurityException, IOException {
-        return SslUtil.createTrustManagers("SSL/cacert.jks", "F8urious".toCharArray());
+        AssetManager am = context.getAssets();
+        InputStream is = am.open("cacert.bks");
+        return SslUtil.createTrustManagers(is, "F8urious".toCharArray());
     }
 
     private SSLSocket createSSLSocket(String host, int port) throws Exception {

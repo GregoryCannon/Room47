@@ -14,7 +14,7 @@ public class ExampleClient {
         new Thread(() -> new SslServer(9000, handler)).start();
 
         // Initialize a client
-        SslClient client = new SslClient("localhost", 9000);
+        SslClient client = new SslClient("localhost", 9000, null);
 
         // Create a packet and send it
         ClientPacket msg = new ClientPacket(Action.REGISTER, "josh", "12345678", "dormName", "roomNumber");

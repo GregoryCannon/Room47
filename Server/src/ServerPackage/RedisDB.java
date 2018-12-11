@@ -29,7 +29,7 @@ public class RedisDB {
     private static final String REGISTRATION_TIME = "registrationTime";
     private static final String FULL_NAME = "fullName";
     private static final String USER_ID = "userID";
-    private static final String USERS = "users";
+    protected static final String USERS = "users";
     private static final String ADMIN = "admin";
     private static final String CLIENT_IDS = "clientIds";
     private static final String PACKET_COUNT = "packetCount";
@@ -82,7 +82,7 @@ public class RedisDB {
 
     // TODO: Encrypt all arguments to the commands.___ functions, then decrypt any Strings that are returned
 
-    private long sadd(String key, String val){
+    public long sadd(String key, String val){
         key = AESEncrypt(key);
         val = AESEncrypt(val);
         return commands.sadd(key, val);
@@ -145,8 +145,13 @@ public class RedisDB {
             hset(username, PASSWORD, hashedPassword);
             hset(username, SALT, salt);
             hset(username, ROOM_DRAW_NUMBER, "-1");
+        /*necessary if admin wants to select a room for a student that is not registered*/
+        if(getDormName(username)==null) {
             hset(username, DORM_NAME, "-1");
+        }
+        if(getDormRoomNumber(username)==null) {
             hset(username, DORM_ROOM_NUMBER, "-1");
+        }
             hset(username, REGISTRATION_TIME, registrationTime);
             hset(username, FULL_NAME, fullName);
             hset(username, USER_ID, studentId);

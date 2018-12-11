@@ -32,4 +32,5 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation files('libs/jsr305-3.0.0.jar')
+    implementation 'junit:junit:4.12'
 }
