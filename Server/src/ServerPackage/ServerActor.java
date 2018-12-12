@@ -97,11 +97,14 @@ public class ServerActor {
 
     public boolean registerUser(String username, String password, String studentID,
                                 boolean regTimeInPast) throws UnsupportedEncodingException {
-        // Check that their student ID is valid and they're not already registered
+        // Check that their student ID is valid, not previously used, and that their username is unique
         if (!studentDataManager.isValidStudentId(studentID)) {
             return false;
         }
-        if (redis.getUserID(studentID)!=null) {
+        if (redis.studentIDAlreadyUsed(studentID)) {
+            return false;
+        }
+        if (redis.isUser(username)){
             return false;
         }
 

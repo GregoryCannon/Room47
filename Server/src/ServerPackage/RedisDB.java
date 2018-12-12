@@ -28,7 +28,7 @@ public class RedisDB {
     private static final String DORM_ROOM_NUMBER = "dormRoomNumber";
     private static final String REGISTRATION_TIME = "registrationTime";
     private static final String FULL_NAME = "fullName";
-    private static final String USER_ID = "userID";
+    private static final String STUDENT_ID = "studentId";
     protected static final String USERS = "users";
     private static final String ADMIN = "admin";
     private static final String CLIENT_IDS = "clientIds";
@@ -154,7 +154,7 @@ public class RedisDB {
         }
             hset(username, REGISTRATION_TIME, registrationTime);
             hset(username, FULL_NAME, fullName);
-            hset(username, USER_ID, studentId);
+            hset(username, STUDENT_ID, studentId);
     }
 
     public void startTrackingPacketCount(String clientId){
@@ -304,11 +304,24 @@ public class RedisDB {
     }
 
     public String getUserID(String username){
-        return hget(username, USER_ID);
+        return hget(username, STUDENT_ID);
     }
 
     public void setUserID(String username, String userID){
-        hset(username, USER_ID, userID);
+        hset(username, STUDENT_ID, userID);
+    }
+
+    /*
+        Verifying ID Uniqueness
+     */
+    public boolean studentIDAlreadyUsed(String studentId){
+        for (String user : smembers(USERS)){
+            String userStudentId = hget(user, STUDENT_ID);
+            if (userStudentId != null && userStudentId.equals(studentId)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /*
