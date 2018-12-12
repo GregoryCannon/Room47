@@ -23,27 +23,10 @@ public class SslUtil {
     public static final int READ_LENGTH = 1024;
     // Our own custom list of supported cipher suites, which disallows all 3DES variants and "TLS_EMPTY_RENEGOTIATION_INFO_SCSV"
     public static final String[] ENABLED_CIPHER_SUITES = new String[]{
-            "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
-            "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
-            "TLS_RSA_WITH_AES_128_CBC_SHA256",
-            "TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256",
-            "TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256",
-            "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256",
-            "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256",
-            "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
             "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
             "TLS_RSA_WITH_AES_128_CBC_SHA",
-            "TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA",
-            "TLS_ECDH_RSA_WITH_AES_128_CBC_SHA",
-            "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
-            "TLS_DHE_DSS_WITH_AES_128_CBC_SHA",
-            "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
             "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
-            "TLS_RSA_WITH_AES_128_GCM_SHA256",
-            "TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256",
-            "TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256",
-            "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
-            "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256"
+            "TLS_RSA_WITH_AES_128_GCM_SHA256"
     };
 
     public static KeyManager[] createKeyManagers(String keystore, char[] password) throws GeneralSecurityException, IOException {
