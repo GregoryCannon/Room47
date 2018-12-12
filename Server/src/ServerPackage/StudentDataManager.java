@@ -10,9 +10,11 @@ import java.util.HashMap;
  */
 public class StudentDataManager {
     private HashMap<String, String> fullNamesById;
+    private RedisDB redis;
 
-    public StudentDataManager(){
+    public StudentDataManager(RedisDB parentRedis){
         fullNamesById = new HashMap<>();
+        redis = parentRedis;
 
         // Read student data
         try {
@@ -52,14 +54,18 @@ public class StudentDataManager {
 
     private boolean addStudentToMap(String rawLine){
 
-        String[] chunks = rawLine.split("@",2);
+        String[] chunks = rawLine.split("@",3);
 
-        if (chunks.length != 2) return false;
+        if (chunks.length != 3) return false;
 
         String studentId = chunks[1];
         String fullName = chunks[0];
+        String accessLevel = chunks[2];
 
         fullNamesById.put(studentId, fullName);
+        if(accessLevel.equals("A")) {
+            redis.addAdmin(fullName);
+        }
 
         return true;
     }

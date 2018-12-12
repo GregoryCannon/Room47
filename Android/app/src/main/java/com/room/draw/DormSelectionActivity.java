@@ -18,7 +18,7 @@ public class DormSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dorm_selection_activity);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mAdapter = new DormsAdapter(dorms);
+        mAdapter = new DormsAdapter(this,dorms);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
@@ -56,12 +56,5 @@ public class DormSelectionActivity extends AppCompatActivity {
         dorms.add(dorm);
 
         mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, DashboardActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

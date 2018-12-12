@@ -10,6 +10,10 @@ import java.security.NoSuchAlgorithmException;
 
 import static SSLPackage.ServerPacket.*;
 
+/**
+ * Reads and processes incoming packets, and handles all authorization checks.
+ * Does not take any actions on the DB. That functionality is in ServerActor.java
+ */
 public class Server {
     public ServerActor actor;
     private static SslServer sslServer;
@@ -18,8 +22,7 @@ public class Server {
 
     private String authenticatedUser = null;
 
-    public static final int RATE_LIMIT = 100;
-    private int preLoginPacketCount = 0;
+    public static final int RATE_LIMIT = 400;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         /*if (args.length == 1){
@@ -34,8 +37,6 @@ public class Server {
         SslServerHandler handler = server::handle;
         sslServer = new SslServer(6667, handler);
         clientId = sslServer.getClientId();
-
-
     }
 
     public Server(String dbEncryptionKey) throws NoSuchAlgorithmException{
@@ -54,22 +55,31 @@ public class Server {
         }
 
         switch (p.action){
-            case REGISTER: return register(p);
-            case REQUEST_ROOM: return requestRoom(p);
-            case LOG_IN: return logIn(p);
-            case LOG_OUT: return logOut(p);
-            case ADMIN_PLACE_STUDENT: return adminPlaceStudent(p);
-            case ADMIN_REMOVE_STUDENT: return adminRemoveStudent(p);
-            case GET_INFO: return getInfo(p);
-            case GET_ROOMS: return getOccupiedRooms(p);
+            case REGISTER:
+                return register(p.username, p.password, p.roomNumber);
+            case REQUEST_ROOM:
+                return requestRoom(p.dormName, p.roomNumber);
+            case LOG_IN:
+                return logIn(p.username, p.password);
+            case LOG_OUT:
+                return logOut();
+            case ADMIN_PLACE_STUDENT:
+                return adminPlaceStudent(p.username, p.dormName, p.roomNumber);
+            case ADMIN_REMOVE_STUDENT:
+                return adminRemoveStudent(p.dormName, p.roomNumber);
+            case GET_INFO:
+                return getUserInfo();
+            case GET_ROOMS:
+                return getOccupiedRooms(p.dormName);
         }
         return new ServerPacket(UNKNOWN_ACTION);
     }
 
-    private ServerPacket register(ClientPacket p){
+    private ServerPacket register(String username, String password, String roomNumber){
         try {
-            boolean regSuccess = actor.registerUser(p.username, p.password, p.roomNumber, false);
-            boolean loginSuccess = actor.logIn(p.username, p.password);
+            boolean regSuccess = actor.registerUser(username, password, roomNumber, false);
+            boolean loginSuccess = actor.logIn(username, password);
+            authenticatedUser = username;
             if (regSuccess && loginSuccess){
                 return new ServerPacket(REGISTRATION_SUCCESSFUL);
             }
@@ -80,9 +90,9 @@ public class Server {
         }
     }
 
-    private ServerPacket requestRoom(ClientPacket p){
+    private ServerPacket requestRoom(String dormName, String roomNumber){
         if (authenticatedUser != null){
-            boolean success = actor.requestRoom(authenticatedUser, p.dormName, p.roomNumber);
+            boolean success = actor.requestRoom(authenticatedUser, dormName, roomNumber);
             if (success){
                 return new ServerPacket(RESERVE_SUCCESSFUL);
             } else {
@@ -93,13 +103,13 @@ public class Server {
         }
     }
 
-    private ServerPacket logIn(ClientPacket p){
+    private ServerPacket logIn(String username, String password){
         if (authenticatedUser != null) {
             return new ServerPacket(ALREADY_LOGGED_IN);
         } else {
             try {
-                if (actor.logIn(p.username, p.password)){
-                    authenticatedUser = p.username;
+                if (actor.logIn(username, password)){
+                    authenticatedUser = username;
                     return new ServerPacket(LOGIN_SUCCESSFUL);
                 } else {
                     return new ServerPacket(LOGIN_FAILED);
@@ -111,7 +121,7 @@ public class Server {
         }
     }
 
-    private ServerPacket logOut(ClientPacket p){
+    private ServerPacket logOut(){
         if (authenticatedUser == null) {
             return new ServerPacket(NOT_LOGGED_IN);
         } else {
@@ -120,11 +130,11 @@ public class Server {
         }
     }
 
-    private ServerPacket adminPlaceStudent(ClientPacket p){
+    private ServerPacket adminPlaceStudent(String username, String dormName, String roomNumber){
         if (authenticatedUser == null || !actor.isAdmin(authenticatedUser)){
             return new ServerPacket(ADMIN_UNAUTHORIZED);
         } else {
-            boolean success = actor.adminPlaceUserInRoom(p.username, p.dormName, p.roomNumber);
+            boolean success = actor.adminPlaceUserInRoom(username, dormName, roomNumber);
             if (success) {
                 return new ServerPacket(PLACE_STUDENT_SUCCESSFUL);
             } else {
@@ -133,11 +143,11 @@ public class Server {
         }
     }
 
-    private ServerPacket adminRemoveStudent(ClientPacket p){
+    private ServerPacket adminRemoveStudent(String dormName, String roomNumber){
         if (authenticatedUser == null || !actor.isAdmin(authenticatedUser)){
             return new ServerPacket(ADMIN_UNAUTHORIZED);
         } else {
-            boolean success = actor.adminRemoveUserFromRoom(p.dormName, p.roomNumber);
+            boolean success = actor.adminRemoveUserFromRoom(dormName, roomNumber);
             if (success) {
                 return new ServerPacket(REMOVE_STUDENT_SUCCESSFUL);
             } else {
@@ -146,7 +156,7 @@ public class Server {
         }
     }
 
-    private ServerPacket getInfo(ClientPacket p){
+    private ServerPacket getUserInfo(){
         if (authenticatedUser != null){
             String info = actor.getInfo(authenticatedUser);
             if (info.equals(GET_INFO_FAILED)){
@@ -159,7 +169,7 @@ public class Server {
         }
     }
 
-    private ServerPacket getOccupiedRooms(ClientPacket p){
-        return new ServerPacket(actor.getOccupiedRooms(p.dormName));
+    private ServerPacket getOccupiedRooms(String dormName){
+        return new ServerPacket(actor.getOccupiedRooms(dormName));
     }
 }

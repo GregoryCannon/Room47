@@ -19,7 +19,7 @@ public class TestSsl {
         new Thread(() -> { server = new SslServer(9000, handler); }).start();
 
         // Initialize a client
-        client = new SslClient("localhost", 9000);
+        client = new SslClient("localhost", 9000, null);
     }
 
     @Test

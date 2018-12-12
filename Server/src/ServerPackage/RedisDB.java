@@ -10,7 +10,6 @@ import io.lettuce.core.api.sync.RedisCommands;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,8 +28,8 @@ public class RedisDB {
     private static final String DORM_ROOM_NUMBER = "dormRoomNumber";
     private static final String REGISTRATION_TIME = "registrationTime";
     private static final String FULL_NAME = "fullName";
-    private static final String USER_ID = "userID";
-    private static final String USERS = "users";
+    private static final String STUDENT_ID = "studentId";
+    protected static final String USERS = "users";
     private static final String ADMIN = "admin";
     private static final String CLIENT_IDS = "clientIds";
     private static final String PACKET_COUNT = "packetCount";
@@ -83,7 +82,7 @@ public class RedisDB {
 
     // TODO: Encrypt all arguments to the commands.___ functions, then decrypt any Strings that are returned
 
-    private long sadd(String key, String val){
+    public long sadd(String key, String val){
         key = AESEncrypt(key);
         val = AESEncrypt(val);
         return commands.sadd(key, val);
@@ -141,16 +140,21 @@ public class RedisDB {
         Set management
      */
     public void createAccount(String username, String hashedPassword, String registrationTime, String salt,
-                              String fullName, String studentId) throws UnsupportedEncodingException {
-        sadd(USERS, username);
-        hset(username, PASSWORD, hashedPassword);
-        hset(username, SALT, salt);
-        hset(username, ROOM_DRAW_NUMBER, "-1");
-        hset(username, DORM_NAME, "-1");
-        hset(username, DORM_ROOM_NUMBER, "-1");
-        hset(username, REGISTRATION_TIME, registrationTime);
-        hset(username, FULL_NAME, fullName);
-        hset(username, USER_ID, studentId);
+                              String fullName, String studentId){
+            sadd(USERS, username);
+            hset(username, PASSWORD, hashedPassword);
+            hset(username, SALT, salt);
+            hset(username, ROOM_DRAW_NUMBER, "-1");
+        /*necessary if admin wants to select a room for a student that is not registered*/
+        if(getDormName(username)==null) {
+            hset(username, DORM_NAME, "-1");
+        }
+        if(getDormRoomNumber(username)==null) {
+            hset(username, DORM_ROOM_NUMBER, "-1");
+        }
+            hset(username, REGISTRATION_TIME, registrationTime);
+            hset(username, FULL_NAME, fullName);
+            hset(username, STUDENT_ID, studentId);
     }
 
     public void startTrackingPacketCount(String clientId){
@@ -229,15 +233,15 @@ public class RedisDB {
     }
 
     // Returns a space-separated string of room numbers that are occupied, within a given dorm
-    public String getOccupiedRooms(String dormName){
+    public Set<String> getOccupiedRooms(String dormName){
         Set<String> users = smembers(USERS);
-        String occupiedRooms = "";
+        Set<String> occupiedRooms = new HashSet<>();
 
         for (String user : users){
             String userDormName = hget(user, DORM_NAME);
             String userDormRoomNumber = hget(user, DORM_ROOM_NUMBER);
             if (userDormName.equals(dormName) && !userDormRoomNumber.equals("-1")){
-                occupiedRooms += " " + userDormRoomNumber;
+                occupiedRooms.add(userDormRoomNumber);
             }
         }
         return occupiedRooms;
@@ -300,11 +304,24 @@ public class RedisDB {
     }
 
     public String getUserID(String username){
-        return hget(username, USER_ID);
+        return hget(username, STUDENT_ID);
     }
 
     public void setUserID(String username, String userID){
-        hset(username, USER_ID, userID);
+        hset(username, STUDENT_ID, userID);
+    }
+
+    /*
+        Verifying ID Uniqueness
+     */
+    public boolean studentIDAlreadyUsed(String studentId){
+        for (String user : smembers(USERS)){
+            String userStudentId = hget(user, STUDENT_ID);
+            if (userStudentId != null && userStudentId.equals(studentId)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /*

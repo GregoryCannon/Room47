@@ -2,11 +2,16 @@ package ServerPackage;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 
 import static SSLPackage.ServerPacket.GET_INFO_FAILED;
 
 /**
  * Created by Greg on 12/4/18.
+ *
+ * Handles the nitty-gritty of taking actions based on the incoming requests.
+ * All interactions with the DB are managed here, NOT in Server.java
+ * All packets and authorization is handled in Server.java
  */
 public class ServerActor {
     private static RedisDB redis;
@@ -16,7 +21,7 @@ public class ServerActor {
     ServerActor(String dbEncryptionKey) throws NoSuchAlgorithmException {
         hashUtil = new HashUtil();
         redis = new RedisDB("localhost", 6379, dbEncryptionKey);
-        studentDataManager = new StudentDataManager();
+        studentDataManager = new StudentDataManager(redis);
     }
 
     public int getAndIncrementPacketCount(String username){
@@ -25,11 +30,24 @@ public class ServerActor {
         return packetCount;
     }
 
+    /*
+        Admin-related actions
+     */
+
+    public void addAdmin(String username){
+        redis.addAdmin(username);
+    }
+
+    public boolean isAdmin(String username){
+        return redis.isAdmin(username);
+    }
+
     public boolean adminPlaceUserInRoom(String studentUsername, String dormName, String dormRoomNumber){
         adminRemoveUserFromRoom(dormName, dormRoomNumber);
 
         redis.setDormName(studentUsername, dormName);
         redis.setDormRoomNumber(studentUsername, dormRoomNumber);
+        redis.sadd(redis.USERS, studentUsername);
         return true;
     }
 
@@ -42,9 +60,9 @@ public class ServerActor {
         return true;
     }
 
-    public void addAdmin(String username){
-        redis.addAdmin(username);
-    }
+    /*
+        Querying info
+     */
 
     public String getInfo(String username){
         String fullName = redis.getFullName(username);
@@ -59,13 +77,13 @@ public class ServerActor {
                 + regTime + "|" + studentId + "|" + isAdmin;
     }
 
-    public String getOccupiedRooms(String dormName){
+    public Set<String> getOccupiedRooms(String dormName){
         return redis.getOccupiedRooms(dormName);
     }
 
-    public boolean isAdmin(String username){
-        return redis.isAdmin(username);
-    }
+    /*
+        Authentication
+     */
 
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {
         String salt = redis.getSalt(username);
@@ -79,9 +97,16 @@ public class ServerActor {
 
     public boolean registerUser(String username, String password, String studentID,
                                 boolean regTimeInPast) throws UnsupportedEncodingException {
-        // Check that their student ID is valid and they're not already registered
-        if (!studentDataManager.isValidStudentId(studentID)) return false;
-        if (redis.isUser(username)) return false;
+        // Check that their student ID is valid, not previously used, and that their username is unique
+        if (!studentDataManager.isValidStudentId(studentID)) {
+            return false;
+        }
+        if (redis.studentIDAlreadyUsed(studentID)) {
+            return false;
+        }
+        if (redis.isUser(username)){
+            return false;
+        }
 
         // Calculate their registration time, salt, and hashed password
         String fullName = studentDataManager.getStudentFullName(studentID);
@@ -100,6 +125,10 @@ public class ServerActor {
     private long calculateRegistrationTime(int registrationNumber, long timeDelta){
         return System.currentTimeMillis() + registrationNumber * timeDelta;
     }
+
+    /*
+        Requesting a room
+     */
 
     public boolean requestRoom(String username, String room, String roomNumber){
         long currentTime = System.currentTimeMillis();
