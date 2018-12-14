@@ -14,14 +14,15 @@ import static SSLPackage.ServerPacket.GET_INFO_FAILED;
  * All packets and authorization is handled in Server.java
  */
 public class ServerActor {
-    private static RedisDB redis;
-    private static HashUtil hashUtil;
-    private static StudentDataManager studentDataManager;
+    private RedisDB redis;
+    private HashUtil hashUtil;
+    private StudentDataManager studentDataManager;
 
-    ServerActor(String dbEncryptionKey) throws NoSuchAlgorithmException {
-        hashUtil = new HashUtil();
-        redis = new RedisDB("localhost", 6379, dbEncryptionKey);
-        studentDataManager = new StudentDataManager(redis);
+    ServerActor(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
+                HashUtil hashUtil) throws NoSuchAlgorithmException {
+        this.hashUtil = hashUtil;
+        this.redis = redis;
+        this.studentDataManager = studentDataManager;
     }
 
     public int getAndIncrementPacketCount(String username){

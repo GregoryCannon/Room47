@@ -21,18 +21,22 @@ import static org.junit.Assert.*;
 public class ServerTest {
     private static Server server;
     private static RedisDB redis;
-
-    private static final String dbEncryptionKey = "CecilSagehen1987";
+    private static EncryptionManager encryptionManager;
+    private static StudentDataManager studentDataManager;
+    private static HashUtil hashUtil;
 
     @BeforeClass
     public static void init() throws Exception {
-        redis = new RedisDB("localhost", 6379, dbEncryptionKey);
+        encryptionManager = new EncryptionManager(Server.dbEncryptionKey, Server.initVector);
+        redis = new RedisDB("localhost", 6379, encryptionManager);
+        studentDataManager = new StudentDataManager(redis, encryptionManager);
+        hashUtil = new HashUtil();
     }
 
     @Before
-    public void createServer() throws Exception {
+    public void createFreshServer() throws Exception {
         redis.clearRedisDB();
-        server = new Server(dbEncryptionKey);
+        server = new Server(redis, encryptionManager, studentDataManager, hashUtil);
         setupTestData();
     }
 

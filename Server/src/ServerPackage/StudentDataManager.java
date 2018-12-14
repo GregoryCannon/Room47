@@ -1,8 +1,6 @@
 package ServerPackage;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 
 /**
@@ -11,18 +9,66 @@ import java.util.HashMap;
 public class StudentDataManager {
     private HashMap<String, String> fullNamesById;
     private RedisDB redis;
+    private EncryptionManager encryptionManager;
 
-    public StudentDataManager(RedisDB parentRedis){
+    private static final String TEST_ENC = "Server/TestStudentData-Enc.txt";
+    private static final String VALID_ENC = "Server/ValidStudentData-Enc.txt";
+    private static final String TEST = "Server/TestStudentData.txt";
+    private static final String VALID = "Server/ValidStudentData.txt";
+
+    public StudentDataManager(RedisDB parentRedis, EncryptionManager parentEncManager){
         fullNamesById = new HashMap<>();
         redis = parentRedis;
+        encryptionManager = parentEncManager;
+
+        // TODO: remove plaintext versions for final release
+        // Encrypt the text files if necessary
+        if (!new File(TEST_ENC).exists() || !new File(VALID_ENC).exists())
+        try {
+            encryptFile(TEST, TEST_ENC);
+            encryptFile(VALID, VALID_ENC);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Read student data
         try {
-            readStudentData("Server/TestStudentData.txt");
-            readStudentData("Server/ValidStudentData.txt");
+            readEncryptedStudentData(TEST_ENC);
+            readEncryptedStudentData(VALID_ENC);
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void encryptFile(String filename, String outFilename) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(outFilename));
+        try {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String cipherLine = encryptionManager.AESEncrypt(line);
+                bw.write(cipherLine);
+                bw.newLine();
+            }
+        } finally {
+            br.close();
+            bw.close();
+        }
+    }
+
+    public void readEncryptedStudentData(String filename) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        try {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String plaintextLine = encryptionManager.AESDecrypt(line);
+                addStudentToMap(plaintextLine);
+            }
+        } finally {
+            br.close();
         }
     }
 

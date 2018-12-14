@@ -16,32 +16,46 @@ import static SSLPackage.ServerPacket.*;
  */
 public class Server {
     public ServerActor actor;
+
     private static SslServer sslServer;
     private static String clientId;
-    private static String dbEncryptionKey;
+
+    // This is the source of truth for these constants. All other files import them from here.
+    static final String dbEncryptionKey = "CecilSagehen1987";
+    static final String initVector = "encryptionIntVec";  // TODO: encrypt
+    static final int RATE_LIMIT = 400;
+    static final int SSL_PORT = 6667;
 
     private String authenticatedUser = null;
 
-    public static final int RATE_LIMIT = 400;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        /*if (args.length == 1){
-            dbEncryptionKey = args[0];
+        // Get DB encryption key from CLI args
+        String userDbEncryptionKey = "";
+        if (args.length == 1){
+            userDbEncryptionKey = args[0];
         } else {
             System.out.println("Please enter the encryption key for the database, as a command line argument!");
             return;
-        }*/
-        dbEncryptionKey = "CecilSagehen1987";
+        }
 
-        Server server = new Server(dbEncryptionKey);
+        // Initialize all dependencies
+        EncryptionManager encryptionManager = new EncryptionManager(userDbEncryptionKey, initVector);
+        RedisDB redis = new RedisDB("localhost", 6379, encryptionManager);
+        StudentDataManager studentDataManager = new StudentDataManager(redis, encryptionManager);
+        HashUtil hashUtil = new HashUtil();
+
+        // Initialize server
+        Server server = new Server(redis, encryptionManager, studentDataManager, hashUtil);
         SslServerHandler handler = server::handle;
-        sslServer = new SslServer(6667, handler);
+        sslServer = new SslServer(SSL_PORT, handler);
         clientId = sslServer.getClientId();
     }
 
-    public Server(String dbEncryptionKey) throws NoSuchAlgorithmException{
-        actor = new ServerActor(dbEncryptionKey);
-        clientId = "UnitTestClientId";
+    public Server(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
+                  HashUtil hashUtil) throws NoSuchAlgorithmException{
+        actor = new ServerActor(redis, encryptionManager, studentDataManager, hashUtil);
+        clientId = "UnitTestClientId"; // Overwritten if not in a unit test
     }
 
     public ServerPacket handle(ClientPacket p) {
