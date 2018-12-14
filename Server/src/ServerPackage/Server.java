@@ -89,15 +89,21 @@ public class Server {
         return new ServerPacket(UNKNOWN_ACTION);
     }
 
-    private ServerPacket register(String username, String password, String roomNumber){
+    private ServerPacket register(String username, String password, String studentID){
+        // Validate the registration requirements
+        String validationProblem = actor.validateRegistration(username, password, studentID);
+        if (!validationProblem.equals("")){
+            return new ServerPacket(validationProblem);
+        }
+
         try {
-            boolean regSuccess = actor.registerUser(username, password, roomNumber, false);
+            boolean regSuccess = actor.registerUser(username, password, studentID, false);
             boolean loginSuccess = actor.logIn(username, password);
             authenticatedUser = username;
             if (regSuccess && loginSuccess){
                 return new ServerPacket(REGISTRATION_SUCCESSFUL);
             }
-            return new ServerPacket(REGISTRATION_FAILED);
+            return new ServerPacket(REGISTRATION_FAILED_INTERNAL_SERVER_ERROR);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return new ServerPacket(e.getMessage());

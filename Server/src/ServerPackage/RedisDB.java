@@ -141,7 +141,9 @@ public class RedisDB {
     }
 
     public Set<String> getClientIds(){
-        return smembers(CLIENT_IDS);
+        Set<String> members = smembers(CLIENT_IDS);
+        members.remove("");
+        return members;
     }
 
     /*
@@ -293,14 +295,19 @@ public class RedisDB {
      */
 
     public void clearRedisDB(){
-        for (String currentUser : getUsers()) {
-            del(currentUser);
-            srem(USERS, currentUser);
+        while(getClientIds().size() > 0 || getUsers().size() > 0){
+            for (String currentUser : getUsers()) {
+                del(currentUser);
+                srem(USERS, currentUser);
+            }
+            for (String clientId : getClientIds()) {
+                del(clientId);
+                srem(CLIENT_IDS, clientId);
+            }
         }
-        for (String clientId : getClientIds()) {
-            del(clientId);
-            srem(USERS, clientId);
-        }
+
+        assert getUsers().size() == 0;
+        assert getClientIds().size() == 0;
     }
 
     public void closeRedisConnection(){

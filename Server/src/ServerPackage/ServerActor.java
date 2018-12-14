@@ -3,8 +3,9 @@ package ServerPackage;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
+import java.util.regex.Pattern;
 
-import static SSLPackage.ServerPacket.GET_INFO_FAILED;
+import static SSLPackage.ServerPacket.*;
 
 /**
  * Created by Greg on 12/4/18.
@@ -17,6 +18,15 @@ public class ServerActor {
     private RedisDB redis;
     private HashUtil hashUtil;
     private StudentDataManager studentDataManager;
+
+    private static final Pattern passwordFormat = Pattern.compile("(" +
+            "(?=.*[a-z])" +
+            "(?=.*\\d)" +
+            "(?=.*[A-Z])" +
+            "(?=.*[!@#$%&'()*+,-.^_`{|}~])" +
+            ".{8,40})");
+
+    // !#$%&'()*+,-./[\\\]^_`{|}~
 
     ServerActor(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
                 HashUtil hashUtil) throws NoSuchAlgorithmException {
@@ -86,29 +96,24 @@ public class ServerActor {
         Authentication
      */
 
-    public boolean logIn(String username, String password) throws UnsupportedEncodingException {
-        String salt = redis.getSalt(username);
-        if (salt == null) return false;
-
-        String verificationHashPass = new String(hashUtil.hashPassword(salt, password), "UTF8");
-        String redisHashedPassword = redis.getHashedPassword(username);
-
-        return (redisHashedPassword != null && redisHashedPassword.equals(verificationHashPass));
+    public String validateRegistration(String username, String password, String studentID){
+        if (!studentDataManager.isValidStudentId(studentID)) {
+            return REGISTRATION_FAILED_STUDENT_ID;
+        }
+        if (redis.studentIDAlreadyUsed(studentID)) {
+            return REGISTRATION_FAILED_STUDENT_ID;
+        }
+        if (redis.isUser(username)){
+            return REGISTRATION_FAILED_USERNAME;
+        }
+        if (!passwordFormat.matcher(password).matches()){
+            return REGISTRATION_FAILED_PASSWORD;
+        }
+        return "";
     }
 
     public boolean registerUser(String username, String password, String studentID,
                                 boolean regTimeInPast) throws UnsupportedEncodingException {
-        // Check that their student ID is valid, not previously used, and that their username is unique
-        if (!studentDataManager.isValidStudentId(studentID)) {
-            return false;
-        }
-        if (redis.studentIDAlreadyUsed(studentID)) {
-            return false;
-        }
-        if (redis.isUser(username)){
-            return false;
-        }
-
         // Calculate their registration time, salt, and hashed password
         String fullName = studentDataManager.getStudentFullName(studentID);
         String salt = "" + (int) (Math.random() * 999999);
@@ -121,6 +126,16 @@ public class ServerActor {
         redis.setRoomDrawNumber(username, "" + regNumber);
         redis.setFullName(username, fullName);
         return true;
+    }
+
+    public boolean logIn(String username, String password) throws UnsupportedEncodingException {
+        String salt = redis.getSalt(username);
+        if (salt == null) return false;
+
+        String verificationHashPass = new String(hashUtil.hashPassword(salt, password), "UTF8");
+        String redisHashedPassword = redis.getHashedPassword(username);
+
+        return (redisHashedPassword != null && redisHashedPassword.equals(verificationHashPass));
     }
 
     private long calculateRegistrationTime(int registrationNumber, long timeDelta){
