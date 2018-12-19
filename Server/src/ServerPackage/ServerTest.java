@@ -21,18 +21,23 @@ import static org.junit.Assert.*;
 public class ServerTest {
     private static Server server;
     private static RedisDB redis;
-
-    private static final String dbEncryptionKey = "CecilSagehen1987";
+    private static EncryptionManager encryptionManager;
+    private static StudentDataManager studentDataManager;
+    private static HashUtil hashUtil;
 
     @BeforeClass
     public static void init() throws Exception {
-        redis = new RedisDB("localhost", 6379, dbEncryptionKey);
+        // Initialize dependencies
+        encryptionManager = new EncryptionManager(Server.dbEncryptionKey, Server.initVector);
+        redis = new RedisDB("localhost", 6379, encryptionManager);
+        studentDataManager = new StudentDataManager(redis, encryptionManager);
+        hashUtil = new HashUtil();
     }
 
     @Before
-    public void createServer() throws Exception {
+    public void createFreshServer() throws Exception {
         redis.clearRedisDB();
-        server = new Server(dbEncryptionKey);
+        server = new Server(redis, encryptionManager, studentDataManager, hashUtil);
         setupTestData();
     }
 
@@ -72,18 +77,36 @@ public class ServerTest {
 
     @Test
     public void canRegister(){
-        testAction(REGISTER, "elmer", "fudd12", null, "00001111", REGISTRATION_SUCCESSFUL);
+        testAction(REGISTER, "bambi", "DeerTr@x9", null, "33333333", REGISTRATION_SUCCESSFUL);
     }
 
     @Test
-    public void cannotRegisterTwice(){
-        testAction(REGISTER, "elmer", "fudd12", null, "00001111", REGISTRATION_SUCCESSFUL);
-        testAction(REGISTER, "elmer", "fudd12", null, "00001111", REGISTRATION_FAILED);
+    public void cannotRegisterWithInvalidPassword(){
+        testAction(REGISTER, "bambi", "abcdefg", null, "33333333", REGISTRATION_FAILED_PASSWORD);
+        testAction(REGISTER, "bambi", "ABCDEFG", null, "33333333", REGISTRATION_FAILED_PASSWORD);
+        testAction(REGISTER, "bambi", "1237593", null, "33333333", REGISTRATION_FAILED_PASSWORD);
+        testAction(REGISTER, "bambi", "$*@(&@@", null, "33333333", REGISTRATION_FAILED_PASSWORD);
+        testAction(REGISTER, "bambi", "DeerTrax9", null, "33333333", REGISTRATION_FAILED_PASSWORD);
+        testAction(REGISTER, "bambi", "DeerTr@x", null, "33333333", REGISTRATION_FAILED_PASSWORD);
+        testAction(REGISTER, "bambi", "deertr@x9", null, "33333333", REGISTRATION_FAILED_PASSWORD);
+        testAction(REGISTER, "bambi", "DEERTR@X9", null, "33333333", REGISTRATION_FAILED_PASSWORD);
+    }
+
+    @Test
+    public void cannotRegisterTwiceWithSameStudentId(){
+        testAction(REGISTER, "elmer", "Fudd12#$%", null, "00001111", REGISTRATION_SUCCESSFUL);
+        testAction(REGISTER, "donald", "Fudd12#$%", null, "00001111", REGISTRATION_FAILED_STUDENT_ID);
+    }
+
+    @Test
+    public void cannotRegisterTwiceWithSameUsername(){
+        testAction(REGISTER, "elmer", "Fudd12#$%", null, "00001111", REGISTRATION_SUCCESSFUL);
+        testAction(REGISTER, "elmer", "Fudd12newpass$", null, "77777777", REGISTRATION_FAILED_USERNAME);
     }
 
     @Test
     public void registrationFailsWithBadStudentId(){
-        testAction(REGISTER, "elmer", "fudd12", null, "badID", REGISTRATION_FAILED);
+        testAction(REGISTER, "elmer", "fudd12", null, "badID", REGISTRATION_FAILED_STUDENT_ID);
     }
 
     @Test

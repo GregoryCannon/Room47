@@ -7,10 +7,6 @@ import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +14,7 @@ public class RedisDB {
     private RedisClient client;
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> commands;
-    private String dbEncryptionKey;
-    private String initVector = "encryptionIntVec";
+    private EncryptionManager encryptionManager;
 
     private static final String PASSWORD = "password";
     private static final String SALT = "salt";
@@ -34,99 +29,64 @@ public class RedisDB {
     private static final String CLIENT_IDS = "clientIds";
     private static final String PACKET_COUNT = "packetCount";
 
-    public RedisDB(String host, int port, String dbEncryptionKey){
+    public RedisDB(String host, int port, EncryptionManager encryptionManager){
         RedisURI uri = RedisURI.create(host, port);
         client = RedisClient.create(uri);
         connection = client.connect();
         commands = connection.sync();
-        this.dbEncryptionKey = dbEncryptionKey;
+        this.encryptionManager = encryptionManager;
         startTrackingPacketCount("_");
-        //this.initVector = initVector;
     }
 
     /*
-        DB Commands With Encryption
+        Replacement DB Commands With Encryption
      */
 
-    public String AESEncrypt(String plaintext){
-        try {
-            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-            SecretKeySpec skeySpec = new SecretKeySpec(dbEncryptionKey.getBytes("UTF-8"), "AES");
-
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
-
-            byte[] ciphertext = cipher.doFinal(plaintext.getBytes());
-            return Base64.getEncoder().encodeToString(ciphertext);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    public String AESDecrypt(String ciphertext){
-        try {
-            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-            SecretKeySpec skeySpec = new SecretKeySpec(dbEncryptionKey.getBytes("UTF-8"), "AES");
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
-
-            byte[] plaintext = cipher.doFinal(Base64.getDecoder().decode(ciphertext));
-
-            return new String(plaintext);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    // TODO: Encrypt all arguments to the commands.___ functions, then decrypt any Strings that are returned
-
     public long sadd(String key, String val){
-        key = AESEncrypt(key);
-        val = AESEncrypt(val);
+        key = encryptionManager.AESEncrypt(key);
+        val = encryptionManager.AESEncrypt(val);
         return commands.sadd(key, val);
     }
 
     private boolean hset(String key, String key1, String val){
-        key = AESEncrypt(key);
-        key1 = AESEncrypt(key1);
-        val = AESEncrypt(val);
+        key = encryptionManager.AESEncrypt(key);
+        key1 = encryptionManager.AESEncrypt(key1);
+        val = encryptionManager.AESEncrypt(val);
         return commands.hset(key, key1, val);
     }
 
     private boolean sismember(String key, String val){
-        key = AESEncrypt(key);
-        val = AESEncrypt(val);
+        key = encryptionManager.AESEncrypt(key);
+        val = encryptionManager.AESEncrypt(val);
         return commands.sismember(key, val);
     }
 
     private Set<String> smembers(String key){
-        key = AESEncrypt(key);
+        key = encryptionManager.AESEncrypt(key);
         Set<String> encryptedMembers = commands.smembers(key);
         Set<String> plaintextMembers = new HashSet<>();
         for (String encMember : encryptedMembers){
-            plaintextMembers.add(AESDecrypt(encMember));
+            plaintextMembers.add(encryptionManager.AESDecrypt(encMember));
         }
         return plaintextMembers;
     }
 
     private String hget(String key, String key1){
-        key = AESEncrypt(key);
-        key1 = AESEncrypt(key1);
+        key = encryptionManager.AESEncrypt(key);
+        key1 = encryptionManager.AESEncrypt(key1);
         String encryptedResponse = commands.hget(key, key1);
         if (encryptedResponse == null) return null;
-        return AESDecrypt(encryptedResponse);
+        return encryptionManager.AESDecrypt(encryptedResponse);
     }
 
     private long del(String key){
-        key = AESEncrypt(key);
+        key = encryptionManager.AESEncrypt(key);
         return commands.del(key);
     }
 
     private long srem(String key, String val){
-        key = AESEncrypt(key);
-        val = AESEncrypt(val);
+        key = encryptionManager.AESEncrypt(key);
+        val = encryptionManager.AESEncrypt(val);
         return commands.srem(key, val);
     }
 
@@ -181,7 +141,9 @@ public class RedisDB {
     }
 
     public Set<String> getClientIds(){
-        return smembers(CLIENT_IDS);
+        Set<String> members = smembers(CLIENT_IDS);
+        members.remove("");
+        return members;
     }
 
     /*
@@ -211,6 +173,10 @@ public class RedisDB {
         Room Occupancy
      */
 
+    private boolean strEqual(String a, String b) {
+        return !(a == null || b == null) && a.equals(b);
+    }
+
     public void clearRoom(String dormName, String dormRoomNumber){
         String occupant;
         while (!(occupant = getOccupantOfRoom(dormName, dormRoomNumber)).equals("-1")){
@@ -225,7 +191,7 @@ public class RedisDB {
         for (String user : users){
             String userDormName = hget(user, DORM_NAME);
             String userDormRoomNumber = hget(user, DORM_ROOM_NUMBER);
-            if(userDormName.equals(dormName) && userDormRoomNumber.equals(dormRoomNumber)){
+            if(strEqual(userDormName, dormName) && strEqual(userDormRoomNumber, dormRoomNumber)) {
                 return user;
             }
         }
@@ -240,7 +206,7 @@ public class RedisDB {
         for (String user : users){
             String userDormName = hget(user, DORM_NAME);
             String userDormRoomNumber = hget(user, DORM_ROOM_NUMBER);
-            if (userDormName.equals(dormName) && !userDormRoomNumber.equals("-1")){
+            if (strEqual(userDormName, dormName) && !strEqual(userDormRoomNumber, "-1")) {
                 occupiedRooms.add(userDormRoomNumber);
             }
         }
@@ -329,14 +295,19 @@ public class RedisDB {
      */
 
     public void clearRedisDB(){
-        for (String currentUser : getUsers()) {
-            del(currentUser);
-            srem(USERS, currentUser);
+        while(getClientIds().size() > 0 || getUsers().size() > 0){
+            for (String currentUser : getUsers()) {
+                del(currentUser);
+                srem(USERS, currentUser);
+            }
+            for (String clientId : getClientIds()) {
+                del(clientId);
+                srem(CLIENT_IDS, clientId);
+            }
         }
-        for (String clientId : getClientIds()) {
-            del(clientId);
-            srem(USERS, clientId);
-        }
+
+        assert getUsers().size() == 0;
+        assert getClientIds().size() == 0;
     }
 
     public void closeRedisConnection(){

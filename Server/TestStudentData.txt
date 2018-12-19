@@ -7,3 +7,4 @@ Johnathan Smith/12121212/S/jsmith@mymail.pomona.edu
 Elmer Fudd/00001111/S/efudd@mymail.pomona.edu
 Daffy Duck/77777777/S/dduck@mymail.pomona.edu
 Waity Waiterson/87878787/S/wwaiterson@mymail.pomona.edu
+Notyet Registered/33333333/S/notyetregistered@mymail.pomona.edu

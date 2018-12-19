@@ -10,7 +10,12 @@ public class ServerPacket implements java.io.Serializable{
 
     // Possible server responses
     public static final String REGISTRATION_SUCCESSFUL = "Registration successful";
-    public static final String REGISTRATION_FAILED = "Registration failed! Check that your student ID is valid.";
+    public static final String REGISTRATION_FAILED_STUDENT_ID = "Registration failed! Check that your student ID " +
+            "is valid and not previously used.";
+    public static final String REGISTRATION_FAILED_USERNAME = "Registration failed! That username is already in use.";
+    public static final String REGISTRATION_FAILED_PASSWORD = "Registration failed! That password doesn't meet the" +
+            "password requirements: 1 capital letter, 1 lowercase letter, 1 number, and 1 special character.";
+    public static final String REGISTRATION_FAILED_INTERNAL_SERVER_ERROR = "Registration failed! An internal server error occurred";
     public static final String RESERVE_SUCCESSFUL = "Room reserved!";
     public static final String RESERVE_FAILED = "Failed to reserve room. Check that the room is empty, " +
             "and that you're currently available to register.";

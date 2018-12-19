@@ -1,6 +1,9 @@
 package ServerPackage;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -11,12 +14,12 @@ public class RedisDBTest {
     private static RedisDB redis;
     private static HashUtil hashUtil;
     private static final int port = 6379;
-    private static final String dbEncryptionKey = "CecilSagehen1987";
 
     @BeforeClass
     public static void setUp() throws NoSuchAlgorithmException {
         hashUtil = new HashUtil();
-        redis = new RedisDB("localhost", port, dbEncryptionKey);
+        EncryptionManager encryptionManager = new EncryptionManager(Server.dbEncryptionKey, Server.initVector);
+        redis = new RedisDB("localhost", port, encryptionManager);
     }
 
     @AfterClass
