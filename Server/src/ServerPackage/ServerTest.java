@@ -261,17 +261,28 @@ public class ServerTest {
         testAction(ADMIN_PLACE_STUDENT, GREG_USERNAME, null, "Smiley", "303", RATE_LIMIT_REACHED);
     }
 
+
+    /*
+        PASSWORD RESETTING
+     */
+
+    @Test
+    public void canSendTempPassword(){
+        //testAction(REQUEST_TEMP_PASSWORD, JS_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+    }
+
+
     /*
         HELPER METHODS
      */
 
-    static void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
+    private static void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
                             String expectedResult){
         ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
         assertEquals(expectedResult, server.handle(p).message);
     }
 
-    static ServerPacket responseFromTestingAction(Action a, String username, String password, String dormName,
+    private static ServerPacket responseFromTestingAction(Action a, String username, String password, String dormName,
                                                    String dormRoomNumber){
         ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
         return server.handle(p);

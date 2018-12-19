@@ -27,6 +27,9 @@ public class ServerActor {
             "(?=.*[A-Z])" +
             "(?=.*[!@#$%&'()*+,-.^_`{|}~])" +
             ".{8,40})");
+    private static final String DISCLAIMER = "\n\nThis email was sent as part of a project for CS181S at Pomona. If you're " +
+            "unaware of such a project, then we probably accidentally generated your email in our dummy test data. " +
+            "Apologies from the Room47 team.";
 
     // !#$%&'()*+,-./[\\\]^_`{|}~
 
@@ -117,6 +120,7 @@ public class ServerActor {
                                 boolean regTimeInPast) throws UnsupportedEncodingException {
         // Calculate their registration time, salt, and hashed password
         String fullName = studentDataManager.getStudentFullName(studentID);
+        if (fullName == null) return false;
         String salt = "" + (int) (Math.random() * 999999);
         int regNumber = (int) (Math.random() * 1000);
         long regTimeMs = regTimeInPast ? System.currentTimeMillis() - 1 : calculateRegistrationTime(regNumber, 3000000);
@@ -151,9 +155,9 @@ public class ServerActor {
         // Generate alphanumeric password of length 10
         String generatedString = RandomStringUtils.random(10, true, true);
 
-        emailManager.sendEmail(email, "Your Room47 Temporary Password", generatedString);
+        emailManager.sendEmail(email, "Your Room47 Temporary Password", generatedString + DISCLAIMER);
 
-        return false;
+        return true;
     }
 
     /*
