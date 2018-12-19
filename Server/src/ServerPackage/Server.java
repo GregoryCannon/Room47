@@ -16,32 +16,46 @@ import static SSLPackage.ServerPacket.*;
  */
 public class Server {
     public ServerActor actor;
+
     private static SslServer sslServer;
     private static String clientId;
-    private static String dbEncryptionKey;
+
+    // This is the source of truth for these constants. All other files import them from here.
+    static final String dbEncryptionKey = "CecilSagehen1987";
+    static final String initVector = "encryptionIntVec";  // TODO: encrypt
+    static final int RATE_LIMIT = 400;
+    static final int SSL_PORT = 6667;
 
     private String authenticatedUser = null;
 
-    public static final int RATE_LIMIT = 400;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        /*if (args.length == 1){
-            dbEncryptionKey = args[0];
+        // Get DB encryption key from CLI args
+        String userDbEncryptionKey = "";
+        if (args.length == 1){
+            userDbEncryptionKey = args[0];
         } else {
             System.out.println("Please enter the encryption key for the database, as a command line argument!");
             return;
-        }*/
-        dbEncryptionKey = "CecilSagehen1987";
+        }
 
-        Server server = new Server(dbEncryptionKey);
+        // Initialize all dependencies
+        EncryptionManager encryptionManager = new EncryptionManager(userDbEncryptionKey, initVector);
+        RedisDB redis = new RedisDB("localhost", 6379, encryptionManager);
+        StudentDataManager studentDataManager = new StudentDataManager(redis, encryptionManager);
+        HashUtil hashUtil = new HashUtil();
+
+        // Initialize server
+        Server server = new Server(redis, encryptionManager, studentDataManager, hashUtil);
         SslServerHandler handler = server::handle;
-        sslServer = new SslServer(6667, handler);
+        sslServer = new SslServer(SSL_PORT, handler);
         clientId = sslServer.getClientId();
     }
 
-    public Server(String dbEncryptionKey) throws NoSuchAlgorithmException{
-        actor = new ServerActor(dbEncryptionKey);
-        clientId = "UnitTestClientId";
+    public Server(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
+                  HashUtil hashUtil) throws NoSuchAlgorithmException{
+        actor = new ServerActor(redis, encryptionManager, studentDataManager, hashUtil);
+        clientId = "UnitTestClientId"; // Overwritten if not in a unit test
     }
 
     public ServerPacket handle(ClientPacket p) {
@@ -75,15 +89,21 @@ public class Server {
         return new ServerPacket(UNKNOWN_ACTION);
     }
 
-    private ServerPacket register(String username, String password, String roomNumber){
+    private ServerPacket register(String username, String password, String studentID){
+        // Validate the registration requirements
+        String validationProblem = actor.validateRegistration(username, password, studentID);
+        if (!validationProblem.equals("")){
+            return new ServerPacket(validationProblem);
+        }
+
         try {
-            boolean regSuccess = actor.registerUser(username, password, roomNumber, false);
+            boolean regSuccess = actor.registerUser(username, password, studentID, false);
             boolean loginSuccess = actor.logIn(username, password);
             authenticatedUser = username;
             if (regSuccess && loginSuccess){
                 return new ServerPacket(REGISTRATION_SUCCESSFUL);
             }
-            return new ServerPacket(REGISTRATION_FAILED);
+            return new ServerPacket(REGISTRATION_FAILED_INTERNAL_SERVER_ERROR);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return new ServerPacket(e.getMessage());
