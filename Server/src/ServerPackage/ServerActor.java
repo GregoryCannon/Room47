@@ -58,7 +58,6 @@ public class ServerActor {
 
         redis.setDormName(studentUsername, dormName);
         redis.setDormRoomNumber(studentUsername, dormRoomNumber);
-        redis.sadd(redis.USERS, studentUsername);
         return true;
     }
 

@@ -13,10 +13,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ResetPasswordActivity extends AppCompatActivity {
-    @BindView(R.id.reset_password_email)
-    TextView _enterEmail;
-    @BindView(R.id.email)
-    EditText _email;
+    @BindView(R.id.reset_password_username)
+    TextView _enterUsername;
+    @BindView(R.id.username)
+    EditText _username;
     @BindView(R.id.btn_reset_password)
     Button _reset_password;
 

@@ -160,15 +160,15 @@ public class SignupActivity extends AppCompatActivity {
         } else {
             _userNameText.setError(null);
         }
-        if (password.isEmpty() || password.length() < 8 || password.length() > 21) {
+        if (password.isEmpty() || password.length() < 8 || password.length() > 20) {
             _passwordText.setError("between 4 and 10 alphanumeric characters");
             valid = false;
         } else {
             _passwordText.setError(null);
         }
 
-        if (reEnterPassword.isEmpty() || reEnterPassword.length() < 4 || reEnterPassword.length() > 10 || !(reEnterPassword.equals(password))) {
-            _reEnterPasswordText.setError("Password Do not match");
+        if (reEnterPassword.isEmpty() || !(reEnterPassword.equals(password))) {
+            _reEnterPasswordText.setError("Passwords Do not match");
             valid = false;
         } else {
             _reEnterPasswordText.setError(null);
