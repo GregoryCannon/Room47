@@ -20,6 +20,7 @@ public class ServerActor {
     private RedisDB redis;
     private HashUtil hashUtil;
     private StudentDataManager studentDataManager;
+    private EmailManager emailManager;
 
     private static final Pattern passwordFormat = Pattern.compile("(" +
             "(?=.*[a-z])" +
@@ -33,11 +34,12 @@ public class ServerActor {
 
     // !#$%&'()*+,-./[\\\]^_`{|}~
 
-    ServerActor(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
-                HashUtil hashUtil) throws NoSuchAlgorithmException {
+    ServerActor(RedisDB redis, StudentDataManager studentDataManager,
+                HashUtil hashUtil, EmailManager emailManager) throws NoSuchAlgorithmException {
         this.hashUtil = hashUtil;
         this.redis = redis;
         this.studentDataManager = studentDataManager;
+        this.emailManager = emailManager;
     }
 
     public int getAndIncrementPacketCount(String username){
@@ -149,13 +151,20 @@ public class ServerActor {
 
     public boolean requestTempPassword(String username){
         String studentId = redis.getUserID(username);
+        if (studentId == null) return false;
         String email = studentDataManager.getStudentEmail(studentId);
-        SendMail emailManager = new SendMail();
+        if (email == null) return false;
 
         // Generate alphanumeric password of length 10
         String generatedString = RandomStringUtils.random(10, true, true);
 
-        emailManager.sendEmail(email, "Your Room47 Temporary Password", generatedString + DISCLAIMER);
+        try {
+            emailManager.sendEmail(email, "Your Room47 Temporary Password", generatedString + DISCLAIMER);
+        } catch (Exception e){
+            System.out.println("Failed to send email to" + email);
+            e.printStackTrace();
+            return false;
+        }
 
         return true;
     }

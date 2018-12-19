@@ -7,8 +7,6 @@ public class ClientPacket implements java.io.Serializable{
     public String dormName;
     public String roomNumber;
 
-    public ClientPacket(){}
-
     public ClientPacket(Action action, String username, String password, String dormName, String roomNumber){
         this.action = action;
         this.username = username;

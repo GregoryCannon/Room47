@@ -24,6 +24,7 @@ public class ServerTest {
     private static EncryptionManager encryptionManager;
     private static StudentDataManager studentDataManager;
     private static HashUtil hashUtil;
+    private static EmailManager emailManager;
 
     @BeforeClass
     public static void init() throws Exception {
@@ -32,12 +33,13 @@ public class ServerTest {
         redis = new RedisDB("localhost", 6379, encryptionManager);
         studentDataManager = new StudentDataManager(redis, encryptionManager);
         hashUtil = new HashUtil();
+        emailManager = new EmailManager();
     }
 
     @Before
     public void createFreshServer() throws Exception {
         redis.clearRedisDB();
-        server = new Server(redis, encryptionManager, studentDataManager, hashUtil);
+        server = new Server(redis, encryptionManager, studentDataManager, hashUtil, emailManager);
         setupTestData();
     }
 
@@ -268,7 +270,7 @@ public class ServerTest {
 
     @Test
     public void canSendTempPassword(){
-        //testAction(REQUEST_TEMP_PASSWORD, JS_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+        testAction(REQUEST_TEMP_PASSWORD, JS_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
     }
 
 

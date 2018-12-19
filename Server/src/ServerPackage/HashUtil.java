@@ -11,13 +11,13 @@ public class HashUtil {
         digest = MessageDigest.getInstance("SHA-256");
     }
 
-    public MessageDigest getHashFunction(){
-        return digest;
-    }
-
-    public void setHashFunction(String hashFunction) throws NoSuchAlgorithmException {
-        digest = MessageDigest.getInstance(hashFunction);
-    }
+//    public MessageDigest getHashFunction(){
+//        return digest;
+//    }
+//
+//    public void setHashFunction(String hashFunction) throws NoSuchAlgorithmException {
+//        digest = MessageDigest.getInstance(hashFunction);
+//    }
 
     public byte[] hashPassword(String salt, String password){
         String input = salt + password;

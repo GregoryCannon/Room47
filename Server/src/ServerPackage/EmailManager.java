@@ -5,28 +5,26 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class SendMail {
+public class EmailManager {
 	String username;
 	String password;
 	Session session;
 
-    final String DEFAULT_USERNAME = "srgb2015@mymail.pomona.edu";
-    final String DEFAULT_PASSWORD = "Tennis15";
+    private static final String DEFAULT_USERNAME = "srgb2015@mymail.pomona.edu";
+    private static final String DEFAULT_PASSWORD = "Tennis15";
 
-    public SendMail(){
-        username = DEFAULT_USERNAME;
-        password = DEFAULT_PASSWORD;
-        session = userAuthorization(username, password);
-    }
-
-	public SendMail(String username, String password) {
+	public EmailManager(String username, String password) {
 		this.username = username;
 		this.password = password;
 		this.session = userAuthorization(username, password);
 	}
 
+    public EmailManager(){
+        this(DEFAULT_USERNAME, DEFAULT_PASSWORD);
+    }
+
 	public static void main(String[] args) {
-		SendMail mail = new SendMail("srgb2015@mymail.pomona.edu", "Tennis15");
+		EmailManager mail = new EmailManager("srgb2015@mymail.pomona.edu", "Tennis15");
 		mail.sendEmail("gccc2015@mymail.pomona.edu", "Room47 Test", "This is a test");
 	}
 	

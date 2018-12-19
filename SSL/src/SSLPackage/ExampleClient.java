@@ -8,9 +8,7 @@ import java.io.IOException;
 public class ExampleClient {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         // Initialize server
-        SslServerHandler handler = (clientPacket) -> {
-            return new ServerPacket("Generic message");
-        };
+        SslServerHandler handler = (clientPacket) -> new ServerPacket("Generic message");
         new Thread(() -> new SslServer(9000, handler)).start();
 
         // Initialize a client
@@ -26,16 +24,5 @@ public class ExampleClient {
         System.out.println("Received server packet: " + response.message);
     }
 
-
-
-    /*
-        String msg = "Welcome to the test of the SSL protocol in Java";
-        client.sendBytes(msg.getBytes());
-        System.out.println("Sent: " + msg);
-
-        String message = client.readString();
-        System.out.println("Received: " + message);
-    }
-    */
 
 }

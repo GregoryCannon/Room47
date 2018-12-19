@@ -44,17 +44,18 @@ public class Server {
         RedisDB redis = new RedisDB("localhost", 6379, encryptionManager);
         StudentDataManager studentDataManager = new StudentDataManager(redis, encryptionManager);
         HashUtil hashUtil = new HashUtil();
+        EmailManager emailManager = new EmailManager();
 
         // Initialize server
-        Server server = new Server(redis, encryptionManager, studentDataManager, hashUtil);
+        Server server = new Server(redis, encryptionManager, studentDataManager, hashUtil, emailManager);
         SslServerHandler handler = server::handle;
         sslServer = new SslServer(SSL_PORT, handler);
         clientId = sslServer.getClientId();
     }
 
     public Server(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
-                  HashUtil hashUtil) throws NoSuchAlgorithmException{
-        actor = new ServerActor(redis, encryptionManager, studentDataManager, hashUtil);
+                  HashUtil hashUtil, EmailManager emailManager) throws NoSuchAlgorithmException{
+        actor = new ServerActor(redis, studentDataManager, hashUtil, emailManager);
         clientId = "UnitTestClientId"; // Overwritten if not in a unit test
     }
 
@@ -197,9 +198,9 @@ public class Server {
 
     private ServerPacket requestTempPassword(String username){
         if (actor.requestTempPassword(username)){
-            return new ServerPacket(LOGIN_SUCCESSFUL);
+            return new ServerPacket(REQUEST_TEMP_PASSWORD_SUCCESSFUL);
         } else {
-            return new ServerPacket(LOGIN_FAILED);
+            return new ServerPacket(REQUEST_TEMP_PASSWORD_FAILED);
         }
     }
 }

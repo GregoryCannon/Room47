@@ -25,7 +25,7 @@ public class StudentDataManager {
 
         // TODO: remove plaintext versions for final release
         // Encrypt the text files if necessary
-        if (!new File(TEST_ENC).exists() || !new File(VALID_ENC).exists())
+        //if (!new File(TEST_ENC).exists() || !new File(VALID_ENC).exists())
         try {
             encryptFile(TEST, TEST_ENC);
             encryptFile(VALID, VALID_ENC);
@@ -68,20 +68,6 @@ public class StudentDataManager {
             while ((line = br.readLine()) != null) {
                 String plaintextLine = encryptionManager.AESDecrypt(line);
                 addStudentToMap(plaintextLine);
-            }
-        } finally {
-            br.close();
-        }
-    }
-
-    public void readStudentData(String filename) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        try {
-            StringBuilder sb = new StringBuilder();
-            String line = "";
-
-            while ((line = br.readLine()) != null) {
-                addStudentToMap(line);
             }
         } finally {
             br.close();
