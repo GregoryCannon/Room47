@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static SSLPackage.Action.*;
 import static SSLPackage.ServerPacket.*;
-import static ServerPackage.ServerTestAccounts.*;
+import static ServerPackage.ServerTestAccountData.*;
 import static org.junit.Assert.*;
 
 /**
@@ -183,7 +183,7 @@ public class ServerTest {
         testAction(REQUEST_ROOM, null, null, "Walker", "208", RESERVE_SUCCESSFUL);
         testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
 
-        testAction(LOG_IN, ServerTestAccounts.GREG_USERNAME, GREG_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(LOG_IN, ServerTestAccountData.GREG_USERNAME, GREG_PASS, null, null, LOGIN_SUCCESSFUL);
         testAction(REQUEST_ROOM, null, null, "Walker", "204", RESERVE_SUCCESSFUL);
         testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
 
@@ -242,13 +242,13 @@ public class ServerTest {
         HELPER METHODS
      */
 
-    private void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
+    static void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
                             String expectedResult){
         ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
         assertEquals(expectedResult, server.handle(p).message);
     }
 
-    private ServerPacket responseFromTestingAction(Action a, String username, String password, String dormName,
+    static ServerPacket responseFromTestingAction(Action a, String username, String password, String dormName,
                                                    String dormRoomNumber){
         ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
         return server.handle(p);

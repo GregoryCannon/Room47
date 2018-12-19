@@ -1,5 +1,7 @@
 package ServerPackage;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
@@ -124,6 +126,19 @@ public class ServerActor {
 
     private long calculateRegistrationTime(int registrationNumber, long timeDelta){
         return System.currentTimeMillis() + registrationNumber * timeDelta;
+    }
+
+    public boolean requestTempPassword(String username){
+        String studentId = redis.getUserID(username);
+        String email = studentDataManager.getStudentEmail(studentId);
+        SendMail emailManager = new SendMail();
+
+        // Generate alphanumeric password of length 10
+        String generatedString = RandomStringUtils.random(10, true, true);
+
+        emailManager.sendEmail(email, "Your Room47 Temporary Password", generatedString);
+
+        return false;
     }
 
     /*

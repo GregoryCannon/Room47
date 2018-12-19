@@ -3,7 +3,7 @@ package ServerPackage;
 /**
  * Created by Greg on 12/4/18.
  */
-public class ServerTestAccounts {
+public class ServerTestAccountData {
     static final String SAM_USERNAME = "sam";
     static final String SAM_PASS = "passphrase1";
     static final String SAM_ID = "00011122";

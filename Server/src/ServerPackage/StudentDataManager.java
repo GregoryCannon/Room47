@@ -46,16 +46,18 @@ public class StudentDataManager {
         return fullNamesById.containsKey(studentId);
     }
 
-    public boolean isValidEmail(String email){
-        return emailById.containsValue(email);
+    public String getStudentEmail(String studentId){
+        if (emailById.containsKey(studentId)) {
+            return emailById.get(studentId);
+        }
+        return null;
     }
 
     public String getStudentFullName(String studentId){
         if (fullNamesById.containsKey(studentId)) {
             return fullNamesById.get(studentId);
-        } else {
-            return null;
         }
+        return null;
     }
 
     private boolean addStudentToMap(String rawLine){

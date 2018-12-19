@@ -25,6 +25,7 @@ public class Server {
     public static final int RATE_LIMIT = 400;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
+        // TODO: make them enter it
         /*if (args.length == 1){
             dbEncryptionKey = args[0];
         } else {
@@ -63,14 +64,16 @@ public class Server {
                 return logIn(p.username, p.password);
             case LOG_OUT:
                 return logOut();
-            case ADMIN_PLACE_STUDENT:
-                return adminPlaceStudent(p.username, p.dormName, p.roomNumber);
-            case ADMIN_REMOVE_STUDENT:
-                return adminRemoveStudent(p.dormName, p.roomNumber);
             case GET_INFO:
                 return getUserInfo();
             case GET_ROOMS:
                 return getOccupiedRooms(p.dormName);
+            case ADMIN_PLACE_STUDENT:
+                return adminPlaceStudent(p.username, p.dormName, p.roomNumber);
+            case ADMIN_REMOVE_STUDENT:
+                return adminRemoveStudent(p.dormName, p.roomNumber);
+            case REQUEST_TEMP_PASSWORD:
+                return requestTempPassword(p.username);
         }
         return new ServerPacket(UNKNOWN_ACTION);
     }
@@ -171,5 +174,13 @@ public class Server {
 
     private ServerPacket getOccupiedRooms(String dormName){
         return new ServerPacket(actor.getOccupiedRooms(dormName));
+    }
+
+    private ServerPacket requestTempPassword(String username){
+        if (actor.requestTempPassword(username)){
+            return new ServerPacket(LOGIN_SUCCESSFUL);
+        } else {
+            return new ServerPacket(LOGIN_FAILED);
+        }
     }
 }
