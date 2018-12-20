@@ -22,7 +22,7 @@ The results of our static analysis tool 'ErrorProne' is in the file 'errorProneR
 
 ## Register ##
 
-As a Pomona student, you must register with a username, password, and student ID. 
+As a Pomona student, you must register with a valid username, password, and student ID. 
 
 ## Draw a room ## 
 
