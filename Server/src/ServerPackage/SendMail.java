@@ -1,4 +1,4 @@
-package email;
+package ServerPackage;
 
 import java.util.Properties;
 
