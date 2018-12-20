@@ -197,9 +197,14 @@ public class Server {
     }
 
     private ServerPacket requestTempPassword(String username){
-        if (actor.requestTempPassword(username)){
-            return new ServerPacket(REQUEST_TEMP_PASSWORD_SUCCESSFUL);
-        } else {
+        try {
+            if (actor.requestTempPassword(username)){
+                return new ServerPacket(REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+            } else {
+                return new ServerPacket(REQUEST_TEMP_PASSWORD_FAILED);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
             return new ServerPacket(REQUEST_TEMP_PASSWORD_FAILED);
         }
     }
