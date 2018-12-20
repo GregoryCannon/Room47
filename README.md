@@ -27,7 +27,7 @@ As a Pomona student, you must register with a valid username, password, and stud
 
 ### Draw a room ### 
 
-To draw a room, a Pomona student must login with their username and password. Then, they can view a list of available rooms and choose a room to draw into. 
+To draw a room, a Pomona student must login with their username and password. Then, they can view a list of available rooms and choose a room to draw into druing their room draw time. 
 
 ## Admins ##
 
