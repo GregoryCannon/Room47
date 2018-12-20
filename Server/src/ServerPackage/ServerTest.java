@@ -278,13 +278,13 @@ public class ServerTest {
         HELPER METHODS
      */
 
-    private static void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
+    static void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
                             String expectedResult){
         ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
         assertEquals(expectedResult, server.handle(p).message);
     }
 
-    private static ServerPacket responseFromTestingAction(Action a, String username, String password, String dormName,
+    static ServerPacket responseFromTestingAction(Action a, String username, String password, String dormName,
                                                    String dormRoomNumber){
         ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
         return server.handle(p);
