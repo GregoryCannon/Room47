@@ -21,11 +21,11 @@ GitHub repo: https://github.com/GregoryCannon/Room47/
 ## Students ##
 ### Register ###
 
-As a Pomona student, you must register with a valid username, password, and student ID. 
+As a Pomona student, you must register with a valid username, password, and student ID. They can also reset their password through a temporary password emailed to their vaild email. 
 
 ### Draw a room ### 
 
-To draw a room, a Pomona student must login with their username and password. Then, they can view a list of available rooms and choose a room to draw into during their alloted room draw time. They can also reset their password through a temporary password emailed to their vaild email. 
+To draw a room, a Pomona student must login with their username and password. Then, they can view a list of available rooms and choose a room to draw into during their alloted room draw time.
 
 ## Admins ##
 
