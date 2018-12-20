@@ -270,13 +270,18 @@ public class ServerTest {
 
     @Test
     public void canResetPasswordFromTemp(){
-        testAction(REQUEST_TEMP_PASSWORD, JS_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+        final String newPassword = "Newpass1!";
+        ServerPacket response = responseFromTestingAction(REQUEST_TEMP_PASSWORD, GREG_USERNAME, null, null, null);
+        assertEquals(REQUEST_TEMP_PASSWORD_SUCCESSFUL, response.message);
+        assertTrue(response.tempPassword != null && response.tempPassword.length() > 0);
+        testAction(RESET_PASSWORD, GREG_USERNAME, newPassword, response.tempPassword, null, RESET_PASSWORD_SUCCESSFUL);
+        testAction(LOG_IN, GREG_USERNAME, newPassword, null, null, LOGIN_SUCCESSFUL);
     }
 
-    @Test
-    public void canSendRealTempPasswordToGreg() {
-        testAction(REQUEST_TEMP_PASSWORD, GREG_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
-    }
+//    @Test
+//    public void canSendRealTempPasswordToGreg() {
+//        testAction(REQUEST_TEMP_PASSWORD, GREG_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+//    }
 
 
 

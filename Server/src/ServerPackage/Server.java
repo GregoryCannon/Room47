@@ -215,7 +215,7 @@ public class Server {
         try {
             String tempPassword = actor.requestTempPassword(username);
             if (tempPassword != null){
-                return new ServerPacket(REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+                return new ServerPacket(REQUEST_TEMP_PASSWORD_SUCCESSFUL, tempPassword);
             } else {
                 return new ServerPacket(REQUEST_TEMP_PASSWORD_FAILED);
             }

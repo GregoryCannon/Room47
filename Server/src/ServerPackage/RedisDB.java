@@ -219,6 +219,10 @@ public class RedisDB {
         Individual User Properties
      */
 
+    public void setHashedPassword(String username, String password){
+        hset(username, PASSWORD, password);
+    }
+
     public String getHashedPassword(String username){
         return hget(username, PASSWORD);
     }
