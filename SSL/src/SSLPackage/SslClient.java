@@ -12,7 +12,6 @@ public class SslClient implements SslContextProvider {
     SSLSocket socket;
     OutputStream os;
     InputStream is;
-    final int READ_LENGTH = 1024;
 
     public SslClient(String host, int port) {
         try {
@@ -52,16 +51,6 @@ public class SslClient implements SslContextProvider {
             throw new RuntimeException("Not enough bytes read: " + read + ", expected " + len + " bytes!");
         }
         return buf;
-    }
-
-    public void close(){
-        try {
-            os.close();
-            is.close();
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /*

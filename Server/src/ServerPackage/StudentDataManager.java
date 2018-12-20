@@ -25,7 +25,7 @@ public class StudentDataManager {
 
         // TODO: remove plaintext versions for final release
         // Encrypt the text files if necessary
-        if (!new File(TEST_ENC).exists() || !new File(VALID_ENC).exists())
+        //if (!new File(TEST_ENC).exists() || !new File(VALID_ENC).exists())
         try {
             encryptFile(TEST, TEST_ENC);
             encryptFile(VALID, VALID_ENC);
@@ -74,34 +74,22 @@ public class StudentDataManager {
         }
     }
 
-    public void readStudentData(String filename) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        try {
-            StringBuilder sb = new StringBuilder();
-            String line = "";
-
-            while ((line = br.readLine()) != null) {
-                addStudentToMap(line);
-            }
-        } finally {
-            br.close();
-        }
-    }
-
     public boolean isValidStudentId(String studentId){
         return fullNamesById.containsKey(studentId);
     }
 
-    public boolean isValidEmail(String email){
-        return emailById.containsValue(email);
+    public String getStudentEmail(String studentId){
+        if (emailById.containsKey(studentId)) {
+            return emailById.get(studentId);
+        }
+        return null;
     }
 
     public String getStudentFullName(String studentId){
         if (fullNamesById.containsKey(studentId)) {
             return fullNamesById.get(studentId);
-        } else {
-            return null;
         }
+        return null;
     }
 
     private boolean addStudentToMap(String rawLine){

@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static SSLPackage.Action.*;
 import static SSLPackage.ServerPacket.*;
-import static ServerPackage.ServerTestAccounts.*;
+import static ServerPackage.ServerTestAccountData.*;
 import static org.junit.Assert.*;
 
 /**
@@ -24,6 +24,7 @@ public class ServerTest {
     private static EncryptionManager encryptionManager;
     private static StudentDataManager studentDataManager;
     private static HashUtil hashUtil;
+    private static EmailManager emailManager;
 
     @BeforeClass
     public static void init() throws Exception {
@@ -32,12 +33,13 @@ public class ServerTest {
         redis = new RedisDB("localhost", 6379, encryptionManager);
         studentDataManager = new StudentDataManager(redis, encryptionManager);
         hashUtil = new HashUtil();
+        emailManager = new EmailManager();
     }
 
     @Before
     public void createFreshServer() throws Exception {
         redis.clearRedisDB();
-        server = new Server(redis, encryptionManager, studentDataManager, hashUtil);
+        server = new Server(redis, encryptionManager, studentDataManager, hashUtil, emailManager);
         setupTestData();
     }
 
@@ -206,7 +208,7 @@ public class ServerTest {
         testAction(REQUEST_ROOM, null, null, "Walker", "208", RESERVE_SUCCESSFUL);
         testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
 
-        testAction(LOG_IN, ServerTestAccounts.GREG_USERNAME, GREG_PASS, null, null, LOGIN_SUCCESSFUL);
+        testAction(LOG_IN, ServerTestAccountData.GREG_USERNAME, GREG_PASS, null, null, LOGIN_SUCCESSFUL);
         testAction(REQUEST_ROOM, null, null, "Walker", "204", RESERVE_SUCCESSFUL);
         testAction(LOG_OUT, null, null, null, null, LOGOUT_SUCCESSFUL);
 
@@ -261,17 +263,33 @@ public class ServerTest {
         testAction(ADMIN_PLACE_STUDENT, GREG_USERNAME, null, "Smiley", "303", RATE_LIMIT_REACHED);
     }
 
+
+    /*
+        PASSWORD RESETTING
+     */
+
+    @Test
+    public void canSendTempPassword(){
+        testAction(REQUEST_TEMP_PASSWORD, JS_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+    }
+
+    @Test
+    public void canSendRealTempPasswordToGreg() {
+        // Register Greg
+        testAction(REQUEST_TEMP_PASSWORD, GREG_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+    }
+
     /*
         HELPER METHODS
      */
 
-    private void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
+    static void testAction(Action a, String username, String password, String dormName, String dormRoomNumber,
                             String expectedResult){
         ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
         assertEquals(expectedResult, server.handle(p).message);
     }
 
-    private ServerPacket responseFromTestingAction(Action a, String username, String password, String dormName,
+    static ServerPacket responseFromTestingAction(Action a, String username, String password, String dormName,
                                                    String dormRoomNumber){
         ClientPacket p = new ClientPacket(a, username, password, dormName, dormRoomNumber);
         return server.handle(p);

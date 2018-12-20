@@ -44,17 +44,18 @@ public class Server {
         RedisDB redis = new RedisDB("localhost", 6379, encryptionManager);
         StudentDataManager studentDataManager = new StudentDataManager(redis, encryptionManager);
         HashUtil hashUtil = new HashUtil();
+        EmailManager emailManager = new EmailManager();
 
         // Initialize server
-        Server server = new Server(redis, encryptionManager, studentDataManager, hashUtil);
+        Server server = new Server(redis, encryptionManager, studentDataManager, hashUtil, emailManager);
         SslServerHandler handler = server::handle;
         sslServer = new SslServer(SSL_PORT, handler);
         clientId = sslServer.getClientId();
     }
 
     public Server(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
-                  HashUtil hashUtil) throws NoSuchAlgorithmException{
-        actor = new ServerActor(redis, encryptionManager, studentDataManager, hashUtil);
+                  HashUtil hashUtil, EmailManager emailManager) throws NoSuchAlgorithmException{
+        actor = new ServerActor(redis, studentDataManager, hashUtil, emailManager);
         clientId = "UnitTestClientId"; // Overwritten if not in a unit test
     }
 
@@ -77,14 +78,16 @@ public class Server {
                 return logIn(p.username, p.password);
             case LOG_OUT:
                 return logOut();
-            case ADMIN_PLACE_STUDENT:
-                return adminPlaceStudent(p.username, p.dormName, p.roomNumber);
-            case ADMIN_REMOVE_STUDENT:
-                return adminRemoveStudent(p.dormName, p.roomNumber);
             case GET_INFO:
                 return getUserInfo();
             case GET_ROOMS:
                 return getOccupiedRooms(p.dormName);
+            case ADMIN_PLACE_STUDENT:
+                return adminPlaceStudent(p.username, p.dormName, p.roomNumber);
+            case ADMIN_REMOVE_STUDENT:
+                return adminRemoveStudent(p.dormName, p.roomNumber);
+            case REQUEST_TEMP_PASSWORD:
+                return requestTempPassword(p.username);
         }
         return new ServerPacket(UNKNOWN_ACTION);
     }
@@ -191,5 +194,18 @@ public class Server {
 
     private ServerPacket getOccupiedRooms(String dormName){
         return new ServerPacket(actor.getOccupiedRooms(dormName));
+    }
+
+    private ServerPacket requestTempPassword(String username){
+        try {
+            if (actor.requestTempPassword(username)){
+                return new ServerPacket(REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+            } else {
+                return new ServerPacket(REQUEST_TEMP_PASSWORD_FAILED);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return new ServerPacket(REQUEST_TEMP_PASSWORD_FAILED);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package ServerPackage;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
@@ -18,6 +20,7 @@ public class ServerActor {
     private RedisDB redis;
     private HashUtil hashUtil;
     private StudentDataManager studentDataManager;
+    private EmailManager emailManager;
 
     private static final Pattern passwordFormat = Pattern.compile("(" +
             "(?=.*[a-z])" +
@@ -25,14 +28,18 @@ public class ServerActor {
             "(?=.*[A-Z])" +
             "(?=.*[!@#$%&'()*+,-.^_`{|}~])" +
             ".{8,40})");
+    private static final String DISCLAIMER = "\n\nThis email was sent as part of a project for CS181S at Pomona. If you're " +
+            "unaware of such a project, then we probably accidentally generated your email in our dummy test data. " +
+            "Apologies from the Room47 team.";
 
     // !#$%&'()*+,-./[\\\]^_`{|}~
 
-    ServerActor(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
-                HashUtil hashUtil) throws NoSuchAlgorithmException {
+    ServerActor(RedisDB redis, StudentDataManager studentDataManager,
+                HashUtil hashUtil, EmailManager emailManager) throws NoSuchAlgorithmException {
         this.hashUtil = hashUtil;
         this.redis = redis;
         this.studentDataManager = studentDataManager;
+        this.emailManager = emailManager;
     }
 
     public int getAndIncrementPacketCount(String username){
@@ -115,6 +122,7 @@ public class ServerActor {
                                 boolean regTimeInPast) throws UnsupportedEncodingException {
         // Calculate their registration time, salt, and hashed password
         String fullName = studentDataManager.getStudentFullName(studentID);
+        if (fullName == null) return false;
         String salt = "" + (int) (Math.random() * 999999);
         int regNumber = (int) (Math.random() * 1000);
         long regTimeMs = regTimeInPast ? System.currentTimeMillis() - 1 : calculateRegistrationTime(regNumber, 3000000);
@@ -139,6 +147,31 @@ public class ServerActor {
 
     private long calculateRegistrationTime(int registrationNumber, long timeDelta){
         return System.currentTimeMillis() + registrationNumber * timeDelta;
+    }
+
+    public boolean requestTempPassword(String username) throws UnsupportedEncodingException {
+        String studentId = redis.getUserID(username);
+        if (studentId == null) return false;
+        String email = studentDataManager.getStudentEmail(studentId);
+        if (email == null) return false;
+
+        // Generate alphanumeric password of length 10
+        String tempPassword = RandomStringUtils.random(10, true, true);
+
+        // Hash and store in DB
+        String salt = redis.getSalt(username);
+        String hashedTempPassword = new String(hashUtil.hashPassword(salt, tempPassword), "UTF8");
+        redis.setHashedTempPassword(username, hashedTempPassword);
+
+        try {
+            emailManager.sendEmail(email, "Your Room47 Temporary Password", tempPassword + DISCLAIMER);
+        } catch (Exception e){
+            System.out.println("Failed to send email to" + email);
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     /*

@@ -1,43 +1,34 @@
 package ServerPackage;
 
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
-public class SendMail {
+public class EmailManager {
 	String username;
 	String password;
 	Session session;
-	public SendMail(String username, String password) {
+
+    private static final String DEFAULT_USERNAME = "srgb2015@mymail.pomona.edu";
+    private static final String DEFAULT_PASSWORD = "Tennis15";
+
+	public EmailManager(String username, String password) {
 		this.username = username;
 		this.password = password;
 		this.session = userAuthorization(username, password);
 	}
-	
-	public String getUsername() {
-		return username;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-	
-	public Session getSession() {
-		return session;
-	}
+
+    public EmailManager(){
+        this(DEFAULT_USERNAME, DEFAULT_PASSWORD);
+    }
 
 	public static void main(String[] args) {
-		SendMail mail = new SendMail("srgb2015@mymail.pomona.edu", "Tennis15");
-		mail.sendEmail("srgb2015@mymail.pomona.edu", "Room47 Test", "This is a test");
+		EmailManager mail = new EmailManager("srgb2015@mymail.pomona.edu", "Tennis15");
+		mail.sendEmail("gccc2015@mymail.pomona.edu", "Room47 Test", "This is a test");
 	}
 	
-	public Session userAuthorization(String username, String password) {
+	private Session userAuthorization(String username, String password) {
 		Properties props = new Properties();
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.auth", "true");

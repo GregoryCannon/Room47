@@ -28,6 +28,7 @@ public class RedisDB {
     private static final String ADMIN = "admin";
     private static final String CLIENT_IDS = "clientIds";
     private static final String PACKET_COUNT = "packetCount";
+    private static final String TEMP_PASSWORD = "tempPassword";
 
     public RedisDB(String host, int port, EncryptionManager encryptionManager){
         RedisURI uri = RedisURI.create(host, port);
@@ -103,6 +104,7 @@ public class RedisDB {
                               String fullName, String studentId){
             sadd(USERS, username);
             hset(username, PASSWORD, hashedPassword);
+            hset(username, TEMP_PASSWORD, "-1");
             hset(username, SALT, salt);
             hset(username, ROOM_DRAW_NUMBER, "-1");
         /*necessary if admin wants to select a room for a student that is not registered*/
@@ -219,6 +221,14 @@ public class RedisDB {
 
     public String getHashedPassword(String username){
         return hget(username, PASSWORD);
+    }
+
+    public String getHashedTempPassword(String username) {
+        return hget(username, TEMP_PASSWORD);
+    }
+
+    public void setHashedTempPassword(String username, String hashedTempPassword){
+        hset(username, TEMP_PASSWORD, hashedTempPassword);
     }
 
     public void setRoomDrawNumber(String username, String roomDrawNumber){
