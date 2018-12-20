@@ -18,11 +18,12 @@ GitHub repo: https://github.com/GregoryCannon/Room47/
 * reactor-core-3.2.1.RELEASE.jar
 * rxjava-1.0.2.jar
 
+## Android ##
+We used android studio for the android client: https://developer.android.com/studio/
+
 ## Redis Database ##
 We used Redis for our DB: https://redis.io/
 
-## Android ##
-We used android studio for the android client: https://developer.android.com/studio/
 ## Students ##
 ### Register ###
 
