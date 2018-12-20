@@ -10,7 +10,8 @@ since for now we can just demo live for you.
 The results of our static analysis tool 'ErrorProne' is in the file 'errorProneResults.txt'
 
 ## .jar files ##
-
+activation.jar
+bcprov-jdk15on-159.jar
 
 ## Register ##
 
