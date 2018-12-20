@@ -9,5 +9,5 @@ since for now we can just demo live for you.
 
 The results of our static analysis tool 'ErrorProne' is in the file 'errorProneResults.txt'
 
-Register
+## Register ##
 
