@@ -135,6 +135,19 @@ public class ServerActor {
         return true;
     }
 
+    public boolean resetPassword(String username, String tempPassword, String password) throws UnsupportedEncodingException {
+        String studentId = redis.getUserID(username);
+        String salt = redis.getSalt(username);
+        f(studentId == null) return false;
+        String verificationHashPass = new String(hashUtil.hashPassword(salt, tempPassword), "UTF8");
+        String redisHashedTempPassword = redis.getHashedTempPassword(username);
+        if (redisHashedTempPassword != null && redisHashedTempPassword.equals(verificationHashPass)) {
+            String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
+            redis.setHashedPassword(username, hashedPassword);
+            return true;
+        }
+    }
+
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {
         String salt = redis.getSalt(username);
         if (salt == null) return false;

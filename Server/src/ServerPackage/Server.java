@@ -70,6 +70,8 @@ public class Server {
         }
 
         switch (p.action){
+            case RESET_PASSWORD:
+                return resetPassword(p.username, p.tempPassword, p.password);
             case REGISTER:
                 return register(p.username, p.password, p.roomNumber);
             case REQUEST_ROOM:
@@ -90,6 +92,19 @@ public class Server {
                 return requestTempPassword(p.username);
         }
         return new ServerPacket(UNKNOWN_ACTION);
+    }
+
+    private ServerPacket resetPassword(String username, String tempPassword, String password){
+        try {
+            if (actor.resetPassword(username, tempPassword, password)){
+                return new ServerPacket(RESET_PASSWORD_SUCCESSFUL);
+            } else {
+                return new ServerPacket(RESET_PASSWORD_FAILED);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return new ServerPacket(e.getMessage());
+        }
     }
 
     private ServerPacket register(String username, String password, String studentID){

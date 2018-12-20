@@ -223,6 +223,10 @@ public class RedisDB {
         return hget(username, PASSWORD);
     }
 
+    public void setHashedPassword(String username, String password){
+        hset(username, PASSWORD, hashedPassword);
+    }
+
     public String getHashedTempPassword(String username) {
         return hget(username, TEMP_PASSWORD);
     }
