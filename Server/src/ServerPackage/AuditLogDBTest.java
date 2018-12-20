@@ -6,6 +6,12 @@ import static junit.framework.TestCase.assertEquals;
 
 public class AuditLogDBTest {
     private static AuditLogDB auditLogDB;
+    private static String studentID = "12345";
+    private static String studentUsername = "studentUsername";
+    private static String adminUsername = "adminUsername";
+    private static String displacedStudent = "";
+    private static String dormName = "Walker";
+    private static String dormNumber = "112";
 
     @BeforeClass
     public static void setup(){
@@ -24,31 +30,32 @@ public class AuditLogDBTest {
 
     @Test
     public void registerLogTest(){
-        AuditLogEntry entry = auditLogDB.registerLog("John Smith");
+        AuditLogEntry entry = auditLogDB.registerLog(studentID, studentUsername, adminUsername, displacedStudent, dormName, dormNumber);
         assertEquals(entry.getAction(), AuditLogDB.Action.REGISTER);
-        assertEquals(entry.getUsername(), "John Smith");
+        assertEquals(entry.getStudentUsername(), "studentUsername");
     }
 
     @Test
     public void loginLogTest(){
-        AuditLogEntry entry = auditLogDB.loginLog("John Smith");
+        AuditLogEntry entry = auditLogDB.loginLog(studentID, studentUsername, adminUsername, displacedStudent, dormName, dormNumber);
         assertEquals(entry.getAction(), AuditLogDB.Action.LOGIN);
-        assertEquals(entry.getUsername(), "John Smith");
+        assertEquals(entry.getStudentUsername(), "studentUsername");
     }
 
     @Test
     public void selectRoomLogTest(){
-        AuditLogEntry entry = auditLogDB.selectRoomLog("John Smith");
+        AuditLogEntry entry = auditLogDB.selectRoomLog(studentID, studentUsername, adminUsername, displacedStudent, dormName, dormNumber);
         assertEquals(entry.getAction(), AuditLogDB.Action.SELECT_ROOM);
-        assertEquals(entry.getUsername(), "John Smith");
+        assertEquals(entry.getStudentUsername(), "studentUsername");
     }
 
     @Test
     public void displaceStudentLogTest(){
-        AuditLogEntry entry = auditLogDB.displaceStudentLog("John Smith", "Jane Doe");
+        displacedStudent = "John Smith";
+        AuditLogEntry entry = auditLogDB.displaceStudentLog(studentID, studentUsername, adminUsername, displacedStudent, dormName, dormNumber);
         assertEquals(entry.getAction(), AuditLogDB.Action.DISPLACE_STUDENT);
-        assertEquals(entry.getUsername(), "John Smith");
-        assertEquals(entry.getDisplacedStudent(), "Jane Doe");
+        assertEquals(entry.getStudentUsername(), "studentUsername");
+        assertEquals(entry.getDisplacedStudent(), "John Smith");
     }
 }
 

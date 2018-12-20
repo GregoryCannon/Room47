@@ -71,7 +71,7 @@ public class Server {
 
         switch (p.action){
             case RESET_PASSWORD:
-                return resetPassword(p.username, p.tempPassword, p.password);
+                return resetPassword(p.username, p.dormName, p.password);
             case REGISTER:
                 return register(p.username, p.password, p.roomNumber);
             case REQUEST_ROOM:

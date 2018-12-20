@@ -15,7 +15,11 @@ public class AuditLogDB {
     private RedisClient client;
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> commands;
-    private static final String AUDIT_LOG = "auditLog";
+    private static final String STUDENT_USERNAME = "studentUsername";
+    private static final String ADMIN_USERNAME = "adminUsername";
+    private static final String STUDENT_ID = "studentID";
+    private static final String DORM_NAME = "dormName";
+    private static final String ROOM_NUMBER = "roomNumber";
 
     public AuditLogDB(String host, int port){
         RedisURI uri = RedisURI.create(host, port);
@@ -24,44 +28,63 @@ public class AuditLogDB {
         commands = connection.sync();
     }
 
-    public AuditLogEntry registerLog(String username){
-        double timestamp = System.currentTimeMillis();
-        Action action = Action.REGISTER;
-        AuditLogEntry entry = new AuditLogEntry(username, action, timestamp);
-        commands.zadd(AUDIT_LOG, timestamp, entry.toString());
+    public AuditLogEntry registerLog(String studentID, String studentUsername,
+                                     String adminUsername, String displacedStudent, String dormName, String dormNumber){
+        AuditLogEntry entry = new AuditLogEntry(studentID, studentUsername, adminUsername, Action.REGISTER, System.currentTimeMillis(),
+                displacedStudent, dormName, dormName);
+        commands.lpush(STUDENT_USERNAME, entry.toString());
+        commands.lpush(ADMIN_USERNAME, entry.toString());
+        commands.lpush(STUDENT_ID, entry.toString());
+        commands.lpush(DORM_NAME, entry.toString());
+        commands.lpush(ROOM_NUMBER, entry.toString());
         return entry;
     }
 
-    public AuditLogEntry loginLog(String username){
-        double timestamp = System.currentTimeMillis();
-        Action action = Action.LOGIN;
-        AuditLogEntry entry = new AuditLogEntry(username, action, timestamp);
-        commands.zadd(AUDIT_LOG, timestamp, entry.toString());
+    public AuditLogEntry loginLog(String studentID, String studentUsername,
+                                  String adminUsername, String displacedStudent, String dormName, String dormNumber){
+        AuditLogEntry entry = new AuditLogEntry(studentID, studentUsername, adminUsername, Action.LOGIN, System.currentTimeMillis(),
+                displacedStudent, dormName, dormNumber);
+        commands.lpush(STUDENT_USERNAME, entry.toString());
+        commands.lpush(ADMIN_USERNAME, entry.toString());
+        commands.lpush(STUDENT_ID, entry.toString());
+        commands.lpush(DORM_NAME, entry.toString());
+        commands.lpush(ROOM_NUMBER, entry.toString());
         return entry;
     }
 
-    public AuditLogEntry selectRoomLog(String username){
-        double timestamp = System.currentTimeMillis();
-        Action action = Action.SELECT_ROOM;
-        AuditLogEntry entry = new AuditLogEntry(username, action, timestamp);
-        commands.zadd(AUDIT_LOG, timestamp, entry.toString());
+    public AuditLogEntry selectRoomLog(String studentID, String studentUsername,
+                                       String adminUsername, String displacedStudent, String dormName, String dormNumber){
+        AuditLogEntry entry = new AuditLogEntry(studentID, studentUsername, adminUsername, Action.SELECT_ROOM, System.currentTimeMillis(),
+                displacedStudent, dormName, dormNumber);
+        commands.lpush(STUDENT_USERNAME, entry.toString());
+        commands.lpush(ADMIN_USERNAME, entry.toString());
+        commands.lpush(STUDENT_ID, entry.toString());
+        commands.lpush(DORM_NAME, entry.toString());
+        commands.lpush(ROOM_NUMBER, entry.toString());
         return entry;
     }
 
     /*
      *@param username - the username of the admin who displaced a student
      */
-    public AuditLogEntry displaceStudentLog(String adminUsername, String displacedStudentUsername){
-        double timestamp = System.currentTimeMillis();
-        Action action = Action.DISPLACE_STUDENT;
-        AuditLogEntry entry = new AuditLogEntry(adminUsername, action, timestamp, displacedStudentUsername);
-        commands.zadd(AUDIT_LOG, timestamp, entry.toString());
+    public AuditLogEntry displaceStudentLog(String studentID, String studentUsername,
+                                            String adminUsername, String displacedStudent, String dormName, String dormNumber){
+        AuditLogEntry entry = new AuditLogEntry(studentID, studentUsername, adminUsername, Action.DISPLACE_STUDENT, System.currentTimeMillis(),
+                displacedStudent, dormName, dormNumber);
+        commands.lpush(STUDENT_USERNAME, entry.toString());
+        commands.lpush(ADMIN_USERNAME, entry.toString());
+        commands.lpush(STUDENT_ID, entry.toString());
+        commands.lpush(DORM_NAME, entry.toString());
+        commands.lpush(ROOM_NUMBER, entry.toString());
         return entry;
     }
 
     public void clearAuditLog(){
-        long numLogEntries = commands.zcard(AUDIT_LOG);
-        commands.zremrangebyrank(AUDIT_LOG, 0, numLogEntries);
+        commands.ltrim(STUDENT_USERNAME, 1,0);
+        commands.ltrim(ADMIN_USERNAME, 1,0);
+        commands.ltrim(STUDENT_ID, 1,0);
+        commands.ltrim(DORM_NAME, 1,0);
+        commands.ltrim(ROOM_NUMBER, 1,0);
     }
 
     public void closeRedisConnection(){
