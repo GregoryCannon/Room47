@@ -74,4 +74,9 @@ public class Connection {
         client.sendClientPacket(testClientPacket);
         return client.readServerPacket();
     }
+    public static ServerPacket resetPassword(String username, String password, String tempPassword) throws IOException, ClassNotFoundException {
+        ClientPacket testClientPacket = new ClientPacket(Action.RESET_PASSWORD, username, password, tempPassword, "room");
+        client.sendClientPacket(testClientPacket);
+        return client.readServerPacket();
+    }
 }

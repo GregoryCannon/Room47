@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -28,6 +29,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     @BindView(R.id.btn_reset_password)
     Button _resetPassword;
     ServerPacket response;
+    private static String username;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +50,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 }
                 String message = response.message;
                 if(message.equals(ServerPacket.REQUEST_TEMP_PASSWORD_SUCCESSFUL)) {
+                    username = _username.getText().toString();
                     Intent intent = new Intent(getApplicationContext(), NewPasswordActivity.class);
                     startActivity(intent);
                     finish();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), ServerPacket.REQUEST_TEMP_PASSWORD_FAILED, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -61,7 +67,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             try {
-                String user = _username.getText().toString();
                 response = Connection.requestTempPassword(_username.getText().toString(), getApplicationContext());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -70,5 +75,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+
+    public static String getUsername() {
+        return username;
     }
 }
