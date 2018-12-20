@@ -19,8 +19,10 @@ GitHub repo: https://github.com/GregoryCannon/Room47/
 * rxjava-1.0.2.jar
 
 ## Redis Database ##
-We used Redis for our DB. The download link for Redis can be found here https://redis.io/
+We used Redis for our DB: https://redis.io/
 
+## Android ##
+We used android studio for the android client: https://developer.android.com/studio/
 ## Students ##
 ### Register ###
 
