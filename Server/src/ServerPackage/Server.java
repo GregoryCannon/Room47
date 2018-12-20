@@ -5,6 +5,7 @@ import SSLPackage.ServerPacket;
 import SSLPackage.SslServer;
 import SSLPackage.SslServerHandler;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
@@ -45,20 +46,21 @@ public class Server {
         StudentDataManager studentDataManager = new StudentDataManager(redis, encryptionManager);
         HashUtil hashUtil = new HashUtil();
         EmailManager emailManager = new EmailManager();
+        AuditLogDB auditLogDB = new AuditLogDB("localhost", 6379);
 
         // Initialize server
-        Server server = new Server(redis, encryptionManager, studentDataManager, hashUtil, emailManager);
+        Server server = new Server(redis, studentDataManager, hashUtil, emailManager, auditLogDB);
         SslServerHandler handler = server::handle;
         sslServer = new SslServer(SSL_PORT, handler);
         clientId = sslServer.getClientId();
 
-        auditLogDB = new AuditLogDB("localhost", 6379);
     }
 
-    public Server(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
-                  HashUtil hashUtil, EmailManager emailManager) throws NoSuchAlgorithmException{
+    public Server(RedisDB redis, StudentDataManager studentDataManager,
+                  HashUtil hashUtil, EmailManager emailManager, AuditLogDB auditLogDB) throws NoSuchAlgorithmException{
         actor = new ServerActor(redis, studentDataManager, hashUtil, emailManager);
         clientId = "UnitTestClientId"; // Overwritten if not in a unit test
+        this.auditLogDB = auditLogDB;
     }
 
     public ServerPacket handle(ClientPacket p) {
@@ -122,7 +124,11 @@ public class Server {
             authenticatedUser = username;
             if (regSuccess && loginSuccess){
                 //log
-                auditLogDB.registerLog(studentID, username,  "", "", "", "");
+                try {
+                    auditLogDB.registerLog(studentID, username,  "", "", "");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return new ServerPacket(REGISTRATION_SUCCESSFUL);
             }
             return new ServerPacket(REGISTRATION_FAILED_INTERNAL_SERVER_ERROR);
@@ -139,11 +145,11 @@ public class Server {
                 //log
                 if(actor.isAdmin(authenticatedUser)){
                     auditLogDB.selectRoomLog("", authenticatedUser,
-                            authenticatedUser, "", dormName, roomNumber);
+                            authenticatedUser, dormName, roomNumber);
                 }
                 else{
                     auditLogDB.selectRoomLog("", authenticatedUser,
-                            "", "", dormName, roomNumber);
+                            "", dormName, roomNumber);
                 }
 
                 return new ServerPacket(RESERVE_SUCCESSFUL);
@@ -164,12 +170,12 @@ public class Server {
                     authenticatedUser = username;
                     //log
                     if(actor.isAdmin(authenticatedUser)){
-                        auditLogDB.selectRoomLog("", username,
-                                authenticatedUser, "", "", "");
+                        auditLogDB.loginLog("", username,
+                                authenticatedUser, "", "");
                     }
                     else{
-                        auditLogDB.selectRoomLog("", username,
-                                "", "", "", "");
+                        auditLogDB.loginLog("", username,
+                                "", "", "");
                     }
                     return new ServerPacket(LOGIN_SUCCESSFUL);
                 } else {
@@ -199,7 +205,7 @@ public class Server {
             if (success) {
                 //log
                 auditLogDB.placeStudentLog("", username,
-                        authenticatedUser, username, dormName, roomNumber);
+                        authenticatedUser, dormName, roomNumber);
                 return new ServerPacket(PLACE_STUDENT_SUCCESSFUL);
             } else {
                 return new ServerPacket(PLACE_STUDENT_FAILED);
@@ -215,7 +221,7 @@ public class Server {
             if (success) {
                 //log
                 auditLogDB.displaceStudentLog("", "",
-                        authenticatedUser, "", dormName, roomNumber);
+                        authenticatedUser, dormName, roomNumber);
                 return new ServerPacket(REMOVE_STUDENT_SUCCESSFUL);
             } else {
                 return new ServerPacket(REMOVE_STUDENT_FAILED);

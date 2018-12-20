@@ -1,6 +1,8 @@
 package ServerPackage;
 
-public class AuditLogEntry {
+import java.util.Date;
+
+public class AuditLogEntry implements java.io.Serializable {
     private AuditLogDB.Action action;
     private String studentUsername;
     private String studentID;
@@ -8,7 +10,9 @@ public class AuditLogEntry {
     private String displacedStudent;
     private String dormName;
     private String dormNumber;
-    private double timestamp;
+    private long timestamp;
+
+    private static final long serialVersionUID = 11112222L;
 
     public String getDormNumber() {
         return dormNumber;
@@ -19,13 +23,12 @@ public class AuditLogEntry {
     }
 
     public AuditLogEntry(String studentID, String studentUsername, String adminUsername,
-                         AuditLogDB.Action action, double timestamp, String displacedStudent, String dormName, String dormNumber){
+                         AuditLogDB.Action action, long timestamp, String dormName, String dormNumber){
         this.studentID = studentID;
         this.studentUsername = studentUsername;
         this.adminUsername = adminUsername;
         this.action = action;
         this.timestamp = timestamp;
-        this.displacedStudent = displacedStudent;
         this.dormName = dormName;
         this.dormNumber = dormNumber;
     }
@@ -46,7 +49,7 @@ public class AuditLogEntry {
         return studentUsername;
     }
 
-    public void setTimestamp(double timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -89,14 +92,13 @@ public class AuditLogEntry {
     @Override
     public String toString() {
         return "AuditLogEntry{" +
-                "action=" + action +
-                ", studentUsername='" + studentUsername + '\'' +
-                ", studentID='" + studentID + '\'' +
-                ", adminUsername='" + adminUsername + '\'' +
-                ", displacedStudent='" + displacedStudent + '\'' +
-                ", dormName='" + dormName + '\'' +
-                ", dormNumber='" + dormNumber + '\'' +
-                ", timestamp=" + timestamp +
+                "\n\t action=" + action +
+                ",\n\t studentUsername='" + studentUsername + '\'' +
+                ",\n\t studentID='" + studentID + '\'' +
+                ",\n\t adminUsername='" + adminUsername + '\'' +
+                ",\n\t dormName='" + dormName + '\'' +
+                ",\n\t dormNumber='" + dormNumber + '\'' +
+                ",\n\t timestamp=" + new Date(timestamp) +
                 '}';
     }
 }
