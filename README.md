@@ -21,7 +21,7 @@ the client socket that android uses, and the server socket that the server uses
     * ServerActor.java, which performs actions specified by incoming packets
     * RedisDB.java, which enters and retrieves data from the database
     * AuditLogDB.java, which creates and retrieves audit logs for server actions
-    * as well as other helper classes and unit tests.
+    * unit tests
 * Android - contains all the code for the Android client.
 
 
