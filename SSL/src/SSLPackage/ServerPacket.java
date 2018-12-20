@@ -5,6 +5,7 @@ import java.util.Set;
 public class ServerPacket implements java.io.Serializable{
     public String message;
     public Set<String> occupiedRooms;
+    public String tempPassword;
 
     private static final long serialVersionUID = 1234567L;
 
@@ -32,6 +33,8 @@ public class ServerPacket implements java.io.Serializable{
     public static final String GET_INFO_FAILED = "Failed to get student info. Check that the student is registered in the database.";
     public static final String REQUEST_TEMP_PASSWORD_SUCCESSFUL = "A temp password was sent to your email!";
     public static final String REQUEST_TEMP_PASSWORD_FAILED = "Failed to send a temp password.";
+    public static final String RESET_PASSWORD_SUCCESSFUL = "Your password was reset!";
+    public static final String RESET_PASSWORD_FAILED = "Failed to reset password!";
     public static final String RATE_LIMIT_REACHED = "You have reached your limit for requests to the server. Check back later.";
     public static final String UNKNOWN_ACTION = "Unknown action requested";
 
@@ -41,5 +44,10 @@ public class ServerPacket implements java.io.Serializable{
 
     public ServerPacket(Set<String> occupiedRooms){
         this.occupiedRooms = occupiedRooms;
+    }
+
+    public ServerPacket(String response, String tempPassword){
+        this.message = response;
+        this.tempPassword = tempPassword;
     }
 }

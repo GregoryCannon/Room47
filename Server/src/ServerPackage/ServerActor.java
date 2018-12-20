@@ -138,14 +138,15 @@ public class ServerActor {
     public boolean resetPassword(String username, String tempPassword, String password) throws UnsupportedEncodingException {
         String studentId = redis.getUserID(username);
         String salt = redis.getSalt(username);
-        f(studentId == null) return false;
+        if(studentId == null) return false;
         String verificationHashPass = new String(hashUtil.hashPassword(salt, tempPassword), "UTF8");
         String redisHashedTempPassword = redis.getHashedTempPassword(username);
         if (redisHashedTempPassword != null && redisHashedTempPassword.equals(verificationHashPass)) {
             String hashedPassword = new String(hashUtil.hashPassword(salt, password), "UTF8");
-            redis.setHashedPassword(username, hashedPassword);
+            redis.setHashedTempPassword(username, hashedPassword);
             return true;
         }
+        return false;
     }
 
     public boolean logIn(String username, String password) throws UnsupportedEncodingException {
@@ -162,11 +163,11 @@ public class ServerActor {
         return System.currentTimeMillis() + registrationNumber * timeDelta;
     }
 
-    public boolean requestTempPassword(String username) throws UnsupportedEncodingException {
+    public String requestTempPassword(String username) throws UnsupportedEncodingException {
         String studentId = redis.getUserID(username);
-        if (studentId == null) return false;
+        if (studentId == null) return null;
         String email = studentDataManager.getStudentEmail(studentId);
-        if (email == null) return false;
+        if (email == null) return null;
 
         // Generate alphanumeric password of length 10
         String tempPassword = RandomStringUtils.random(10, true, true);
@@ -178,13 +179,13 @@ public class ServerActor {
 
         try {
             emailManager.sendEmail(email, "Your Room47 Temporary Password", tempPassword + DISCLAIMER);
+            return tempPassword;
         } catch (Exception e){
             System.out.println("Failed to send email to" + email);
             e.printStackTrace();
-            return false;
         }
 
-        return true;
+        return null;
     }
 
     /*

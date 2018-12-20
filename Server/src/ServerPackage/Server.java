@@ -71,7 +71,7 @@ public class Server {
 
         switch (p.action){
             case RESET_PASSWORD:
-                return resetPassword(p.username, p.tempPassword, p.password);
+                return resetPassword(p.username, p.dormName, p.password);
             case REGISTER:
                 return register(p.username, p.password, p.roomNumber);
             case REQUEST_ROOM:
@@ -213,7 +213,8 @@ public class Server {
 
     private ServerPacket requestTempPassword(String username){
         try {
-            if (actor.requestTempPassword(username)){
+            String tempPassword = actor.requestTempPassword(username)
+            if (tempPassword != null){
                 return new ServerPacket(REQUEST_TEMP_PASSWORD_SUCCESSFUL);
             } else {
                 return new ServerPacket(REQUEST_TEMP_PASSWORD_FAILED);
