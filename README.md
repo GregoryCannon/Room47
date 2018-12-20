@@ -34,5 +34,8 @@ Admins must login with a valid username, password, and ID. Admins can read any r
 ## Error Prone ##
 The results of our static analysis tool 'ErrorProne' is in the file 'errorProneResults.txt'
 
+## Code Coverage ##
+Code coverage can be found in the file 'Code Coverage.png'
+
 
 
