@@ -25,7 +25,7 @@ public class StudentDataManager {
 
         // TODO: remove plaintext versions for final release
         // Encrypt the text files if necessary
-        //if (!new File(TEST_ENC).exists() || !new File(VALID_ENC).exists())
+//        if (!new File(TEST_ENC).exists() || !new File(VALID_ENC).exists())
         try {
             encryptFile(TEST, TEST_ENC);
             encryptFile(VALID, VALID_ENC);

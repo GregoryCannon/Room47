@@ -31,8 +31,10 @@ public class SslClient implements SslContextProvider {
     }
 
     public void sendClientPacket(ClientPacket clientPacket) throws IOException{
+        String s = new String(Serializer.serialize(clientPacket), "UTF8");
+        byte[] bytes = Serializer.serialize(clientPacket);
         System.out.println(new String(Serializer.serialize(clientPacket)));
-        sendBytes(Serializer.serialize(clientPacket));
+        sendBytes(bytes);
     }
 
     public void sendBytes(byte[] bytes) throws IOException {
