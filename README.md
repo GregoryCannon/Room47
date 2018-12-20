@@ -11,3 +11,11 @@ The results of our static analysis tool 'ErrorProne' is in the file 'errorProneR
 
 ## Register ##
 
+As a Pomona student, you must register with a username, password, and student ID. 
+
+## Draw a room ## 
+
+To draw a room, a Pomona student must login with their username and password. Then, they can view a list of available rooms and choose a room to draw into. 
+
+
+
