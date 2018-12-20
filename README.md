@@ -4,8 +4,6 @@ Language: Java (for server and Android client)
 
 GitHub repo: https://github.com/GregoryCannon/Room47/
 
-The results of our static analysis tool 'ErrorProne' is in the file 'errorProneResults.txt'
-
 ## .jar files ##
 * activation.jar
 * bcprov-jdk15on-159.jar
@@ -32,6 +30,9 @@ To draw a room, a Pomona student must login with their username and password. Th
 ## Admins ##
 
 Admins can read any rooming-related data and modify any students’ rooming assignments data at any time. 
+
+## Error Prone ##
+The results of our static analysis tool 'ErrorProne' is in the file 'errorProneResults.txt'
 
 
 
