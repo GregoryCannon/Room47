@@ -57,5 +57,14 @@ public class AuditLogDBTest {
         assertEquals(entry.getStudentUsername(), "studentUsername");
         assertEquals(entry.getDisplacedStudent(), "John Smith");
     }
+
+    @Test
+    public void placeStudentLogTest(){
+        displacedStudent = "John Smith";
+        AuditLogEntry entry = auditLogDB.placeStudentLog(studentID, studentUsername, adminUsername, displacedStudent, dormName, dormNumber);
+        assertEquals(entry.getAction(), AuditLogDB.Action.PLACE_STUDENT);
+        assertEquals(entry.getStudentUsername(), "studentUsername");
+        assertEquals(entry.getDisplacedStudent(), "John Smith");
+    }
 }
 

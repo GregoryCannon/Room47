@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class RedisDB {
-    private AuditLogDB auditLogDB;
     private RedisClient client;
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> commands;
@@ -38,7 +37,6 @@ public class RedisDB {
         commands = connection.sync();
         this.encryptionManager = encryptionManager;
         startTrackingPacketCount("_");
-        auditLogDB = new AuditLogDB("localhost", 6379);
     }
 
     /*
@@ -119,8 +117,6 @@ public class RedisDB {
             hset(username, REGISTRATION_TIME, registrationTime);
             hset(username, FULL_NAME, fullName);
             hset(username, STUDENT_ID, studentId);
-            auditLogDB.registerLog(studentId, username, "", "",
-                    "No dorm", "no dorm room number");
     }
 
     public void startTrackingPacketCount(String clientId){
@@ -259,7 +255,6 @@ public class RedisDB {
         hset(username, DORM_ROOM_NUMBER, dormRoomNumber);
         String studentId = hget(username, STUDENT_ID);
         String dormName = hget(username, DORM_NAME);
-        auditLogDB.selectRoomLog(studentId, username, "", "", dormName, dormRoomNumber);
     }
 
     public String getDormRoomNumber(String username){

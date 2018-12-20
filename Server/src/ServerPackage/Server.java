@@ -27,7 +27,7 @@ public class Server {
     static final int SSL_PORT = 6667;
 
     private String authenticatedUser = null;
-
+    private static AuditLogDB auditLogDB;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         // Get DB encryption key from CLI args
@@ -51,6 +51,8 @@ public class Server {
         SslServerHandler handler = server::handle;
         sslServer = new SslServer(SSL_PORT, handler);
         clientId = sslServer.getClientId();
+
+        auditLogDB = new AuditLogDB("localhost", 6379);
     }
 
     public Server(RedisDB redis, EncryptionManager encryptionManager, StudentDataManager studentDataManager,
@@ -119,6 +121,8 @@ public class Server {
             boolean loginSuccess = actor.logIn(username, password);
             authenticatedUser = username;
             if (regSuccess && loginSuccess){
+                //log
+                auditLogDB.registerLog(studentID, username,  "", "", "", "");
                 return new ServerPacket(REGISTRATION_SUCCESSFUL);
             }
             return new ServerPacket(REGISTRATION_FAILED_INTERNAL_SERVER_ERROR);
@@ -132,6 +136,16 @@ public class Server {
         if (authenticatedUser != null){
             boolean success = actor.requestRoom(authenticatedUser, dormName, roomNumber);
             if (success){
+                //log
+                if(actor.isAdmin(authenticatedUser)){
+                    auditLogDB.selectRoomLog("", authenticatedUser,
+                            authenticatedUser, "", dormName, roomNumber);
+                }
+                else{
+                    auditLogDB.selectRoomLog("", authenticatedUser,
+                            "", "", dormName, roomNumber);
+                }
+
                 return new ServerPacket(RESERVE_SUCCESSFUL);
             } else {
                 return new ServerPacket(RESERVE_FAILED);
@@ -148,6 +162,15 @@ public class Server {
             try {
                 if (actor.logIn(username, password)){
                     authenticatedUser = username;
+                    //log
+                    if(actor.isAdmin(authenticatedUser)){
+                        auditLogDB.selectRoomLog("", username,
+                                authenticatedUser, "", "", "");
+                    }
+                    else{
+                        auditLogDB.selectRoomLog("", username,
+                                "", "", "", "");
+                    }
                     return new ServerPacket(LOGIN_SUCCESSFUL);
                 } else {
                     return new ServerPacket(LOGIN_FAILED);
@@ -174,6 +197,9 @@ public class Server {
         } else {
             boolean success = actor.adminPlaceUserInRoom(username, dormName, roomNumber);
             if (success) {
+                //log
+                auditLogDB.placeStudentLog("", username,
+                        authenticatedUser, username, dormName, roomNumber);
                 return new ServerPacket(PLACE_STUDENT_SUCCESSFUL);
             } else {
                 return new ServerPacket(PLACE_STUDENT_FAILED);
@@ -187,6 +213,9 @@ public class Server {
         } else {
             boolean success = actor.adminRemoveUserFromRoom(dormName, roomNumber);
             if (success) {
+                //log
+                auditLogDB.displaceStudentLog("", "",
+                        authenticatedUser, "", dormName, roomNumber);
                 return new ServerPacket(REMOVE_STUDENT_SUCCESSFUL);
             } else {
                 return new ServerPacket(REMOVE_STUDENT_FAILED);
