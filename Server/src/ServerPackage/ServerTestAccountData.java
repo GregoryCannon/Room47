@@ -28,5 +28,4 @@ public class ServerTestAccountData {
     static final String ADMIN_USERNAME = "testadmin";
     static final String ADMIN_PASS = "adminpass";
     static final String ADMIN_ID = "01234567";
-
 }

@@ -21,25 +21,27 @@ import static org.junit.Assert.*;
 public class ServerTest {
     private static Server server;
     private static RedisDB redis;
-    private static EncryptionManager encryptionManager;
     private static StudentDataManager studentDataManager;
     private static HashUtil hashUtil;
     private static EmailManager emailManager;
+    private static AuditLogDB auditLogDB;
 
     @BeforeClass
     public static void init() throws Exception {
         // Initialize dependencies
-        encryptionManager = new EncryptionManager(Server.dbEncryptionKey, Server.initVector);
+        EncryptionManager encryptionManager = new EncryptionManager(Server.dbEncryptionKey, Server.initVector);
         redis = new RedisDB("localhost", 6379, encryptionManager);
         studentDataManager = new StudentDataManager(redis, encryptionManager);
         hashUtil = new HashUtil();
         emailManager = new EmailManager();
+        auditLogDB = new AuditLogDB("localhost", 6379);
     }
 
     @Before
     public void createFreshServer() throws Exception {
+        auditLogDB.clearAuditLog();
         redis.clearRedisDB();
-        server = new Server(redis, encryptionManager, studentDataManager, hashUtil, emailManager);
+        server = new Server(redis, studentDataManager, hashUtil, emailManager, auditLogDB);
         setupTestData();
     }
 

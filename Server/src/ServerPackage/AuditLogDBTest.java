@@ -1,11 +1,22 @@
 package ServerPackage;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
 public class AuditLogDBTest {
     private static AuditLogDB auditLogDB;
+    private static String studentID = "12345";
+    private static String studentUsername = "John Smith";
+    private static String adminUsername = "adminUsername";
+    private static String dormName = "Walker";
+    private static String dormNumber = "112";
 
     @BeforeClass
     public static void setup(){
@@ -23,32 +34,67 @@ public class AuditLogDBTest {
     }
 
     @Test
-    public void registerLogTest(){
-        AuditLogEntry entry = auditLogDB.registerLog("John Smith");
+    public void registerLogTest() throws IOException, ClassNotFoundException {
+        int initialSize = auditLogDB.getLogsForStudent(studentUsername).size();
+        auditLogDB.registerLog(studentID, studentUsername, adminUsername, dormName, dormNumber);
+        List<AuditLogEntry> result = auditLogDB.getLogsForStudent(studentUsername);
+        assertEquals(initialSize + 1, result.size());
+
+        AuditLogEntry entry = result.get(0);
         assertEquals(entry.getAction(), AuditLogDB.Action.REGISTER);
-        assertEquals(entry.getUsername(), "John Smith");
+        assertEquals(entry.getStudentUsername(), "studentUsername");
     }
 
     @Test
-    public void loginLogTest(){
-        AuditLogEntry entry = auditLogDB.loginLog("John Smith");
+    public void loginLogTest() throws IOException, ClassNotFoundException {
+        int initialSize = auditLogDB.getLogsForStudent(studentUsername).size();
+        auditLogDB.loginLog(studentID, studentUsername, adminUsername, dormName, dormNumber);
+        List<AuditLogEntry> result = auditLogDB.getLogsForStudent(studentUsername);
+        assertEquals(initialSize + 1, result.size());
+
+        AuditLogEntry entry = result.get(0);
         assertEquals(entry.getAction(), AuditLogDB.Action.LOGIN);
-        assertEquals(entry.getUsername(), "John Smith");
+        assertEquals(entry.getStudentUsername(), "studentUsername");
     }
 
     @Test
-    public void selectRoomLogTest(){
-        AuditLogEntry entry = auditLogDB.selectRoomLog("John Smith");
+    public void selectRoomLogTest() throws IOException, ClassNotFoundException {
+        int initialSize = auditLogDB.getLogsForStudent(studentUsername).size();
+        auditLogDB.selectRoomLog(studentID, studentUsername, adminUsername, dormName, dormNumber);
+        List<AuditLogEntry> result = auditLogDB.getLogsForStudent(studentUsername);
+        assertEquals(initialSize + 1, result.size());
+
+        AuditLogEntry entry = result.get(0);
+
         assertEquals(entry.getAction(), AuditLogDB.Action.SELECT_ROOM);
-        assertEquals(entry.getUsername(), "John Smith");
+        assertEquals(entry.getStudentUsername(), "studentUsername");
     }
 
     @Test
-    public void displaceStudentLogTest(){
-        AuditLogEntry entry = auditLogDB.displaceStudentLog("John Smith", "Jane Doe");
+    public void displaceStudentLogTest() throws IOException, ClassNotFoundException {
+        int initialSize = auditLogDB.getLogsForStudent(studentUsername).size();
+        auditLogDB.displaceStudentLog(studentID, studentUsername, adminUsername, dormName, dormNumber);
+        List<AuditLogEntry> result = auditLogDB.getLogsForStudent(studentUsername);
+        assertEquals(initialSize + 1, result.size());
+
+        AuditLogEntry entry = result.get(0);
         assertEquals(entry.getAction(), AuditLogDB.Action.DISPLACE_STUDENT);
-        assertEquals(entry.getUsername(), "John Smith");
-        assertEquals(entry.getDisplacedStudent(), "Jane Doe");
+        assertEquals(entry.getStudentUsername(), "studentUsername");
+        assertEquals(entry.getDisplacedStudent(), "John Smith");
+    }
+
+    @Test
+    public void placeStudentLogTest() throws IOException, ClassNotFoundException {
+        int initialSize = auditLogDB.getLogsForStudent(studentUsername).size();
+        auditLogDB.placeStudentLog(studentID, studentUsername, adminUsername, dormName, dormNumber);
+        List<AuditLogEntry> result = auditLogDB.getLogsForStudent(studentUsername);
+        assertEquals(initialSize + 1, result.size());
+
+        AuditLogEntry entry = result.get(0);
+
+        assertEquals(entry.getAction(), AuditLogDB.Action.PLACE_STUDENT);
+        assertEquals(entry.getStudentUsername(), "studentUsername");
+        assertEquals(entry.getDisplacedStudent(), "John Smith");
     }
 }
 

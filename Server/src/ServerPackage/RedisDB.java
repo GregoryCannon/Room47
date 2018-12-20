@@ -227,7 +227,6 @@ public class RedisDB {
         return hget(username, PASSWORD);
     }
 
-
     public String getHashedTempPassword(String username) {
         return hget(username, TEMP_PASSWORD);
     }
@@ -254,6 +253,8 @@ public class RedisDB {
 
     public void setDormRoomNumber(String username, String dormRoomNumber){
         hset(username, DORM_ROOM_NUMBER, dormRoomNumber);
+        String studentId = hget(username, STUDENT_ID);
+        String dormName = hget(username, DORM_NAME);
     }
 
     public String getDormRoomNumber(String username){
