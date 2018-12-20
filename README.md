@@ -26,15 +26,12 @@ We used Redis for our DB: https://redis.io/
 
 ## Students ##
 ### Register ###
-
 As a Pomona student, you must register with a valid username, password, and student ID. They can also reset their password through a temporary password emailed to their vaild email. 
 
 ### Draw a room ### 
-
 To draw a room, a Pomona student must login with their username and password. Then, they can view a list of available rooms and choose a room to draw into during their alloted room draw time.
 
 ## Admins ##
-
 Admins must register/login with a valid username, password, and ID. Admins can read any rooming-related data and modify any students’ rooming assignments data at any time. They can also reset their password through a temporary password emailed to their valid email.  
 
 ## Audit Logs ##
