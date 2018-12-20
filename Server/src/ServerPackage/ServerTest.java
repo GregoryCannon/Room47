@@ -273,6 +273,11 @@ public class ServerTest {
         testAction(REQUEST_TEMP_PASSWORD, JS_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
     }
 
+    @Test
+    public void canSendRealTempPasswordToGreg() {
+        // Register Greg
+        testAction(REQUEST_TEMP_PASSWORD, GREG_USERNAME, null, null, null, REQUEST_TEMP_PASSWORD_SUCCESSFUL);
+    }
 
     /*
         HELPER METHODS
