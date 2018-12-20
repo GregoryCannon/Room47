@@ -9,6 +9,9 @@ since for now we can just demo live for you.
 
 The results of our static analysis tool 'ErrorProne' is in the file 'errorProneResults.txt'
 
+## .jar files ##
+
+
 ## Register ##
 
 As a Pomona student, you must register with a username, password, and student ID. 
