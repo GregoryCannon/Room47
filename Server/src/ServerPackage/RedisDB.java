@@ -223,12 +223,12 @@ public class RedisDB {
         Individual User Properties
      */
 
-    public String getHashedPassword(String username){
-        return hget(username, PASSWORD);
-    }
-
     public void setHashedPassword(String username, String password){
         hset(username, PASSWORD, password);
+    }
+
+    public String getHashedPassword(String username){
+        return hget(username, PASSWORD);
     }
 
     public String getHashedTempPassword(String username) {

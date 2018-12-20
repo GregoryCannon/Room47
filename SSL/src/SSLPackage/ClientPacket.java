@@ -7,6 +7,8 @@ public class ClientPacket implements java.io.Serializable{
     public String dormName;
     public String roomNumber;
 
+    private static final long serialVersionUID = 1234568L;
+
     public ClientPacket(Action action, String username, String password, String dormName, String roomNumber){
         this.action = action;
         this.username = username;
