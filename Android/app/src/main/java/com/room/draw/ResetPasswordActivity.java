@@ -1,5 +1,6 @@
 package com.room.draw;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,10 +38,15 @@ public class ResetPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reset_password);
         ButterKnife.bind(this);
 
-        _resetPassword.setOnClickListener(new Button.OnClickListener(){
+        _resetPassword.setOnClickListener(new Button.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+                final ProgressDialog progressDialog = new ProgressDialog(ResetPasswordActivity.this,
+                        R.style.AppTheme_Dark_Dialog);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Sending password to email...");
+                progressDialog.show();
                 try {
                     new SslClientToServer().execute((Object) null).get();
                 } catch (InterruptedException e) {
@@ -49,17 +55,26 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 String message = response.message;
-                if(message.equals(ServerPacket.REQUEST_TEMP_PASSWORD_SUCCESSFUL)) {
-                    username = _username.getText().toString();
-                    Intent intent = new Intent(getApplicationContext(), NewPasswordActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else {
+                if (message.equals(ServerPacket.REQUEST_TEMP_PASSWORD_SUCCESSFUL)) {
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    username = _username.getText().toString();
+                                    Intent intent = new Intent(getApplicationContext(), NewPasswordActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    progressDialog.dismiss();
+                                }
+                            }, 3000);
+                } else {
                     Toast.makeText(getApplicationContext(), ServerPacket.REQUEST_TEMP_PASSWORD_FAILED, Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+
     }
 
     private class SslClientToServer extends AsyncTask {

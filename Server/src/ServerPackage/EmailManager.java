@@ -10,8 +10,8 @@ public class EmailManager {
 	String password;
 	Session session;
 
-    private static final String DEFAULT_USERNAME = "srgb2015@mymail.pomona.edu";
-    private static final String DEFAULT_PASSWORD = "Tennis15";
+    private static final String DEFAULT_USERNAME = "jcga2015@mymail.pomona.edu";
+    private static final String DEFAULT_PASSWORD = "Mapo5172";
 
 	public EmailManager(String username, String password) {
 		this.username = username;
@@ -24,8 +24,8 @@ public class EmailManager {
     }
 
 	public static void main(String[] args) {
-		EmailManager mail = new EmailManager("srgb2015@mymail.pomona.edu", "Tennis15");
-		mail.sendEmail("gccc2015@mymail.pomona.edu", "Room47 Test", "This is a test");
+		EmailManager mail = new EmailManager("jcga2015@mymail.pomona.edu", "Mapo5172");
+		mail.sendEmail("jcga2015@mymail.pomona.edu", "Room47 Test", "This is a test");
 	}
 	
 	private Session userAuthorization(String username, String password) {

@@ -53,10 +53,6 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     signup();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
@@ -77,7 +73,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void signup() throws IOException, ClassNotFoundException, ExecutionException, InterruptedException {
+    public void signup() throws ExecutionException, InterruptedException {
         Log.d(TAG, "Signup");
 
         if (!validate()) {

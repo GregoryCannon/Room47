@@ -1,5 +1,7 @@
 package com.room.draw;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,6 +43,11 @@ public class NewPasswordActivity extends AppCompatActivity {
         _resetPassword.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final ProgressDialog progressDialog = new ProgressDialog(NewPasswordActivity.this,
+                        R.style.AppTheme_Dark_Dialog);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Resetting Password...");
+                progressDialog.show();
                 try {
                     new SslClientToServer().execute((Object) null).get();
                 } catch (InterruptedException e) {
@@ -50,9 +57,15 @@ public class NewPasswordActivity extends AppCompatActivity {
                 }
                 String message = response.message;
                 if (message.equals(ServerPacket.RESET_PASSWORD_SUCCESSFUL)) {
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    progressDialog.dismiss();
+                                }
+                            }, 3000);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), ServerPacket.RESET_PASSWORD_FAILED, Toast.LENGTH_LONG).show();
