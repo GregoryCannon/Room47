@@ -35,7 +35,7 @@ To draw a room, a Pomona student must login with their username and password. Th
 Admins must register/login with a valid username, password, and ID. Admins can read any rooming-related data and modify any students’ rooming assignments data at any time. They can also reset their password through a temporary password emailed to their valid email.  
 
 ## Audit Logs ##
-The following audit logs are available:
+The following audit logs are available to admin:
 * Who registered with a certain ID
 * All logs for 1 room
 * All logs for 1 student
