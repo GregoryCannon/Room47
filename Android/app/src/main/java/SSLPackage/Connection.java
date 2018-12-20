@@ -65,4 +65,13 @@ public class Connection {
         client.sendClientPacket(testClientPacket);
         return client.readServerPacket();
     }
+
+    public static ServerPacket requestTempPassword(String username, Context context) throws IOException, ClassNotFoundException {
+        if (!handshakeComplete) {
+            client = new SslClient("10.0.2.2", 6667, context);
+        }
+        ClientPacket testClientPacket = new ClientPacket(Action.REQUEST_TEMP_PASSWORD, username, "password", "dorm", "room");
+        client.sendClientPacket(testClientPacket);
+        return client.readServerPacket();
+    }
 }
