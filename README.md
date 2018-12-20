@@ -10,18 +10,18 @@ since for now we can just demo live for you.
 The results of our static analysis tool 'ErrorProne' is in the file 'errorProneResults.txt'
 
 ## .jar files ##
-*activation.jar
-*bcprov-jdk15on-159.jar
-*commons-lang3-3.8.1.jar
-*hamcrest-all-1.3.jar
-*junit-4.12.jar
-*lettuce-core-5.1.1.RELEASE.jar
-*mail.jar
-*netty-all-4.1.5.Final.jar
-*netty-transport-native-epoll-5.0.0.Alpha2.jar
-*reactive-streams-1.0.1.jar
-*reactor-core-3.2.1.RELEASE.jar
-*rxjava-1.0.2.jar
+* activation.jar
+* bcprov-jdk15on-159.jar
+* commons-lang3-3.8.1.jar
+* hamcrest-all-1.3.jar
+* junit-4.12.jar
+* lettuce-core-5.1.1.RELEASE.jar
+* mail.jar
+* netty-all-4.1.5.Final.jar
+* netty-transport-native-epoll-5.0.0.Alpha2.jar
+* reactive-streams-1.0.1.jar
+* reactor-core-3.2.1.RELEASE.jar
+* rxjava-1.0.2.jar
 
 ## Register ##
 
