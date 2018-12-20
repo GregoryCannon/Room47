@@ -25,11 +25,11 @@ As a Pomona student, you must register with a valid username, password, and stud
 
 ### Draw a room ### 
 
-To draw a room, a Pomona student must login with their username and password. Then, they can view a list of available rooms and choose a room to draw into druing their alloted room draw time. 
+To draw a room, a Pomona student must login with their username and password. Then, they can view a list of available rooms and choose a room to draw into during their alloted room draw time. 
 
 ## Admins ##
 
-Admins can read any rooming-related data and modify any students’ rooming assignments data at any time. 
+Admins must login with a valid username, password, and ID. Admins can read any rooming-related data and modify any students’ rooming assignments data at any time. 
 
 ## Error Prone ##
 The results of our static analysis tool 'ErrorProne' is in the file 'errorProneResults.txt'
