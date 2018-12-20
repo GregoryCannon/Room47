@@ -149,17 +149,22 @@ public class ServerActor {
         return System.currentTimeMillis() + registrationNumber * timeDelta;
     }
 
-    public boolean requestTempPassword(String username){
+    public boolean requestTempPassword(String username) throws UnsupportedEncodingException {
         String studentId = redis.getUserID(username);
         if (studentId == null) return false;
         String email = studentDataManager.getStudentEmail(studentId);
         if (email == null) return false;
 
         // Generate alphanumeric password of length 10
-        String generatedString = RandomStringUtils.random(10, true, true);
+        String tempPassword = RandomStringUtils.random(10, true, true);
+
+        // Hash and store in DB
+        String salt = redis.getSalt(username);
+        String hashedTempPassword = new String(hashUtil.hashPassword(salt, tempPassword), "UTF8");
+        redis.setHashedTempPassword(username, hashedTempPassword);
 
         try {
-            emailManager.sendEmail(email, "Your Room47 Temporary Password", generatedString + DISCLAIMER);
+            emailManager.sendEmail(email, "Your Room47 Temporary Password", tempPassword + DISCLAIMER);
         } catch (Exception e){
             System.out.println("Failed to send email to" + email);
             e.printStackTrace();
