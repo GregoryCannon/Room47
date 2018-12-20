@@ -27,6 +27,7 @@ public class AuditLogDB {
     private static final String DORM_NAME = "dormName";
     private static final String ROOM_NUMBER = "roomNumber";
     private static final String ENTRY_LIST = "entryList";
+    private static final String ALL_ENTRIES = "allEntries";
 
     public AuditLogDB(String host, int port){
         RedisURI uri = RedisURI.create(host, port);
@@ -78,12 +79,24 @@ public class AuditLogDB {
         return studentLogs;
     }
 
+    public List<AuditLogEntry> getLogsForIndices(int howManyAgo, int howMany) throws IOException, ClassNotFoundException {
+        ArrayList<AuditLogEntry> studentLogs = new ArrayList<>();
+        int to = (int) Math.min(commands.llen(ALL_ENTRIES), howManyAgo + howMany);
+        for(int i = howManyAgo; i < to; i++){
+            String newLog = commands.lindex(ALL_ENTRIES, i);
+            byte[] raw = Base64.decode(newLog);
+            AuditLogEntry newEntry = (AuditLogEntry) Serializer.deserialize(raw);
+            studentLogs.add(newEntry);
+        }
+        return studentLogs;
+    }
+
 
     public void registerLog(String studentID, String studentUsername, String adminUsername,
                             String dormName, String dormNumber) throws IOException {
         AuditLogEntry entry = new AuditLogEntry(studentID, studentUsername, adminUsername, Action.REGISTER, System.currentTimeMillis(),
                 dormName, dormName);
-        
+        lpush(ALL_ENTRIES, entry);
         if(!studentUsername.equals("")){
             lpush(studentUsername, entry);
         }
@@ -102,6 +115,7 @@ public class AuditLogDB {
                                   String adminUsername, String dormName, String dormNumber){
         AuditLogEntry entry = new AuditLogEntry(studentID, studentUsername, adminUsername, Action.LOGIN, System.currentTimeMillis(),
                 dormName, dormNumber);
+        lpush(ALL_ENTRIES, entry);
         if(!studentUsername.equals("")){
             lpush(studentUsername, entry);
         }
@@ -120,6 +134,7 @@ public class AuditLogDB {
                                        String adminUsername, String dormName, String dormNumber){
         AuditLogEntry entry = new AuditLogEntry(studentID, studentUsername, adminUsername, Action.SELECT_ROOM, System.currentTimeMillis(),
                 dormName, dormNumber);
+        lpush(ALL_ENTRIES, entry);
         if(!studentUsername.equals("")){
             lpush(studentUsername, entry);
         }
@@ -141,6 +156,7 @@ public class AuditLogDB {
                                             String adminUsername, String dormName, String dormNumber){
         AuditLogEntry entry = new AuditLogEntry(studentID, studentUsername, adminUsername, Action.DISPLACE_STUDENT, System.currentTimeMillis(),
                 dormName, dormNumber);
+        lpush(ALL_ENTRIES, entry);
         if(!studentUsername.equals("")){
             lpush(studentUsername, entry);
         }
@@ -159,6 +175,7 @@ public class AuditLogDB {
                                             String adminUsername, String dormName, String dormNumber){
         AuditLogEntry entry = new AuditLogEntry(studentID, studentUsername, adminUsername, Action.PLACE_STUDENT, System.currentTimeMillis(),
                 dormName, dormNumber);
+        lpush(ALL_ENTRIES, entry);
         if(!studentUsername.equals("")){
             lpush(studentUsername, entry);
         }

@@ -27,14 +27,15 @@ public class AuditCLI {
 
     public static void main(String args[]) throws IOException {
         auditLogDB = new AuditLogDB("localhost", 6379);
-        //makeDemoList();
+        makeDemoList();
 
         Scanner scanner = new Scanner(System.in);
         while(true){
             System.out.println("\n\nEnter the type of query you want to perform (or 'quit'):" +
                     "\nStudent" +
                     "\nAdmin" +
-                    "\nRoom\n");
+                    "\nRoom" +
+                    "\nTimeFrame\n");
             String inputLine = scanner.nextLine();
             switch (inputLine.toLowerCase()) {
                 case "student":
