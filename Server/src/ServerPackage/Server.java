@@ -213,7 +213,7 @@ public class Server {
 
     private ServerPacket requestTempPassword(String username){
         try {
-            String tempPassword = actor.requestTempPassword(username)
+            String tempPassword = actor.requestTempPassword(username);
             if (tempPassword != null){
                 return new ServerPacket(REQUEST_TEMP_PASSWORD_SUCCESSFUL);
             } else {
