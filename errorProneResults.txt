@@ -1,17 +1,81 @@
 Information:error-prone compiler 2.3.1 was used to compile java sources
-Information:11/14/2018 9:28 PM - Compilation completed successfully with 5 warnings in 3 s 36 ms
-C:\Users\samge_000\Desktop\Room47\SSL\src\SSLPackage\SslClient.java
-Warning:(24, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+Information:12/20/2018 1:42 PM - Compilation completed successfully with 8 warnings in 2 s 602 ms
+C:\Users\Josh Gearou\Desktop\Room47\SSL\src\SSLPackage\ClientPacket.java
+Warning:(21, 20) java: [EqualsHashCode] Classes that override equals should also override hashCode.
+    (see http://errorprone.info/bugpattern/EqualsHashCode)
+C:\Users\Josh Gearou\Desktop\Room47\SSL\src\SSLPackage\SslServer.java
+Warning:(34, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
     (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
+Warning:(60, 16) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
+    (see http://errorprone.info/bugpattern/DefaultCharset)
+  Did you mean 'return new String(readBytes(), UTF_8).replaceAll("\0", "");' or 'return new String(readBytes(), Charset.defaultCharset()).replaceAll("\0", "");'?
+Warning:(79, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+    (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
+C:\Users\Josh Gearou\Desktop\Room47\SSL\src\SSLPackage\SslClient.java
+Warning:(23, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+    (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
+Warning:(28, 28) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
+    (see http://errorprone.info/bugpattern/DefaultCharset)
+  Did you mean 'System.out.println(new String(Serializer.serialize(clientPacket), UTF_8));' or 'System.out.println(new String(Serializer.serialize(clientPacket), Charset.defaultCharset()));'?
 Warning:(44, 16) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
     (see http://errorprone.info/bugpattern/DefaultCharset)
   Did you mean 'return new String(readBytes(SslUtil.READ_LENGTH), UTF_8).replaceAll("\0", "");' or 'return new String(readBytes(SslUtil.READ_LENGTH), Charset.defaultCharset()).replaceAll("\0", "");'?
-C:\Users\samge_000\Desktop\Room47\SSL\src\SSLPackage\ClientPacket.java
-Warning:(23, 20) java: [EqualsHashCode] Classes that override equals should also override hashCode.
-    (see http://errorprone.info/bugpattern/EqualsHashCode)
-C:\Users\samge_000\Desktop\Room47\SSL\src\SSLPackage\SslServer.java
-Warning:(32, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+C:\Users\Josh Gearou\Desktop\Room47\SSL\src\SSLPackage\TestSsl.java
+Warning:(34, 47) java: stop() in java.lang.Thread has been deprecated
+
+Information:error-prone compiler 2.3.1 was used to compile java sources
+Information:12/20/2018 1:43 PM - Compilation completed successfully with 18 warnings in 3 s 266 ms
+C:\Users\Josh Gearou\Desktop\Room47\Server\src\ServerPackage\StudentDataManager.java
+Warning:(33, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
     (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
-Warning:(54, 16) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
+Warning:(42, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+    (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
+Warning:(47, 48) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
     (see http://errorprone.info/bugpattern/DefaultCharset)
-  Did you mean 'return new String(readBytes(), UTF_8).replaceAll("\0", "");' or 'return new String(readBytes(), Charset.defaultCharset()).replaceAll("\0", "");'?
+  Did you mean 'BufferedReader br = Files.newBufferedReader(Paths.get(filename), UTF_8);' or 'BufferedReader br = Files.newBufferedReader(Paths.get(filename), Charset.defaultCharset());'?
+Warning:(48, 48) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
+    (see http://errorprone.info/bugpattern/DefaultCharset)
+  Did you mean 'BufferedWriter bw = Files.newBufferedWriter(Paths.get(outFilename), UTF_8);' or 'BufferedWriter bw = Files.newBufferedWriter(Paths.get(outFilename), Charset.defaultCharset());'?
+Warning:(64, 48) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
+    (see http://errorprone.info/bugpattern/DefaultCharset)
+  Did you mean 'BufferedReader br = Files.newBufferedReader(Paths.get(filename), UTF_8);' or 'BufferedReader br = Files.newBufferedReader(Paths.get(filename), Charset.defaultCharset());'?
+C:\Users\Josh Gearou\Desktop\Room47\Server\src\ServerPackage\EmailManager.java
+Warning:(40, 46) java: [MissingOverride] getPasswordAuthentication overrides method in Authenticator; expected @Override
+    (see http://errorprone.info/bugpattern/MissingOverride)
+  Did you mean '@Override protected PasswordAuthentication getPasswordAuthentication() {'?
+C:\Users\Josh Gearou\Desktop\Room47\Server\src\ServerPackage\EncryptionManager.java
+Warning:(28, 66) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
+    (see http://errorprone.info/bugpattern/DefaultCharset)
+  Did you mean 'byte[] ciphertext = cipher.doFinal(plaintext.getBytes(UTF_8));' or 'byte[] ciphertext = cipher.doFinal(plaintext.getBytes(Charset.defaultCharset()));'?
+Warning:(31, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+    (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
+Warning:(45, 20) java: [DefaultCharset] Implicit use of the platform default charset, which can result in differing behaviour between JVM executions or incorrect behavior if the encoding of the data source doesn't match expectations.
+    (see http://errorprone.info/bugpattern/DefaultCharset)
+  Did you mean 'return new String(plaintext, UTF_8);' or 'return new String(plaintext, Charset.defaultCharset());'?
+Warning:(47, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+    (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
+C:\Users\Josh Gearou\Desktop\Room47\Server\src\ServerPackage\AuditLogEntry.java
+Warning:(39, 19) java: [MissingOverride] toString overrides method in Object; expected @Override
+    (see http://errorprone.info/bugpattern/MissingOverride)
+  Did you mean '@Override public String toString(){'?
+C:\Users\Josh Gearou\Desktop\Room47\Server\src\ServerPackage\ServerTest.java
+Warning:(307, 31) java: [ShortCircuitBoolean] Prefer the short-circuiting boolean operators && and || to & and |.
+    (see http://errorprone.info/bugpattern/ShortCircuitBoolean)
+  Did you mean 'success = success && server.actor.registerUser(JOSH_USERNAME, JOSH_PASS, JOSH_ID, true);'?
+Warning:(308, 31) java: [ShortCircuitBoolean] Prefer the short-circuiting boolean operators && and || to & and |.
+    (see http://errorprone.info/bugpattern/ShortCircuitBoolean)
+  Did you mean 'success = success && server.actor.registerUser(PATRICK_USERNAME, PATRICK_PASS, PATRICK_ID, true);'?
+Warning:(309, 31) java: [ShortCircuitBoolean] Prefer the short-circuiting boolean operators && and || to & and |.
+    (see http://errorprone.info/bugpattern/ShortCircuitBoolean)
+  Did you mean 'success = success && server.actor.registerUser(GREG_USERNAME, GREG_PASS, GREG_ID, true);'?
+Warning:(311, 31) java: [ShortCircuitBoolean] Prefer the short-circuiting boolean operators && and || to & and |.
+    (see http://errorprone.info/bugpattern/ShortCircuitBoolean)
+  Did you mean 'success = success && server.actor.registerUser(JS_USERNAME, JS_PASS, JS_ID, true);'?
+Warning:(312, 31) java: [ShortCircuitBoolean] Prefer the short-circuiting boolean operators && and || to & and |.
+    (see http://errorprone.info/bugpattern/ShortCircuitBoolean)
+  Did you mean 'success = success && server.actor.registerUser(WAITING_USERNAME, WAITING_PASS, WAITING_ID, false);'?
+Warning:(314, 31) java: [ShortCircuitBoolean] Prefer the short-circuiting boolean operators && and || to & and |.
+    (see http://errorprone.info/bugpattern/ShortCircuitBoolean)
+  Did you mean 'success = success && server.actor.registerUser(ADMIN_USERNAME, ADMIN_PASS, ADMIN_ID, true);'?
+Warning:(319, 13) java: [CatchAndPrintStackTrace] Logging or rethrowing exceptions should usually be preferred to catching and calling printStackTrace
+    (see http://errorprone.info/bugpattern/CatchAndPrintStackTrace)
