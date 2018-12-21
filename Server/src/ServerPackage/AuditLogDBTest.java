@@ -13,7 +13,7 @@ import static junit.framework.TestCase.assertEquals;
 public class AuditLogDBTest {
     private static AuditLogDB auditLogDB;
     private static String studentID = "12345";
-    private static String studentUsername = "John Smith";
+    private static String studentUsername = "johnsmith";
     private static String adminUsername = "adminUsername";
     private static String dormName = "Walker";
     private static String dormNumber = "112";
@@ -42,7 +42,7 @@ public class AuditLogDBTest {
 
         AuditLogEntry entry = result.get(0);
         assertEquals(entry.getAction(), AuditLogDB.Action.REGISTER);
-        assertEquals(entry.getStudentUsername(), "studentUsername");
+        assertEquals(entry.getStudentUsername(), "johnsmith");
     }
 
     @Test
@@ -54,7 +54,7 @@ public class AuditLogDBTest {
 
         AuditLogEntry entry = result.get(0);
         assertEquals(entry.getAction(), AuditLogDB.Action.LOGIN);
-        assertEquals(entry.getStudentUsername(), "studentUsername");
+        assertEquals(entry.getStudentUsername(), "johnsmith");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class AuditLogDBTest {
         AuditLogEntry entry = result.get(0);
 
         assertEquals(entry.getAction(), AuditLogDB.Action.SELECT_ROOM);
-        assertEquals(entry.getStudentUsername(), "studentUsername");
+        assertEquals(entry.getStudentUsername(), "johnsmith");
     }
 
     @Test
@@ -79,8 +79,7 @@ public class AuditLogDBTest {
 
         AuditLogEntry entry = result.get(0);
         assertEquals(entry.getAction(), AuditLogDB.Action.DISPLACE_STUDENT);
-        assertEquals(entry.getStudentUsername(), "studentUsername");
-        assertEquals(entry.getDisplacedStudent(), "John Smith");
+        assertEquals(entry.getStudentUsername(), "johnsmith");
     }
 
     @Test
@@ -93,8 +92,7 @@ public class AuditLogDBTest {
         AuditLogEntry entry = result.get(0);
 
         assertEquals(entry.getAction(), AuditLogDB.Action.PLACE_STUDENT);
-        assertEquals(entry.getStudentUsername(), "studentUsername");
-        assertEquals(entry.getDisplacedStudent(), "John Smith");
+        assertEquals(entry.getStudentUsername(), "johnsmith");
     }
 }
 

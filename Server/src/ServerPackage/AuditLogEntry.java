@@ -7,20 +7,11 @@ public class AuditLogEntry implements java.io.Serializable {
     private String studentUsername;
     private String studentID;
     private String adminUsername;
-    private String displacedStudent;
     private String dormName;
     private String dormNumber;
     private long timestamp;
 
     private static final long serialVersionUID = 11112222L;
-
-    public String getDormNumber() {
-        return dormNumber;
-    }
-
-    public void setDormNumber(String dormNumber) {
-        this.dormNumber = dormNumber;
-    }
 
     public AuditLogEntry(String studentID, String studentUsername, String adminUsername,
                          AuditLogDB.Action action, long timestamp, String dormName, String dormNumber){
@@ -37,8 +28,12 @@ public class AuditLogEntry implements java.io.Serializable {
         return action;
     }
 
-    public String getDisplacedStudent(){
-        return displacedStudent;
+    public String getDormNumber() {
+        return dormNumber;
+    }
+
+    public void setDormNumber(String dormNumber) {
+        this.dormNumber = dormNumber;
     }
 
     public double getTimestamp(){
@@ -59,10 +54,6 @@ public class AuditLogEntry implements java.io.Serializable {
 
     public void setDormName(String dormName) {
         this.dormName = dormName;
-    }
-
-    public void setDisplacedStudent(String displacedStudent) {
-        this.displacedStudent = displacedStudent;
     }
 
     public String getAdminUsername() {
