@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-=======
 <module version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
->>>>>>> master
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
@@ -15,11 +9,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/bcprov-jdk15on-159.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/activation.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -28,11 +18,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/commons-lang3-3.8.1.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/bcprov-jdk15on-159.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -41,11 +27,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/hamcrest-all-1.3.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/commons-lang3-3.8.1.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -54,11 +36,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/junit-4.12.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/hamcrest-all-1.3.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -67,11 +45,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/lettuce-core-5.1.1.RELEASE.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/junit-4.12.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -80,11 +54,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/netty-all-4.1.5.Final.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/lettuce-core-5.1.1.RELEASE.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -93,11 +63,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/netty-transport-native-epoll-5.0.0.Alpha2.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/mail.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -106,11 +72,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/reactive-streams-1.0.1.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/netty-all-4.1.5.Final.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -119,11 +81,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/reactor-core-3.2.1.RELEASE.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/netty-transport-native-epoll-5.0.0.Alpha2.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -132,29 +90,16 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/rxjava-1.0.2.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/reactive-streams-1.0.1.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-<<<<<<< HEAD
-    <orderEntry type="module" module-name="SSL" />
-    <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../External JARs/activation.jar!/" />
-=======
     <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../External JARs/reactor-core-3.2.1.RELEASE.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -163,19 +108,12 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< HEAD
-          <root url="jar://$MODULE_DIR$/../External JARs/mail.jar!/" />
-=======
           <root url="jar://$MODULE_DIR$/../External JARs/rxjava-1.0.2.jar!/" />
->>>>>>> master
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-<<<<<<< HEAD
-=======
     <orderEntry type="module" module-name="SSL" />
->>>>>>> master
   </component>
 </module>
